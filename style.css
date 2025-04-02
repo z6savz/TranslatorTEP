@@ -3,7 +3,7 @@ body {
     text-align: center;
     margin: 0;
     padding: 20px;
-    background-image: url('../foxy.png'); /* Path to your background image */
+    background-image: url('foxy.png'); /* Path to your background image */
     background-size: cover; /* Ensures the image covers the entire page */
     background-position: center center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents the image from repeating */
