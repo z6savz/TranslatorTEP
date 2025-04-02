@@ -1,0 +1,28 @@
+<cipherMappings>
+    <mapping cipher="⟒" alphabet="A" />
+    <mapping cipher="ϟ" alphabet="B" />
+    <mapping cipher="⚲" alphabet="C" />
+    <mapping cipher="⍠" alphabet="D" />
+    <mapping cipher="Ξ" alphabet="E" />
+    <mapping cipher="দ" alphabet="F" />
+    <mapping cipher="⌁" alphabet="G" />
+    <mapping cipher="⍥" alphabet="H" />
+    <mapping cipher="∷" alphabet="I" />
+    <mapping cipher="⊙" alphabet="J" />
+    <mapping cipher="Ϟ" alphabet="K" />
+    <mapping cipher="⌇" alphabet="L" />
+    <mapping cipher="⨀" alphabet="M" />
+    <mapping cipher="〄" alphabet="N" />
+    <mapping cipher="◎" alphabet="O" />
+    <mapping cipher="⌬" alphabet="P" />
+    <mapping cipher="⏁" alphabet="Q" />
+    <mapping cipher="⎐" alphabet="R" />
+    <mapping cipher="Ϩ" alphabet="S" />
+    <mapping cipher="⌖" alphabet="T" />
+    <mapping cipher="⋑" alphabet="U" />
+    <mapping cipher="⚶" alphabet="V" />
+    <mapping cipher="Ѡ" alphabet="W" />
+    <mapping cipher="⊗" alphabet="X" />
+    <mapping cipher="⚷" alphabet="Y" />
+    <mapping cipher="⏃" alphabet="Z" />
+</cipherMappings>

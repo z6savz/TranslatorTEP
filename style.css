@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    background-image: url('/foxy.png'); /* Path to your background image */
+    background-size: cover; /* Ensures the image covers the entire page */
+    background-position: center center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-color: rgb(89, 89, 89); /* Fallback color if the image doesn't load */
+    opacity: 0.8; /* Adjust the value between 0 (fully transparent) and 1 (fully opaque) */
+}
+
+.styled-image {
+    width: 300px;
+    height: auto; /* Maintains aspect ratio */
+}
+
+h1 {
+    color: lightgrey;
+    font-size: 30px;
+}
+
+textarea {
+    width: 80%;
+    height: 100px;
+    margin: 10px;
+    font-size: large;
+    color: lightgray;
+    background-color: rgb(81, 81, 81);
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: rgb(80, 80, 80);
+    background-color: gray
+}
+
+#keyboardPanel button {
+    font-size: 16px;
+    text-align: center;
+    color: rgb(79, 79, 79);
+    padding: 10px;
+}
+
+#keyboardPanel {
+    margin: 20px auto;
+    width: 300px; /* Adjust width for small keyboard */
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 7 buttons per row */
+    gap: 5px;
+}
