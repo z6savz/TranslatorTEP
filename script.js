@@ -46,7 +46,7 @@ function translateToAlphabet() {
     const inputText = document.getElementById("inputText").value;
     let outputText = "";
     for (let char of inputText) {
-        outputText += cipherToAlphabet[char] || "?";
+        outputText += (char === " ") ? " " : (cipherToAlphabet[char] || "?"); // Preserve spaces
     }
     document.getElementById("outputText").value = outputText;
 }
@@ -56,7 +56,7 @@ function translateToCipher() {
     const inputText = document.getElementById("inputText").value.toUpperCase();
     let outputText = "";
     for (let char of inputText) {
-        outputText += alphabetToCipher[char] || "?";
+        outputText += (char === " ") ? " " : (alphabetToCipher[char] || "?"); // Preserve spaces
     }
     document.getElementById("outputText").value = outputText;
 }
