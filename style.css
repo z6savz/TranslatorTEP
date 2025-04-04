@@ -8,7 +8,7 @@ body {
     background-position: center center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-color: rgb(89, 89, 89); /* Fallback color if the image doesn't load */
-    opacity: 0.8; /* Adjust the value between 0 (fully transparent) and 1 (fully opaque) */
+    opacity: 0.9; /* Adjust the value between 0 (fully transparent) and 1 (fully opaque) */
 }
 
 .styled-image {
@@ -35,7 +35,7 @@ button {
     margin: 5px;
     padding: 10px 20px;
     font-size: 16px;
-    color: rgb(80, 80, 80);
+    color: rgb(42, 42, 42);
     background-color: gray
 }
 
