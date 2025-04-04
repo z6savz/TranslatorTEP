@@ -7,7 +7,7 @@ body {
     background-size: cover; /* Ensures the image covers the entire page */
     background-position: center center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents the image from repeating */
-    background-color: lightgray; /* Fallback color if the image doesn't load */
+    background-color: rgb(120, 120, 120); /* Fallback color if the image doesn't load */
     opacity: 0.9; /* Adjust the value between 0 (fully transparent) and 1 (fully opaque) */
 }
 
