@@ -14,7 +14,7 @@ body {
 .styled-image {
     width: 300px;
     height: auto; /* Maintains aspect ratio */
-    display: none;
+    visibility: hidden;
 }
 
 h1 {
