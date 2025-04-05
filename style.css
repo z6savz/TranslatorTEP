@@ -15,6 +15,11 @@ body {
     width: 300px;
     height: auto; /* Maintains aspect ratio */
     visibility: hidden;
+    position: absolute; /* Positions the image */
+    bottom: 0; /* Aligns it to the bottom */
+    left: 50%; /* Centers it horizontally */
+    transform: translateX(-50%); /* Adjusts for the element's width */
+    z-index: -1; /* Sends it behind other elements */
 }
 
 h1 {
