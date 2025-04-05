@@ -3,12 +3,12 @@ body {
     text-align: center;
     margin: 0;
     padding: 20px;
-    background-image: url('foxy.png'); /* Path to your background image */
+    background-image: url(foxy.png); /* Path to your background image */
     background-size: cover; /* Ensures the image covers the entire page */
     background-position: center center; /* Centers the image */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-color: rgb(120, 120, 120); /* Fallback color if the image doesn't load */
-    opacity: 0.9; /* Adjust the value between 0 (fully transparent) and 1 (fully opaque) */
+    opacity: 0.95; /* Slightly increased for better readability */
 }
 
 .styled-image {
@@ -16,10 +16,7 @@ body {
     height: auto; /* Maintains aspect ratio */
     visibility: hidden;
     position: absolute; /* Positions the image */
-    bottom: 0; /* Aligns it to the bottom */
-    left: 50%; /* Centers it horizontally */
-    transform: translateX(-50%); /* Adjusts for the element's width */
-    z-index: -1; /* Sends it behind other elements */
+    z-index: -1; /* Sends it behind everything else */
 }
 
 h1 {
@@ -39,6 +36,8 @@ textarea {
     font-size: large;
     color: rgb(225, 225, 225);
     background-color: rgb(81, 81, 81);
+    border: 1px solid rgb(120, 120, 120); /* Added border for better visibility */
+    border-radius: 5px; /* Smooth edges */
 }
 
 button {
@@ -47,6 +46,13 @@ button {
     font-size: 16px;
     color: rgb(225, 225, 225);
     background-color: rgb(81, 81, 81);
+    border: 1px solid rgb(120, 120, 120); /* Added border for better button definition */
+    border-radius: 5px; /* Smooth edges */
+    cursor: pointer; /* Changes cursor to pointer */
+}
+
+button:hover {
+    background-color: rgb(100, 100, 100); /* Slight color change on hover */
 }
 
 #keyboardPanel button {
@@ -54,12 +60,31 @@ button {
     text-align: center;
     color: rgb(225, 225, 225);
     padding: 10px;
+    background-color: rgb(81, 81, 81);
+    border: 1px solid rgb(120, 120, 120); /* Matches main buttons */
+    border-radius: 5px; /* Smooth edges */
+    cursor: pointer;
+}
+
+#keyboardPanel button:hover {
+    background-color: rgb(100, 100, 100); /* Color change on hover for keyboard buttons */
 }
 
 #keyboardPanel {
     margin: 20px auto;
     width: 300px; /* Adjust width for small keyboard */
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 7 buttons per row */
+    grid-template-columns: repeat(6, 1fr); /* 6 buttons per row */
     gap: 5px;
+}
+
+textarea#alternativeOutputText {
+    border: 1px solid rgb(120, 120, 120); /* Slightly darker border for differentiation */
+    background-color: rgb(81, 81, 81); /* Slightly darker background for distinction */
+}
+
+footer {
+    margin-top: 20px;
+    color: rgb(225, 225, 225);
+    font-size: 14px;
 }
