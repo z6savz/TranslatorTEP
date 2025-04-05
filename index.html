@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="script.js"></script>
+<img src="/foxy.png" class="styled-image" alt="Description of image">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,13 +11,30 @@
 <body>
     <h1>⌖⎐⟒〄Ϩ⌇⟒⌖◎⎐</h1>
     <h2>⌖⍥Ξ Ξ〄⍠ ⎔⎐◎⊙Ξ⚲⌖ Ϩ◎⌇⚶Ξ⎐Ϩ</h2>
+    
+    <!-- Input field -->
     <textarea id="inputText" placeholder="Enter text here..."></textarea>
+    
+    <!-- Keyboard panel for cipher buttons -->
     <div id="keyboardPanel"></div>
-    <button onclick="translateToAlphabet()">To Alphabet</button>
-    <button onclick="translateToCipher()">To Cipher</button>
+    
+    <!-- Control buttons -->
+    <button onclick="translateToAlphabet()">Translate to Alphabet</button>
+    <button onclick="translateToCipher()">Translate to Cipher</button>
     <button onclick="clearFields()">Clear</button>
-    <textarea id="outputText" readonly placeholder="Output..."></textarea>
-    <img src="foxy.png" class="styled-image" alt="Description of image">
+    
+    <!-- Output fields -->
+    <textarea id="outputText" readonly placeholder="Translation to Alphabet or Cipher..."></textarea>
+    <textarea id="alternativeOutputText" readonly placeholder="Alternative Translation..."></textarea>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>The End Project Solvers: <a href="https://discord.com/invite/eJGpsbpM86">Discord</a></p>
+        <p>&copy; 2025 ⌁⍥◎Ϩ⌖ ∷〄 ⌖⍥Ξ ⨀⟒⚲⍥∷〄Ξ</p>
+        <!--<p>Version 1.0 | Contact: <a href="mailto:zs6avz@proton.me">zs6avz@proton.me</a></p>-->
+    </footer>
+
+    <!-- Include the JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
