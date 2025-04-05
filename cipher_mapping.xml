@@ -1,28 +1,28 @@
 <cipherMappings>
-    <mapping cipher="⟒" alphabet="A" />
-    <mapping cipher="ϟ" alphabet="B" />
-    <mapping cipher="⚲" alphabet="C" />
-    <mapping cipher="⍠" alphabet="D" />
-    <mapping cipher="Ξ" alphabet="E" />
-    <mapping cipher="⌬" alphabet="F" />
-    <mapping cipher="⌁" alphabet="G" />
-    <mapping cipher="⍥" alphabet="H" />
-    <mapping cipher="∷" alphabet="I" />
-    <mapping cipher="⊙" alphabet="J" />
-    <mapping cipher="Ϟ" alphabet="K" />
-    <mapping cipher="⌇" alphabet="L" />
-    <mapping cipher="⨀" alphabet="M" />
-    <mapping cipher="〄" alphabet="N" />
-    <mapping cipher="◎" alphabet="O" />
-    <mapping cipher="⎔" alphabet="P" />
-    <mapping cipher="⏁" alphabet="Q" />
-    <mapping cipher="⎐" alphabet="R" />
-    <mapping cipher="Ϩ" alphabet="S" />
-    <mapping cipher="⌖" alphabet="T" />
-    <mapping cipher="⋑" alphabet="U" />
-    <mapping cipher="⚶" alphabet="V" />
-    <mapping cipher="Ѡ" alphabet="W" />
-    <mapping cipher="⊗" alphabet="X" />
-    <mapping cipher="⚷" alphabet="Y" />
-    <mapping cipher="⏃" alphabet="Z" />
+    <mapping cipher="⟒" alphabet="A" alternative="⎒" />
+    <mapping cipher="ϟ" alphabet="B" alternative="ϟ" />
+    <mapping cipher="⚲" alphabet="C" alternative="⚲" />
+    <mapping cipher="⍠" alphabet="D" alternative="⌬" />
+    <mapping cipher="Ξ" alphabet="E" alternative="Ϩ" />
+    <mapping cipher="⌬" alphabet="F" alternative="⚶" />
+    <mapping cipher="⌁" alphabet="G" alternative="⌁" />
+    <mapping cipher="⍥" alphabet="H" alternative="⍥" />
+    <mapping cipher="∷" alphabet="I" alternative="∷" />
+    <mapping cipher="⊙" alphabet="J" alternative="⏃" />
+    <mapping cipher="Ϟ" alphabet="K" alternative="Ϟ" />
+    <mapping cipher="⌇" alphabet="L" alternative="⌇" />
+    <mapping cipher="⨀" alphabet="M" alternative="⨀" />
+    <mapping cipher="〄" alphabet="N" alternative="〄" />
+    <mapping cipher="◎" alphabet="O" alternative="◎" />
+    <mapping cipher="⎔" alphabet="P" alternative="⎔" />
+    <mapping cipher="⏁" alphabet="Q" alternative="⏁" />
+    <mapping cipher="⎐" alphabet="R" alternative="⎐" />
+    <mapping cipher="Ϩ" alphabet="S" alternative="Ξ" />
+    <mapping cipher="⌖" alphabet="T" alternative="⌖" />
+    <mapping cipher="⋑" alphabet="U" alternative="⋑" />
+    <mapping cipher="⚶" alphabet="V" alternative="⍠" />
+    <mapping cipher="Ѡ" alphabet="W" alternative="Ѡ" />
+    <mapping cipher="⊗" alphabet="X" alternative="⊗" />
+    <mapping cipher="⚷" alphabet="Y" alternative="⚷" />
+    <mapping cipher="⏃" alphabet="Z" alternative="⏃" />
 </cipherMappings>
