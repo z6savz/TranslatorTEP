@@ -30,9 +30,10 @@ async function loadMappings() {
     }
 }
 
-// Populate cipher buttons dynamically (original functionality preserved)
+// Populate cipher buttons dynamically
 function populateCipherButtons() {
     const keyboardPanel = document.getElementById("keyboardPanel");
+    keyboardPanel.innerHTML = ""; // Clear existing buttons if any
     for (let cipher in cipherToAlphabet) {
         const button = document.createElement("button");
         button.textContent = cipher; // Display cipher character on button
