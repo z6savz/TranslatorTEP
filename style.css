@@ -1,24 +1,26 @@
+/* Centered image styling */
+.center-image {
+    width: 150px;
+    height: auto;
+    z-index: -1;
+    position: relative;
+}
+
+/* General body styling */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
     margin: 0;
     padding: 20px;
-    background-image: url(foxy.png); /* Path to your background image */
-    background-size: cover; /* Ensures the image covers the entire page */
-    background-position: center center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    background-color: rgb(120, 120, 120); /* Fallback color if the image doesn't load */
-    opacity: 0.95; /* Slightly increased for better readability */
+    background-image: url(foxy.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: rgb(120, 120, 120);
+    opacity: 0.95;
 }
 
-.styled-image {
-    width: 300px;
-    height: auto; /* Maintains aspect ratio */
-    visibility: hidden;
-    position: absolute; /* Positions the image */
-    z-index: -1; /* Sends it behind everything else */
-}
-
+/* Header styles */
 h1 {
     color: rgb(225, 225, 225);
     font-size: 30px;
@@ -29,6 +31,7 @@ h2 {
     font-size: 20px;
 }
 
+/* Textarea styling */
 textarea {
     width: 80%;
     height: 100px;
@@ -36,53 +39,56 @@ textarea {
     font-size: large;
     color: rgb(225, 225, 225);
     background-color: rgb(81, 81, 81);
-    border: 1px solid rgb(120, 120, 120); /* Added border for better visibility */
-    border-radius: 5px; /* Smooth edges */
+    border: 1px solid rgb(120, 120, 120);
+    border-radius: 5px;
 }
 
+/* Button styling */
 button {
     margin: 5px;
     padding: 10px 20px;
     font-size: 16px;
     color: rgb(225, 225, 225);
     background-color: rgb(81, 81, 81);
-    border: 1px solid rgb(120, 120, 120); /* Added border for better button definition */
-    border-radius: 5px; /* Smooth edges */
-    cursor: pointer; /* Changes cursor to pointer */
+    border: 1px solid rgb(120, 120, 120);
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 button:hover {
-    background-color: rgb(100, 100, 100); /* Slight color change on hover */
+    background-color: rgb(100, 100, 100);
 }
 
+/* Keyboard buttons within the panel */
 #keyboardPanel button {
     font-size: 16px;
-    text-align: center;
     color: rgb(225, 225, 225);
     padding: 10px;
     background-color: rgb(81, 81, 81);
-    border: 1px solid rgb(120, 120, 120); /* Matches main buttons */
-    border-radius: 5px; /* Smooth edges */
+    border: 1px solid rgb(120, 120, 120);
+    border-radius: 5px;
     cursor: pointer;
 }
 
 #keyboardPanel button:hover {
-    background-color: rgb(100, 100, 100); /* Color change on hover for keyboard buttons */
+    background-color: rgb(100, 100, 100);
 }
 
 #keyboardPanel {
     margin: 20px auto;
-    width: 300px; /* Adjust width for small keyboard */
+    width: 300px;
     display: grid;
-    grid-template-columns: repeat(6, 1fr); /* 6 buttons per row */
+    grid-template-columns: repeat(6, 1fr);
     gap: 5px;
 }
 
+/* Alternative translation textarea differentiation */
 textarea#alternativeOutputText {
-    border: 1px solid rgb(120, 120, 120); /* Slightly darker border for differentiation */
-    background-color: rgb(81, 81, 81); /* Slightly darker background for distinction */
+    background-color: rgb(81, 81, 81);
+    border: 1px solid rgb(120, 120, 120);
 }
 
+/* Footer styling */
 footer {
     margin-top: 20px;
     color: rgb(225, 225, 225);
