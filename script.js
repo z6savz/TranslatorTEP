@@ -3,7 +3,28 @@ let alphabetToCipher = {};
 let cipherToAlternative = {};
 let alternativeToAlphabet = {};
 
-// Function to verify the fox
+// Initialize dropdown button functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdownBtn = document.querySelector('.dropbtn'); // Dropdown button
+    const dropdownContent = document.querySelector('.dropdown-content'); // Dropdown content
+
+    // Toggle dropdown visibility on button click
+    dropdownBtn.addEventListener('click', () => {
+        dropdownContent.classList.toggle('active'); // Add or remove the "active" class for visibility
+    });
+
+    // Optional: Close dropdown if clicked outside the dropdown button or menu
+    document.addEventListener('click', (event) => {
+        if (!dropdownBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
+            dropdownContent.classList.remove('active'); // Remove "active" class to hide dropdown
+        }
+    });
+
+    // Ensure cipher mappings are loaded when the page loads
+    loadMappings();
+});
+
+/* Function to verify the fox input
 async function checkFox() {
     try {
         const response = await fetch('fox.xml'); // Fetch fox.xml file
@@ -31,15 +52,12 @@ function hideFoxScreen() {
     foxScreen.style.zIndex = "-1";
     foxScreen.style.opacity = "0";
     foxScreen.style.pointerEvents = "none";
-
-    // Show the hamburger button once `foxScreen` is hidden
-    document.getElementById("hamburgerBtn").classList.remove("hidden");
-}
+}*/
 
 // Function to load cipher mappings
 async function loadMappings() {
     try {
-        const response = await fetch('cipher_mapping.xml');
+        const response = await fetch('cipher_mapping.xml'); // Fetch the mappings XML file
         if (!response.ok) throw new Error(`Failed to load mappings: ${response.statusText}`);
         const xml = await response.text();
         const parser = new DOMParser();
@@ -98,13 +116,13 @@ function translateToAlphabet() {
 
 // Translate text to Cipher (Standard and Alternative)
 function translateToCipher() {
-    const inputText = document.getElementById("inputText").value.toUpperCase();
+    const inputText = document.getElementById("inputText").value;
     let cipherOutput = "";
     let alternativeOutput = "";
 
     for (let char of inputText) {
-        cipherOutput += char === " " ? " " : alphabetToCipher[char] || "?";
-        alternativeOutput += char === " " ? " " : cipherToAlternative[alphabetToCipher[char]] || "?";
+        cipherOutput += char === " " ? " " : alphabetToCipher[char.toUpperCase()] || "?";
+        alternativeOutput += char === " " ? " " : cipherToAlternative[alphabetToCipher[char.toUpperCase()]] || "?";
     }
 
     document.getElementById("outputText").value = cipherOutput;
@@ -118,35 +136,24 @@ function clearFields() {
     document.getElementById("alternativeOutputText").value = "";
 }
 
-// Hide hamburger button while `foxScreen` is active
+/* Hide dropdown button while `foxScreen` is active
 window.onload = () => {
     document.getElementById("foxInput").focus();
     loadMappings();
-    document.getElementById("hamburgerBtn").classList.add("hidden"); // Hide hamburger at startup
-};
+};*/
 
-// Add event listener to `foxInput` for Enter key submission
-document.getElementById("foxInput").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        checkFox();
-    }
-});
-
-// Ensure input fields only allow letters and spaces
+/* Ensure input fields only allow letters and spaces
 document.getElementById("foxInput").addEventListener("input", function () {
-    this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
-});
+    this.value = this.value.replace(/[^a-zA-Z\s]/g, ''); // Restrict to letters and spaces
+});*/
 
+// Input and Paste event listeners for `inputText`
 document.getElementById("inputText").addEventListener("input", function () {
-    this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+    this.value = this.value; // Allow all characters
 });
 
-// Sidebar open/close functionality
-document.getElementById("hamburgerBtn").addEventListener("click", function () {
-    document.getElementById("sidebarMenu").style.left = "0";
-});
-
-document.getElementById("closeBtn").addEventListener("click", function () {
-    document.getElementById("sidebarMenu").style.left = "-250px";
+document.getElementById("inputText").addEventListener("paste", function (event) {
+    event.preventDefault(); // Prevent default paste behavior
+    const pasteData = event.clipboardData.getData("text");
+    this.value += pasteData; // Allow pasted content without filtering
 });
