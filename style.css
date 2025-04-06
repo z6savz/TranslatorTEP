@@ -94,3 +94,47 @@ footer {
     color: rgb(225, 225, 225);
     font-size: 14px;
 }
+
+/* Dropdown Button */
+.dropbtn {
+    background-color: #fcad79;
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+    position: absolute; /* Change from relative to absolute */
+    top: 0; /* Aligns to the top of the page */
+    right: 0; /* Aligns to the right of the page */
+    display: inline-block;
+}
+
+/* Dropdown Content */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fcad79;
+    min-width: 80px;
+    z-index: 1;
+    right: 0; /* Aligns the right edge */
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: rgb(225, 225, 225);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: rgb(81, 81, 81);}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: rgb(81, 81, 81);}
