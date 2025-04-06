@@ -3,14 +3,6 @@ let alphabetToCipher = {};
 let cipherToAlternative = {};
 let alternativeToAlphabet = {};
 
-// Add event listener to foxInput
-document.getElementById("foxInput").addEventListener("keydown", function (event) {
-    if (event.key === "Enter") { // Check if the pressed key is Enter
-        event.preventDefault(); // Prevent default behavior (e.g., adding a newline)
-        checkFox(); // Call the Submit function
-    }
-});
-
 // Function to verify the fox
 async function checkFox() {
     try {
@@ -31,16 +23,20 @@ async function checkFox() {
     } catch (error) {
         console.error(error.message); // Log any errors
     }
+}
 
 // Function to hide the fox screen
 function hideFoxScreen() {
     const foxScreen = document.getElementById("foxScreen");
-    foxScreen.style.zIndex = "-1"; // Push to the back
-    foxScreen.style.opacity = "0"; // Make it invisible
-    foxScreen.style.pointerEvents = "none"; // Disable interactions
+    foxScreen.style.zIndex = "-1";
+    foxScreen.style.opacity = "0";
+    foxScreen.style.pointerEvents = "none";
+
+    // Show the hamburger button once `foxScreen` is hidden
+    document.getElementById("hamburgerBtn").classList.remove("hidden");
 }
 
-// Load the XML file and populate cipher mappings
+// Function to load cipher mappings
 async function loadMappings() {
     try {
         const response = await fetch('cipher_mapping.xml');
@@ -61,53 +57,54 @@ async function loadMappings() {
             alternativeToAlphabet[alternative] = alphabet;
         }
 
-        populateCipherButtons(); // Populate cipher buttons dynamically
+        populateCipherButtons();
     } catch (error) {
         console.error(error.message);
     }
 }
 
-// Populate cipher buttons dynamically in the keyboard panel
+// Function to populate cipher buttons dynamically in the keyboard panel
 function populateCipherButtons() {
     const keyboardPanel = document.getElementById("keyboardPanel");
+    keyboardPanel.innerHTML = ""; // Clear previous buttons
+
     for (let cipher in cipherToAlphabet) {
         const button = document.createElement("button");
-        button.textContent = cipher; // Display cipher character on the button
-        button.onclick = () => addCipherToInput(cipher); // Add cipher to the input field when clicked
-        keyboardPanel.appendChild(button); // Append button to the keyboard panel
+        button.textContent = cipher;
+        button.onclick = () => addCipherToInput(cipher);
+        keyboardPanel.appendChild(button);
     }
 }
 
 // Append cipher to the input field
 function addCipherToInput(cipher) {
-    const inputText = document.getElementById("inputText");
-    inputText.value += cipher; // Add the cipher character to the input text area
+    document.getElementById("inputText").value += cipher;
 }
 
-// Translate the text to Alphabet (Standard and Alternative)
+// Translate text to Alphabet (Standard and Alternative)
 function translateToAlphabet() {
     const inputText = document.getElementById("inputText").value;
     let alphabetOutput = "";
     let alternativeOutput = "";
 
     for (let char of inputText) {
-        alphabetOutput += (char === " ") ? " " : (cipherToAlphabet[char] || "?");
-        alternativeOutput += (char === " ") ? " " : (alternativeToAlphabet[char] || "?");
+        alphabetOutput += char === " " ? " " : cipherToAlphabet[char] || "?";
+        alternativeOutput += char === " " ? " " : alternativeToAlphabet[char] || "?";
     }
 
     document.getElementById("outputText").value = alphabetOutput;
     document.getElementById("alternativeOutputText").value = alternativeOutput;
 }
 
-// Translate the text to Cipher (Standard and Alternative)
+// Translate text to Cipher (Standard and Alternative)
 function translateToCipher() {
     const inputText = document.getElementById("inputText").value.toUpperCase();
     let cipherOutput = "";
     let alternativeOutput = "";
 
     for (let char of inputText) {
-        cipherOutput += (char === " ") ? " " : (alphabetToCipher[char] || "?");
-        alternativeOutput += (char === " ") ? " " : (cipherToAlternative[alphabetToCipher[char]] || "?");
+        cipherOutput += char === " " ? " " : alphabetToCipher[char] || "?";
+        alternativeOutput += char === " " ? " " : cipherToAlternative[alphabetToCipher[char]] || "?";
     }
 
     document.getElementById("outputText").value = cipherOutput;
@@ -121,8 +118,35 @@ function clearFields() {
     document.getElementById("alternativeOutputText").value = "";
 }
 
-// Automatically focus on fox input when the page loads and initialize mappings
+// Hide hamburger button while `foxScreen` is active
 window.onload = () => {
     document.getElementById("foxInput").focus();
-    loadMappings(); // Load cipher mappings when the page loads
+    loadMappings();
+    document.getElementById("hamburgerBtn").classList.add("hidden"); // Hide hamburger at startup
 };
+
+// Add event listener to `foxInput` for Enter key submission
+document.getElementById("foxInput").addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        checkFox();
+    }
+});
+
+// Ensure input fields only allow letters and spaces
+document.getElementById("foxInput").addEventListener("input", function () {
+    this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+});
+
+document.getElementById("inputText").addEventListener("input", function () {
+    this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+});
+
+// Sidebar open/close functionality
+document.getElementById("hamburgerBtn").addEventListener("click", function () {
+    document.getElementById("sidebarMenu").style.left = "0";
+});
+
+document.getElementById("closeBtn").addEventListener("click", function () {
+    document.getElementById("sidebarMenu").style.left = "-250px";
+});
