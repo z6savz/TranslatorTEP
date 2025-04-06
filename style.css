@@ -1,3 +1,37 @@
+/* Maintain existing styles for home-page */
+.home-page {
+    background-image: url(foxy.png);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: rgb(120, 120, 120);
+    opacity: 0.95;
+}
+
+/* About Page */
+.about-page {
+    background-color: #858585; /* Light mode */
+    background-image: url("about-bg.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Decrypt Page */
+.decrypt-page {
+    background-color: #2e2e2e;
+    background-image: url("decrypt-bg.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Cryptology Page */
+.cryptology-page {
+    background-color: #1a1a1a; /* Dark mode */
+    background-image: url("cryptology-bg.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
 /* Centered image styling */
 .center-image {
     width: 150px;
@@ -12,12 +46,12 @@ body {
     text-align: center;
     margin: 0;
     padding: 20px;
-    background-image: url(foxy.png);
+    /*background-image: url(foxy.png);
     background-size: cover;
     background-position: center center;
     background-repeat: no-repeat;
     background-color: rgb(120, 120, 120);
-    opacity: 0.95;
+    opacity: 0.95;*/
 }
 
 /* Header styles */
