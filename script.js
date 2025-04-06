@@ -20,19 +20,17 @@ async function checkFox() {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xml, "application/xml");
 
-        const correctFox = xmlDoc.getElementsByTagName("fox")[0].textContent;
-        const userFox = document.getElementById("foxInput").value;
+        const correctFox = xmlDoc.getElementsByTagName("fox")[0].textContent.toLowerCase(); // Convert to lowercase
+        const userFox = document.getElementById("foxInput").value.toLowerCase(); // Convert to lowercase
 
         if (userFox === correctFox) {
-            // Hide the fox screen
-            hideFoxScreen();
+            hideFoxScreen(); // Hide `foxScreen`
         } else {
             alert("Incorrect! Try again."); // Notify the user
         }
     } catch (error) {
         console.error(error.message); // Log any errors
     }
-}
 
 // Function to hide the fox screen
 function hideFoxScreen() {
