@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<script src="script.js"></script>
-<img src="/foxy.png" class="styled-image" alt="Description of image">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +8,35 @@
 
     <!-- Favicon Links -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+
+    <script src="script.js" defer></script>
 </head>
 <body>
+    <!-- Fox Screen -->
+<div id="foxScreen"
+style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    background-size: cover; background-position: center; background-repeat: no-repeat;
+    background-color: rgb(120, 120, 120); z-index: 10; opacity: 1; transition: z-index 0.3s, opacity 0.3s;">
+<img src="/foxy.png" class="center-image" alt=""
+    style="width: 150px; height: auto;">
+<textarea id="foxInput" placeholder="..." class="fox-box"
+        style="width: 20%; height: 30px; font-size: large; color: rgb(225, 225, 225);
+                background-color: rgb(81, 81, 81); border: 1px solid rgb(120, 120, 120);
+                border-radius: 5px; text-align: center;">
+</textarea>
+<button id="submitFox" onclick="checkFox()"
+        style="margin-top: 10px; padding: 10px 20px; font-size: 16px; color: rgb(225, 225, 225);
+            background-color: rgb(81, 81, 81); border: 1px solid rgb(120, 120, 120);
+            border-radius: 5px; cursor: pointer;">
+    Submit
+</button>
+</div>
+
+    <!-- Main Content -->
     <h1>⌖⎐⟒〄Ϩ⌇⟒⌖◎⎐</h1>
     <h2>⌖⍥Ξ Ξ〄⍠ ⎔⎐◎⊙Ξ⚲⌖ Ϩ◎⌇⚶Ξ⎐Ϩ</h2>
     
@@ -37,11 +59,7 @@
     <footer>
         <p>The End Project Solvers: <a href="https://discord.com/invite/eJGpsbpM86">Discord</a></p>
         <p>&copy; 2025 ⌁⍥◎Ϩ⌖ ∷〄 ⌖⍥Ξ ⨀⟒⚲⍥∷〄Ξ</p>
-        <!--<p>Version 1.0 | Contact: <a href="mailto:zs6avz@proton.me">zs6avz@proton.me</a></p>-->
     </footer>
-
-    <!-- Include the JavaScript file -->
-    <script src="script.js"></script>
 </body>
 </html>
 
