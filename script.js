@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadMappings();
 });
 
-/* Function to verify the fox input
+// Function to verify the fox input
 async function checkFox() {
     try {
         const response = await fetch('fox.xml'); // Fetch fox.xml file
@@ -52,7 +52,7 @@ function hideFoxScreen() {
     foxScreen.style.zIndex = "-1";
     foxScreen.style.opacity = "0";
     foxScreen.style.pointerEvents = "none";
-}*/
+}
 
 // Function to load cipher mappings
 async function loadMappings() {
@@ -136,16 +136,16 @@ function clearFields() {
     document.getElementById("alternativeOutputText").value = "";
 }
 
-/* Hide dropdown button while `foxScreen` is active
+/* Hide dropdown button while `foxScreen` is active*/
 window.onload = () => {
     document.getElementById("foxInput").focus();
     loadMappings();
-};*/
+};
 
-/* Ensure input fields only allow letters and spaces
+/* Ensure input fields only allow letters and spaces*/
 document.getElementById("foxInput").addEventListener("input", function () {
     this.value = this.value.replace(/[^a-zA-Z\s]/g, ''); // Restrict to letters and spaces
-});*/
+});
 
 // Input and Paste event listeners for `inputText`
 document.getElementById("inputText").addEventListener("input", function () {
