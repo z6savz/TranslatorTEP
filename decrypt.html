@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decrypt</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body class="decrypt-page">
+    <h1>Decrypt Methods</h1>
+
+    <!-- Binary -->
+    <div class="method">
+        <h2>Binary (Base 2, 8, 10, 16)</h2>
+        <textarea class="binary-input" placeholder="Enter text..."></textarea>
+        <select class="binary-base">
+            <option value="2">Binary (Base 2)</option>
+            <option value="8">Octal (Base 8)</option>
+            <option value="10">Decimal (Base 10)</option>
+            <option value="16">Hexadecimal (Base 16)</option>
+        </select>
+        <button onclick="encryptBinary(getSelectedBase())">Encrypt</button>
+        <button onclick="decryptBinary(getSelectedBase())">Decrypt</button>
+        <p class="binary-output"></p>
+    </div>
+
+    <!-- Jacquard
+    <div class="method">
+        <h2>Jacquard</h2>
+        <textarea class="jacquard-input" placeholder="Enter text..."></textarea>
+        <button onclick="encryptJacquard()">Encrypt</button>
+        <button onclick="decryptJacquard()">Decrypt</button>
+        <p class="jacquard-output"></p>
+    </div>-->
+
+    <!-- Caesar Cipher -->
+    <div class="method">
+        <h2>Caesar Cipher</h2>
+        <textarea class="caesar-input" placeholder="Enter text..."></textarea>
+        <input type="number" class="caesar-shift" value="3" min="1" max="25">
+        <button onclick="encryptCaesar(getShiftValue())">Encrypt</button>
+        <button onclick="decryptCaesar(getShiftValue())">Decrypt</button>
+        <p class="caesar-output"></p>
+    </div>
+
+    <!-- Vigenère Cipher -->
+    <div class="method">
+        <h2>Vigenère Cipher</h2>
+        <textarea class="vigenere-input" placeholder="Enter text..."></textarea>
+        <input type="text" class="vigenere-key" placeholder="Enter key">
+        <button onclick="encryptVigenere(document.querySelector('.vigenere-key').value)">Encrypt</button>
+        <button onclick="decryptVigenere(document.querySelector('.vigenere-key').value)">Decrypt</button>
+        <p class="vigenere-output"></p>
+    </div>
+
+    <!-- Atbash Cipher -->
+    <div class="method">
+        <h2>Atbash Cipher</h2>
+        <textarea class="atbash-input" placeholder="Enter text..."></textarea>
+        <button onclick="encryptAtbash()">Encrypt</button>
+        <button onclick="decryptAtbash()">Decrypt</button>
+        <p class="atbash-output"></p>
+    </div>
+
+    <!--Base64-->
+    <div class="method">
+        <h2>Base64</h2>
+        <textarea class="base64-input" placeholder="Enter text..."></textarea>
+        <button onclick="encryptBase64()">Encode</button>
+        <button onclick="decryptBase64()">Decode</button>
+        <p class="base64-output"></p>
+    </div>
+
+    <!-- Morse Code -->
+    <div class="method">
+        <h2>Morse Code</h2>
+        <textarea class="morse-input" placeholder="Enter text..."></textarea>
+        <select class="morse-separator">
+            <option value=" ">Space (Standard)</option>
+            <option value="/">Slash Separator</option>
+            <option value="-">Dash Separator</option>
+        </select>
+        <button onclick="encryptMorse(document.querySelector('.morse-separator').value)">Encrypt</button>
+        <button onclick="decryptMorse(document.querySelector('.morse-separator').value)">Decrypt</button>
+        <p class="morse-output"></p>
+    </div>
+
+    <!-- AES -->
+<div class="method">
+    <h2>AES</h2>
+    <textarea class="AES-input" placeholder="Enter text..."></textarea>
+    <input type="text" class="AES-key" placeholder="Enter secret key">
+    <select class="AES-mode">
+        <option value="ECB">ECB (Default)</option>
+        <option value="CBC">CBC (Cipher Block Chaining)</option>
+        <option value="CFB">CFB (Cipher Feedback)</option>
+        <option value="OFB">OFB (Output Feedback)</option>
+    </select>
+    <button onclick="encryptCipher('AES', getSelectedMode('AES'))">Encrypt</button>
+    <button onclick="decryptCipher('AES', getSelectedMode('AES'))">Decrypt</button>
+    <p class="AES-output"></p>
+</div>
+
+<!-- DES -->
+<div class="method">
+    <h2>DES</h2>
+    <textarea class="DES-input" placeholder="Enter text..."></textarea>
+    <input type="text" class="DES-key" placeholder="Enter secret key">
+    <select class="DES-mode">
+        <option value="ECB">ECB (Default)</option>
+        <option value="CBC">CBC (Cipher Block Chaining)</option>
+    </select>
+    <button onclick="encryptCipher('DES', getSelectedMode('DES'))">Encrypt</button>
+    <button onclick="decryptCipher('DES', getSelectedMode('DES'))">Decrypt</button>
+    <p class="DES-output"></p>
+</div>
+
+<!-- Triple DES -->
+<div class="method">
+    <h2>Triple DES</h2>
+    <textarea class="TripleDES-input" placeholder="Enter text..."></textarea>
+    <input type="text" class="TripleDES-key" placeholder="Enter secret key">
+    <select class="TripleDES-mode">
+        <option value="ECB">ECB (Default)</option>
+        <option value="CBC">CBC (Cipher Block Chaining)</option>
+    </select>
+    <button onclick="encryptCipher('TripleDES', getSelectedMode('TripleDES'))">Encrypt</button>
+    <button onclick="decryptCipher('TripleDES', getSelectedMode('TripleDES'))">Decrypt</button>
+    <p class="TripleDES-output"></p>
+</div>
+
+<!-- RC4 -->
+<div class="method">
+    <h2>RC4</h2>
+    <textarea class="RC4-input" placeholder="Enter text..."></textarea>
+    <input type="text" class="RC4-key" placeholder="Enter secret key">
+    <button onclick="encryptCipher('RC4', 'ECB')">Encrypt</button>
+    <button onclick="decryptCipher('RC4', 'ECB')">Decrypt</button>
+    <p class="RC4-output"></p>
+</div>
+
+<!-- Rabbit -->
+<div class="method">
+    <h2>Rabbit</h2>
+    <textarea class="Rabbit-input" placeholder="Enter text..."></textarea>
+    <input type="text" class="Rabbit-key" placeholder="Enter secret key">
+    <button onclick="encryptCipher('Rabbit', 'ECB')">Encrypt</button>
+    <button onclick="decryptCipher('Rabbit', 'ECB')">Decrypt</button>
+    <p class="Rabbit-output"></p>
+</div>
+
+    <!--SHA-256 Hashing-->
+    <div class="method">
+        <h2>SHA-256</h2>
+        <textarea class="sha256-input" placeholder="Enter text to hash..."></textarea>
+        <button onclick="hashSHA256()">Generate Hash</button>
+        <p class="sha256-output"></p>
+    </div>
+
+    <!--HMAC Authentication-->
+    <div class="method">
+        <h2>HMAC Authentication</h2>
+        <textarea class="hmac-input" placeholder="Enter text to generate HMAC..."></textarea>
+        <button onclick="generateHMAC()">Generate HMAC</button>
+        <p class="hmac-output"></p>
+    </div>
+
+    <script src="decrypt.js"></script>
+</body>
+</html>
