@@ -33,7 +33,7 @@ function getSelectedBase() {
     return document.querySelector('.binary-base').value;
 }
 
-// Hexadecimal Encryption & Decryption
+/* Hexadecimal Encryption & Decryption
 function encryptHex() {
     const inputElement = document.querySelector('.hex-input');
     const outputElement = document.querySelector('.hex-output');
@@ -56,7 +56,7 @@ function decryptHex() {
         .join('');
 
     outputElement.textContent = text || "Invalid hex input!";
-}
+}*/
 
 // Ensure cipher mappings are loaded when the page loads
 loadJacquard();
@@ -306,7 +306,7 @@ function decryptMorse() {
     outputElement.textContent = text || "Invalid Morse input!";
 }
 
-// 🔵 Function to encrypt using selected cipher & mode
+/* 🔵 Function to encrypt using selected cipher & mode
 function encryptCipher(method, mode) {
     const inputElement = document.querySelector(`.${method}-input`);
     const keyElement = document.querySelector(`.${method}-key`);
@@ -360,4 +360,4 @@ function generateHMAC() {
     const secretKey = "mysecretkey"; // Change this key
 
     outputElement.textContent = CryptoJS.HmacSHA256(text, secretKey).toString();
-}
+}*/
