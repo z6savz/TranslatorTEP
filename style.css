@@ -10,10 +10,11 @@
 
 /* About Page */
 .about-page {
-    background-color: #858585; /* Light mode */
+    background-color: #2e2e2e;
     background-image: url("about-bg.jpg");
     background-size: cover;
     background-position: center;
+    color: #fcad79;
 }
 
 /* Decrypt Page */
@@ -22,6 +23,10 @@
     background-image: url("decrypt-bg.jpg");
     background-size: cover;
     background-position: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* Cryptology Page */
@@ -93,6 +98,15 @@ button:hover {
     background-color: rgb(100, 100, 100);
 }
 
+/* Button container styling */
+.button-container {
+    display: flex;
+    flex-direction: row; /* Align buttons side by side */
+    justify-content: center; /* Center buttons */
+    gap: 10px; /* Add spacing between buttons */
+    margin: 10px 0;
+}
+
 /* Keyboard buttons within the panel */
 #keyboardPanel button {
     font-size: 16px;
@@ -132,28 +146,32 @@ footer {
 /* Dropdown Button */
 .dropbtn {
     background-color: #fcad79;
-    color: white;
+    color: rgb(255, 255, 255);
     padding: 10px;
     font-size: 16px;
     border: none;
+    cursor: pointer; /* Adds a pointer cursor for better UX */
 }
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-    position: absolute; /* Change from relative to absolute */
+    position: absolute; /* Keeps the menu at a fixed position */
     top: 0; /* Aligns to the top of the page */
     right: 0; /* Aligns to the right of the page */
     display: inline-block;
+    z-index: 1000; /* Ensures it stays on top of other content */
 }
 
 /* Dropdown Content */
 .dropdown-content {
-    display: none;
+    display: none; /* Hidden by default */
     position: absolute;
-    background-color: #fcad79;
-    min-width: 80px;
+    background-color: rgb(81, 81, 81);
+    min-width: 120px; /* Adjusted width for better usability */
     z-index: 1;
     right: 0; /* Aligns the right edge */
+    border-radius: 4px; /* Adds slight rounding for a modern look */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
 }
 
 /* Links inside the dropdown */
@@ -162,13 +180,170 @@ footer {
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    transition: background-color 0.3s ease; /* Adds smooth hover effect */
 }
 
+/* Method container */
+.method {
+    background-color: rgba(45, 45, 45, 0.9);
+    border: 1px solid #444;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center align elements */
+    margin-bottom: 20px;
+    width: 90%;
+    max-width: 800px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.method:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Selector styling */
+select {
+    width: 40%;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    background-color: #515151;
+    color: #e1e1e1;
+    border: 1px solid #666;
+    cursor: pointer;
+    appearance: none; /* Removes default styles */
+    transition: background-color 0.3s ease;
+}
+
+select:hover {
+    background-color: #666666;
+}
+
+/* Styling for text inputs like vigenere-key */
+input[type="text"], input[type="number"] {
+    width: 40%; /* Ensure consistent width across input types */
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    background-color: #515151;
+    color: #e1e1e1;
+    border: 1px solid #666;
+    box-sizing: border-box; /* Prevent width issues */
+    transition: background-color 0.3s ease;
+}
+
+/* Add hover effects for inputs */
+input[type="text"]:hover, input[type="number"]:hover {
+    background-color: #666666;
+}
+
+.binary-base {
+    width: 40%;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    background-color: #515151;
+    color: #e1e1e1;
+    border: 1px solid #666;
+    cursor: pointer;
+    appearance: none; /* Removes default styles */
+    transition: background-color 0.3s ease;
+}
+
+.binary-base:hover {
+    background-color: #666666;
+}
+
+/* Make the decrypted output text lighter */
+p.decrypt-output,
+p.binary-output,
+p.jacquard-output,
+p.caesar-output,
+p.vigenere-output,
+p.atbash-output,
+p.base64-output,
+p.morse-output,
+p.AES-output,
+p.RSA-output,
+p.RC4-output,
+p.DES-output,
+p.TripleDES-output,
+p.Rabbit-output,
+p.SHA-256-output,
+p.SHA-512-output,
+p.HMAC-output {
+    font-size: 18px;
+    font-weight: lighter;
+    color: #fcad79;
+    margin-top: 10px;
+}
+
+/* Styling for section headings */
+section h2 {
+    font-size: 1.5rem;
+    color: #fcad79;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Styling for list items */
+section ul {
+    list-style-type: none; /* Remove bullets */
+    padding: 0;
+    margin: 0 auto;
+    text-align: center; /* Center align items */
+}
+
+/* Styling for links to look like buttons */
+section ul li a {
+    display: inline-block; /* Makes links behave like buttons */
+    margin: 10px 5px; /* Spacing between links */
+    padding: 10px 20px; /* Button-like padding */
+    font-size: 1rem;
+    color: rgb(225, 225, 225); /* Text color */
+    background-color: rgb(81, 81, 81); /* Background color */
+    border: 1px solid rgb(120, 120, 120); /* Border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    text-decoration: none; /* Remove underlines */
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+/* Hover effect for links styled as buttons */
+section ul li a:hover {
+    background-color: rgb(100, 100, 100);
+}
+
+/* Section container styling */
+section {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px;
+    background-color: rgba(45, 45, 45, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Make elements responsive
+@media (max-width: 768px) {
+    textarea, select, button {
+        width: 100%;
+        font-size: 0.9rem;
+    }
+}*/
+
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: rgb(81, 81, 81);}
+.dropdown-content a:hover {background-color: rgb(95, 95, 95);}
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {display: block;}
 
-/* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {background-color: rgb(81, 81, 81);}
+/* Change the background color of the dropdown button when the dropdown content is shown
+.dropdown:hover .dropbtn {background-color: #fcad79;}*/
