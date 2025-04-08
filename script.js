@@ -188,6 +188,21 @@ function clearFields() {
     document.getElementById("alternativeOutputText").value = "";
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    const currentPath = window.location.pathname;
+
+    const mappings = {
+        "/index.html": "/",
+        "/about.html": "/about/",
+        "/decrypt.html": "/decrypt/",
+        "/cryptology.html": "/cryptology/"
+    };
+
+    if (mappings[currentPath]) {
+        window.history.replaceState({}, document.title, mappings[currentPath]);
+    }
+});
+
 /* Hide dropdown button while `foxScreen` is active*/
 window.onload = () => {
     document.getElementById("foxInput").focus();
