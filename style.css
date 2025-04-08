@@ -29,8 +29,8 @@
     align-items: center;
 }
 
-/* Cryptology Page */
-.cryptology-page {
+/* Cryptography Page */
+.cryptography-page {
     background-color: #1a1a1a; /* Dark mode */
     background-image: url("cryptology-bg.jpg");
     background-size: cover;
