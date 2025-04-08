@@ -7,6 +7,15 @@ let alternativeToAlphabet = {};
 document.addEventListener('DOMContentLoaded', () => {
     const dropdownBtn = document.querySelector('.dropbtn'); // Dropdown button
     const dropdownContent = document.querySelector('.dropdown-content'); // Dropdown content
+    const foxScreen = document.getElementById('foxScreen'); // Fox screen container
+    const menu = document.getElementById('menu'); // Dropdown menu container
+
+    // Hide menu if foxScreen is visible
+    if (foxScreen && getComputedStyle(foxScreen).opacity === '1') {
+        menu.style.display = 'none';
+    } else {
+        menu.style.display = 'block';
+    }
 
     // Toggle dropdown visibility on button click
     dropdownBtn.addEventListener('click', () => {
@@ -19,10 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
             dropdownContent.classList.remove('active'); // Remove "active" class to hide dropdown
         }
     });
-
-    // Ensure cipher mappings are loaded when the page loads
-    loadMappings();
 });
+
+// Ensure cipher mappings are loaded when the page loads
+loadMappings();
 
 // Function to verify the fox input
 async function checkFox() {
@@ -38,6 +47,7 @@ async function checkFox() {
 
         if (userFox === correctFox) {
             hideFoxScreen(); // Hide `foxScreen`
+            showMenu(); // Show the dropdown menu
         } else {
             alert("Incorrect! Try again."); // Notify the user
         }
@@ -52,7 +62,49 @@ function hideFoxScreen() {
     foxScreen.style.zIndex = "-1";
     foxScreen.style.opacity = "0";
     foxScreen.style.pointerEvents = "none";
+
+    // Ensure menu visibility is restored when foxScreen is hidden
+    const menu = document.querySelector('.dropdown');
+    if (menu) {
+        menu.style.display = 'block';
+    }
 }
+
+// Function to show the dropdown menu
+function showMenu() {
+    const menu = document.querySelector('.dropdown');
+    if (menu) {
+        menu.style.display = 'block'; // Make the menu visible
+    }
+}
+
+// Initial Menu Visibility Setup
+document.addEventListener('DOMContentLoaded', () => {
+    const foxScreen = document.getElementById('foxScreen');
+    const menu = document.querySelector('.dropdown');
+
+    // Only hide the menu if foxScreen is visible
+    if (foxScreen && getComputedStyle(foxScreen).opacity === '1') {
+        menu.style.display = 'none'; // Hide the menu
+    } else {
+        menu.style.display = 'block'; // Show the menu
+    }
+
+    const dropdownBtn = document.querySelector('.dropbtn'); // Dropdown button
+    const dropdownContent = document.querySelector('.dropdown-content'); // Dropdown content
+
+    // Toggle dropdown visibility on button click
+    dropdownBtn.addEventListener('click', () => {
+        dropdownContent.classList.toggle('active'); // Add or remove the "active" class for visibility
+    });
+
+    // Optional: Close dropdown if clicked outside the dropdown button or menu
+    document.addEventListener('click', (event) => {
+        if (!dropdownBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
+            dropdownContent.classList.remove('active'); // Remove "active" class to hide dropdown
+        }
+    });
+});
 
 // Function to load cipher mappings
 async function loadMappings() {
