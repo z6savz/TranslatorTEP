@@ -58,26 +58,62 @@ function decryptHex() {
     outputElement.textContent = text || "Invalid hex input!";
 }
 
-// Jacquard Cipher Encryption & Decryption (Basic XOR Example)
+// Ensure cipher mappings are loaded when the page loads
+loadJacquard();
+
+// Define mapping objects
+const cipherToAlphabet = {};
+const alphabetToCipher = {};
+
+// Function to load cipher mappings
+async function loadJacquard() {
+    try {
+        const response = await fetch('jacquard.xml'); // Fetch the mappings XML file
+        if (!response.ok) throw new Error(`Failed to load mappings: ${response.statusText}`);
+        const xml = await response.text();
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xml, "application/xml");
+
+        // Extract mappings from the XML file
+        const mappings = xmlDoc.getElementsByTagName("mapping");
+        for (let mapping of mappings) {
+            const cipher = mapping.getAttribute("cipher");
+            const alphabet = mapping.getAttribute("alphabet");
+
+            // Populate mapping objects
+            cipherToAlphabet[cipher] = alphabet;
+            alphabetToCipher[alphabet] = cipher;
+        }
+
+        console.log("Mappings loaded successfully:", cipherToAlphabet, alphabetToCipher);
+    } catch (error) {
+        console.error("Error loading mappings:", error);
+    }
+}
+
+// Jacquard Cipher Encryption: Translates alphabet to cipher
 function encryptJacquard() {
     const inputElement = document.querySelector('.jacquard-input');
     const outputElement = document.querySelector('.jacquard-output');
-    const text = inputElement.value.trim();
+    const text = inputElement.value.trim().toUpperCase(); // Convert to uppercase for matching
 
+    // Translate each character to cipher using the mapping
     const cipherText = text.split('')
-        .map(char => String.fromCharCode(char.charCodeAt(0) ^ 0xFF)) // XOR operation
-        .join('');
+        .map(char => alphabetToCipher[char] || "[?]") // Use [?] for unknown characters
+        .join(' ');
 
     outputElement.textContent = cipherText || "Invalid input!";
 }
 
+// Jacquard Cipher Decryption: Translates cipher to alphabet
 function decryptJacquard() {
     const inputElement = document.querySelector('.jacquard-input');
     const outputElement = document.querySelector('.jacquard-output');
     const cipherText = inputElement.value.trim();
 
-    const text = cipherText.split('')
-        .map(char => String.fromCharCode(char.charCodeAt(0) ^ 0xFF)) // XOR reverses itself
+    // Split the cipher text by spaces and translate each to alphabet
+    const text = cipherText.split(' ')
+        .map(code => cipherToAlphabet[code] || "[?]") // Use [?] for unknown cipher codes
         .join('');
 
     outputElement.textContent = text || "Invalid cipher text!";
