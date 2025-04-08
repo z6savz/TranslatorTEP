@@ -1,0 +1,28 @@
+<jacquardMappings>
+    <mapping cipher="100101" alphabet="A" />
+    <mapping cipher="110010" alphabet="B" />
+    <mapping cipher="011011" alphabet="C" />
+    <mapping cipher="101110" alphabet="D" />
+    <mapping cipher="001011" alphabet="E" />
+    <mapping cipher="110101" alphabet="F" />
+    <mapping cipher="011100" alphabet="G" />
+    <mapping cipher="101001" alphabet="H" />
+    <mapping cipher="001101" alphabet="I" />
+    <mapping cipher="010111" alphabet="J" />
+    <mapping cipher="100110" alphabet="K" />
+    <mapping cipher="110011" alphabet="L" />
+    <mapping cipher="011110" alphabet="M" />
+    <mapping cipher="101011" alphabet="N" />
+    <mapping cipher="001110" alphabet="O" />
+    <mapping cipher="010101" alphabet="P" />
+    <mapping cipher="100011" alphabet="Q" />
+    <mapping cipher="110100" alphabet="R" />
+    <mapping cipher="011101" alphabet="S" />
+    <mapping cipher="101000" alphabet="T" />
+    <mapping cipher="001100" alphabet="U" />
+    <mapping cipher="010110" alphabet="V" />
+    <mapping cipher="100001" alphabet="W" />
+    <mapping cipher="110110" alphabet="X" />
+    <mapping cipher="011010" alphabet="Y" />
+    <mapping cipher="101101" alphabet="Z" />
+</jacquardMappings>
