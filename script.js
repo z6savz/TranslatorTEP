@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function() {
         "/index.html": "/",
         "/about.html": "/about/",
         "/decrypt.html": "/decrypt/",
-        "/cryptology.html": "/cryptology/"
+        "/cryptology.html": "/cryptography/"
     };
 
     if (mappings[currentPath]) {
