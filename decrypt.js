@@ -163,66 +163,75 @@ function getShiftValue() {
 }
 
 // Vigenère Cipher Encryption & Decryption
-document.querySelector('.encrypt-btn').addEventListener('click', function() {
+// Event Listeners for Buttons
+document.querySelector('.encrypt-btn').addEventListener('click', function () {
     const key = document.querySelector('.vigenere-key').value.trim();
-    encryptVigenere(key);
+    const text = document.querySelector('.vigenere-input').value.trim();
+    document.querySelector('.vigenere-output').textContent = vigenereEncrypt(text, key);
 });
 
-document.querySelector('.decrypt-btn').addEventListener('click', function() {
+document.querySelector('.decrypt-btn').addEventListener('click', function () {
     const key = document.querySelector('.vigenere-key').value.trim();
-    decryptVigenere(key);
+    const cipherText = document.querySelector('.vigenere-input').value.trim();
+    document.querySelector('.vigenere-output').textContent = vigenereDecrypt(cipherText, key);
 });
 
-function encryptVigenere(key) {
-    const inputElement = document.querySelector('.vigenere-input');
-    const outputElement = document.querySelector('.vigenere-output');
-    const text = inputElement.value.trim();
-    
-    if (!key) {
-        outputElement.textContent = "Error: Key is required!";
-        return;
+// Function to generate repeating key while skipping spaces
+function generateKey(str, key) {
+    key = key.toUpperCase();
+    let expandedKey = "";
+    let keyIndex = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        if (str[i].match(/[A-Z]/)) {
+            expandedKey += key[keyIndex % key.length]; // Repeat key correctly
+            keyIndex++; // Move to next key letter **only for letters**
+        } else {
+            expandedKey += str[i]; // Preserve spaces
+        }
     }
 
-    let keyIndex = 0;
-    const cipherText = text.split('')
-        .map(char => {
-            if (/[a-zA-Z]/.test(char)) {
-                let offset = char >= 'a' ? 97 : 65;
-                let shift = key[keyIndex % key.length].toUpperCase().charCodeAt(0) - 65;
-                keyIndex++;
-                return String.fromCharCode(((char.charCodeAt(0) - offset + shift) % 26) + offset);
-            }
-            return char;
-        })
-        .join('');
-
-    outputElement.textContent = cipherText || "Invalid input!";
+    return expandedKey;
 }
 
-function decryptVigenere(key) {
-    const inputElement = document.querySelector('.vigenere-input');
-    const outputElement = document.querySelector('.vigenere-output');
-    const cipherText = inputElement.value.trim();
-    
-    if (!key) {
-        outputElement.textContent = "Error: Key is required!";
-        return;
+// Function to encrypt using letter addition while preserving spaces
+function vigenereEncrypt(str, key) {
+    str = str.toUpperCase();
+    key = generateKey(str, key.toUpperCase());
+    let cipherText = "";
+
+    for (let i = 0; i < str.length; i++) {
+        if (str[i].match(/[A-Z]/)) {
+            let plainValue = str[i].charCodeAt(0) - 65;
+            let keyValue = key[i].charCodeAt(0) - 65;
+            let encryptedValue = (plainValue + keyValue) % 26; // Letter addition (modulo 26)
+            cipherText += String.fromCharCode(encryptedValue + 65);
+        } else {
+            cipherText += str[i]; // Preserve spaces and special characters
+        }
     }
 
-    let keyIndex = 0;
-    const text = cipherText.split('')
-        .map(char => {
-            if (/[a-zA-Z]/.test(char)) {
-                let offset = char >= 'a' ? 97 : 65;
-                let shift = key[keyIndex % key.length].toUpperCase().charCodeAt(0) - 65;
-                keyIndex++;
-                return String.fromCharCode(((char.charCodeAt(0) - offset - shift + 26) % 26) + offset);
-            }
-            return char;
-        })
-        .join('');
+    return cipherText;
+}
 
-    outputElement.textContent = text || "Invalid cipher text!";
+// Function to decrypt using letter subtraction while preserving spaces
+function vigenereDecrypt(cipherText, key) {
+    cipherText = cipherText.toUpperCase();
+    key = generateKey(cipherText, key.toUpperCase());
+    let plainText = "";
+
+    for (let i = 0; i < cipherText.length; i++) {
+        if (cipherText[i].match(/[A-Z]/)) {
+            let cipherValue = cipherText[i].charCodeAt(0) - 65;
+            let keyValue = key[i].charCodeAt(0) - 65;
+            let decryptedValue = (cipherValue - keyValue + 26) % 26; // Letter subtraction (modulo 26)
+            plainText += String.fromCharCode(decryptedValue + 65);
+        } else {
+            plainText += cipherText[i]; // Preserve spaces and special characters
+        }
+    }
+
+    return plainText;
 }
 
 // Atbash Cipher Encryption & Decryption
