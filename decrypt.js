@@ -162,22 +162,35 @@ function getShiftValue() {
     return parseInt(document.querySelector('.caesar-shift').value, 10);
 }
 
-// Vigenere Cipher Encryption & Decryption
-function encryptVigenere() {
+// Vigenère Cipher Encryption & Decryption
+document.querySelector('.encrypt-btn').addEventListener('click', function() {
+    const key = document.querySelector('.vigenere-key').value.trim();
+    encryptVigenere(key);
+});
+
+document.querySelector('.decrypt-btn').addEventListener('click', function() {
+    const key = document.querySelector('.vigenere-key').value.trim();
+    decryptVigenere(key);
+});
+
+function encryptVigenere(key) {
     const inputElement = document.querySelector('.vigenere-input');
     const outputElement = document.querySelector('.vigenere-output');
-    const key = "KEY"; // Replace with actual key
     const text = inputElement.value.trim();
+    
+    if (!key) {
+        outputElement.textContent = "Error: Key is required!";
+        return;
+    }
 
     let keyIndex = 0;
     const cipherText = text.split('')
         .map(char => {
-            if (char.match(/[a-z]/i)) {
-                let code = char.charCodeAt(0);
+            if (/[a-zA-Z]/.test(char)) {
                 let offset = char >= 'a' ? 97 : 65;
-                let shift = key.charCodeAt(keyIndex % key.length) - offset;
+                let shift = key[keyIndex % key.length].toUpperCase().charCodeAt(0) - 65;
                 keyIndex++;
-                return String.fromCharCode(((code - offset + shift) % 26) + offset);
+                return String.fromCharCode(((char.charCodeAt(0) - offset + shift) % 26) + offset);
             }
             return char;
         })
@@ -186,21 +199,24 @@ function encryptVigenere() {
     outputElement.textContent = cipherText || "Invalid input!";
 }
 
-function decryptVigenere() {
+function decryptVigenere(key) {
     const inputElement = document.querySelector('.vigenere-input');
     const outputElement = document.querySelector('.vigenere-output');
-    const key = "KEY"; // Replace with actual key
     const cipherText = inputElement.value.trim();
+    
+    if (!key) {
+        outputElement.textContent = "Error: Key is required!";
+        return;
+    }
 
     let keyIndex = 0;
     const text = cipherText.split('')
         .map(char => {
-            if (char.match(/[a-z]/i)) {
-                let code = char.charCodeAt(0);
+            if (/[a-zA-Z]/.test(char)) {
                 let offset = char >= 'a' ? 97 : 65;
-                let shift = key.charCodeAt(keyIndex % key.length) - offset;
+                let shift = key[keyIndex % key.length].toUpperCase().charCodeAt(0) - 65;
                 keyIndex++;
-                return String.fromCharCode(((code - offset - shift + 26) % 26) + offset);
+                return String.fromCharCode(((char.charCodeAt(0) - offset - shift + 26) % 26) + offset);
             }
             return char;
         })
