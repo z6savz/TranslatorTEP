@@ -158,8 +158,14 @@ function translateToAlphabet() {
     let alternativeOutput = "";
 
     for (let char of inputText) {
-        alphabetOutput += char === " " ? " " : cipherToAlphabet[char] || "?";
-        alternativeOutput += char === " " ? " " : alternativeToAlphabet[char] || "?";
+        if (char.match(/[.,?!;:'"-]/)) {
+            // Include punctuation directly
+            alphabetOutput += char;
+            alternativeOutput += char;
+        } else {
+            alphabetOutput += char === " " ? " " : cipherToAlphabet[char] || "?";
+            alternativeOutput += char === " " ? " " : alternativeToAlphabet[char] || "?";
+        }
     }
 
     document.getElementById("outputText").value = alphabetOutput;
@@ -173,8 +179,14 @@ function translateToCipher() {
     let alternativeOutput = "";
 
     for (let char of inputText) {
-        cipherOutput += char === " " ? " " : alphabetToCipher[char.toUpperCase()] || "?";
-        alternativeOutput += char === " " ? " " : cipherToAlternative[alphabetToCipher[char.toUpperCase()]] || "?";
+        if (char.match(/[.,?!;:'"-]/)) {
+            // Include punctuation directly
+            cipherOutput += char;
+            alternativeOutput += char;
+        } else {
+            cipherOutput += char === " " ? " " : alphabetToCipher[char.toUpperCase()] || "?";
+            alternativeOutput += char === " " ? " " : cipherToAlternative[alphabetToCipher[char.toUpperCase()]] || "?";
+        }
     }
 
     document.getElementById("outputText").value = cipherOutput;
@@ -194,6 +206,22 @@ window.onload = () => {
     loadMappings();
 };
 
+
+/*document.addEventListener("DOMContentLoaded", function() {
+    const currentPath = window.location.pathname;
+
+    const mappings = {
+        "/index.html": "/",
+        "/about.html": "/about/",
+        "/decrypt.html": "/decrypt/",
+        "/cryptography.html": "/cryptography/"
+    };
+
+    if (mappings[currentPath]) {
+        window.history.replaceState({}, document.title, mappings[currentPath]);
+    }
+});*/
+
 /* Ensure input fields only allow letters and spaces*/
 document.getElementById("foxInput").addEventListener("input", function () {
     this.value = this.value.replace(/[^a-zA-Z\s]/g, ''); // Restrict to letters and spaces
@@ -209,3 +237,4 @@ document.getElementById("inputText").addEventListener("paste", function (event) 
     const pasteData = event.clipboardData.getData("text");
     this.value += pasteData; // Allow pasted content without filtering
 });
+
