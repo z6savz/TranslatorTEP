@@ -11,6 +11,7 @@
 /* About Page */
 .about-page {
     background-color: #2e2e2e;
+    background-image: url("about-bg.jpg");
     background-size: cover;
     background-position: center;
     color: #fcad79;
@@ -18,7 +19,8 @@
 
 /* Decrypt Page */
 .decrypt-page {
-    background-color: #2e2e2e;
+    background-color: rgb(81, 81, 81);
+    background-image: url("decrypt-bg.jpg");
     background-size: cover;
     background-position: center;
     padding: 20px;
@@ -29,7 +31,7 @@
 
 /* Cryptography Page */
 .cryptography-page {
-    background-color: #1a1a1a; /* Dark mode */
+    background-color: rgb(81, 81, 81);
     background-size: cover;
     background-position: center;
 }
@@ -326,6 +328,136 @@ section {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: center;
+}
+
+/* Image Decryption Section */
+.image-decryption-page {
+    background-color: #2e2e2e;
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Container for image decryption methods */
+.image-decryption {
+    background-color: rgba(45, 45, 45, 0.9);
+    border: 1px solid #444;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 90%;
+    max-width: 800px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-decryption:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Sub-method container */
+.sub-method {
+    background-color: rgba(50, 50, 50, 0.95);
+    border: 1px solid #555;
+    border-radius: 6px;
+    padding: 15px;
+    margin: 15px 0;
+    width: 80%;
+    text-align: center;
+}
+
+/* Image inputs */
+input[type="file"], textarea {
+    width: 80%;
+    height: 40px;
+    margin: 10px;
+    font-size: large;
+    color: rgb(225, 225, 225);
+    background-color: rgb(81, 81, 81);
+    border: 1px solid rgb(120, 120, 120);
+    border-radius: 5px;
+}
+
+/* Buttons for decryption */
+.sub-method button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: rgb(225, 225, 225);
+    background-color: rgb(81, 81, 81);
+    border: 1px solid rgb(120, 120, 120);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sub-method button:hover {
+    background-color: rgb(100, 100, 100);
+}
+
+/* Styling for decrypted images */
+img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* Canvas styling */
+canvas {
+    border: 1px solid #777;
+    background-color: #333;
+    width: 80%;
+    max-width: 600px;
+    margin-top: 10px;
+}
+
+audio {
+    margin-top: 10px;
+    width: 80%;
+    max-width: 600px;
+    color: #fff;
+}
+
+/* Headings */
+h2 {
+    color: #fcad79;
+    font-size: 24px;
+}
+
+h3 {
+    color: rgb(225, 225, 225);
+    font-size: 20px;
+}
+
+/* Base link style */
+a {
+    color: #eb3f7b; /* Set the link color */
+    text-decoration: none; /* Remove default underline */
+    font-weight: bold; /* Make the text bold */
+}
+
+/* Hover effect */
+a:hover {
+    color: #104e8b; /* Change color on hover */
+    text-decoration: underline; /* Add underline on hover */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Active link style */
+a:active {
+    color: #0a3d62; /* Color for active link */
+}
+
+/* Focus style */
+a:focus {
+    outline: 2px dotted #1d72b8; /* Add focus outline for accessibility */
 }
 
 /* Make elements responsive
