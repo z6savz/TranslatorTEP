@@ -33,7 +33,7 @@ function getSelectedBase() {
     return document.querySelector('.binary-base').value;
 }
 
-/* Hexadecimal Encryption & Decryption
+// Hexadecimal Encryption & Decryption
 function encryptHex() {
     const inputElement = document.querySelector('.hex-input');
     const outputElement = document.querySelector('.hex-output');
@@ -46,7 +46,7 @@ function encryptHex() {
     outputElement.textContent = hex || "Invalid input!";
 }
 
-function decryptHex() {
+/*function decryptHex() {
     const inputElement = document.querySelector('.hex-input');
     const outputElement = document.querySelector('.hex-output');
     const hexString = inputElement.value.trim();
@@ -331,7 +331,7 @@ function decryptMorse() {
     outputElement.textContent = text || "Invalid Morse input!";
 }
 
-/* 🔵 Function to encrypt using selected cipher & mode
+// 🔵 Function to encrypt using selected cipher & mode
 function encryptCipher(method, mode) {
     const inputElement = document.querySelector(`.${method}-input`);
     const keyElement = document.querySelector(`.${method}-key`);
@@ -368,16 +368,16 @@ function getSelectedMode(method) {
     return document.querySelector(`.${method}-mode`).value;
 }
 
-// SHA-256 Hashing (Not decryption, but useful for security)
+/* SHA-256 Hashing (Not decryption, but useful for security)
 function hashSHA256() {
     const inputElement = document.querySelector('.sha256-input');
     const outputElement = document.querySelector('.sha256-output');
     const text = inputElement.value.trim();
 
     outputElement.textContent = CryptoJS.SHA256(text).toString();
-}
+}*/
 
-// HMAC Authentication
+/* HMAC Authentication
 function generateHMAC() {
     const inputElement = document.querySelector('.hmac-input');
     const outputElement = document.querySelector('.hmac-output');
@@ -386,3 +386,217 @@ function generateHMAC() {
 
     outputElement.textContent = CryptoJS.HmacSHA256(text, secretKey).toString();
 }*/
+
+const CryptoJS = require("crypto-js");
+
+// AES Image Decryption
+function encryptAESImage() {
+    const plaintext = document.querySelector('.aes-image-plaintext').value;
+    const key = document.querySelector('.aes-image-key').value;
+
+    if (!plaintext || !key) {
+        alert('Please provide image data and the AES key for encryption.');
+        return;
+    }
+
+    const encrypted = CryptoJS.AES.encrypt(plaintext, key).toString();
+    const outputField = document.querySelector('.aes-encrypted-output');
+    outputField.value = encrypted; // Display encrypted data
+}
+
+function decryptAESImage() {
+    const encryptedData = document.querySelector('.aes-image-input').value;
+    const key = document.querySelector('.aes-image-key').value;
+
+    if (!encryptedData || !key) {
+        alert('Please provide both encrypted data and the AES key.');
+        return;
+    }
+
+    const decryptedData = decryptAES(encryptedData, key);
+
+    const outputImg = document.getElementById('aes-image-output');
+    outputImg.src = decryptedData; // Set decrypted image source
+
+    const downloadLink = document.getElementById('aes-download-link');
+    downloadLink.href = decryptedData; // Set download link
+    downloadLink.style.display = 'inline-block'; // Make link visible
+}
+
+// Canvas-Based Image Decryption
+function encryptCanvasImage() {
+    const fileInput = document.querySelector('.canvas-image-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Please select an image file to encrypt.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        // Simulating encryption by encoding the image to Base64
+        const encryptedData = btoa(event.target.result);
+        const outputField = document.querySelector('.canvas-encrypted-output');
+        outputField.value = encryptedData; // Display encrypted image data
+    };
+
+    reader.readAsBinaryString(file);
+}
+
+function decryptCanvasImage() {
+    const fileInput = document.querySelector('.canvas-image-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Please select an image file.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const img = new Image();
+        img.src = event.target.result;
+
+        img.onload = function () {
+            const canvas = document.getElementById('canvas-image-output');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const downloadLink = document.getElementById('canvas-download-link');
+            downloadLink.href = canvas.toDataURL('image/png'); // Canvas to Base64
+            downloadLink.style.display = 'inline-block'; // Make link visible
+        };
+    };
+
+    reader.readAsDataURL(file);
+}
+
+// Base64 Image Decryption
+function encryptBase64Image() {
+    const fileInput = document.querySelector('.base64-image-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Please select an image file to encrypt.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const encryptedData = btoa(event.target.result); // Encode to Base64
+        const outputField = document.querySelector('.base64-encrypted-output');
+        outputField.value = encryptedData; // Display encrypted Base64 data
+    };
+
+    reader.readAsBinaryString(file);
+}
+
+function decryptBase64Image() {
+    const base64Input = document.querySelector('.base64-image-input').value;
+
+    if (!base64Input) {
+        alert('Please enter Base64 encrypted image data.');
+        return;
+    }
+
+    const outputImg = document.getElementById('base64-image-output');
+    outputImg.src = `data:image/png;base64,${base64Input}`;
+
+    const downloadLink = document.getElementById('base64-download-link');
+    downloadLink.href = outputImg.src; // Set download link
+    downloadLink.style.display = 'inline-block'; // Make link visible
+}
+
+// AES Decryption Function
+function decryptAES(encryptedData, key) {
+    let decrypted = CryptoJS.AES.decrypt(encryptedData, key);
+    return decrypted.toString(CryptoJS.enc.Utf8);
+}
+
+// AES Audio Decryption
+function encryptAESAudio() {
+    const fileInput = document.querySelector('.aes-audio-input').files[0];
+    const key = document.querySelector('.aes-audio-key').value;
+
+    if (!fileInput || !key) {
+        alert('Please select an audio file and provide an AES key.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const encryptedData = CryptoJS.AES.encrypt(event.target.result, key).toString();
+        const outputField = document.querySelector('.aes-encrypted-output');
+        outputField.value = encryptedData; // Display encrypted audio data
+    };
+    reader.readAsText(fileInput); // Read audio file as text
+}
+
+function decryptAESAudio() {
+    const encryptedData = document.querySelector('.aes-audio-input-decrypt').value;
+    const key = document.querySelector('.aes-audio-key-decrypt').value;
+
+    if (!encryptedData || !key) {
+        alert('Please provide the AES encrypted data and key.');
+        return;
+    }
+
+    const decryptedData = CryptoJS.AES.decrypt(encryptedData, key).toString(CryptoJS.enc.Utf8);
+    const audioElement = document.getElementById('aes-audio-output');
+    audioElement.src = decryptedData; // Set decrypted data as audio source
+
+    const downloadLink = document.getElementById('aes-audio-download-link');
+    downloadLink.href = decryptedData; // Allow downloading decrypted audio
+    downloadLink.style.display = 'inline-block'; // Make link visible
+}
+
+function encryptRSAAudio() {
+    const fileInput = document.querySelector('.rsa-audio-input').files[0];
+    const publicKey = document.querySelector('.rsa-public-key').value;
+
+    if (!fileInput || !publicKey) {
+        alert('Please select an audio file and provide an RSA public key.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const encryptedData = rsaEncrypt(event.target.result, publicKey); // RSA encryption logic
+        const outputField = document.querySelector('.rsa-encrypted-output');
+        outputField.value = encryptedData; // Display encrypted audio data
+    };
+    reader.readAsText(fileInput); // Read audio file as text
+}
+
+// RSA encryption logic
+function rsaEncrypt(data, publicKey) {
+    // Add RSA encryption logic here (use libraries like NodeRSA or others)
+    return data; // Placeholder
+}
+
+function decryptRSAAudio() {
+    const encryptedData = document.querySelector('.rsa-audio-input-decrypt').value;
+    const privateKey = document.querySelector('.rsa-private-key').value;
+
+    if (!encryptedData || !privateKey) {
+        alert('Please provide the RSA encrypted data and private key.');
+        return;
+    }
+
+    const decryptedData = rsaDecrypt(encryptedData, privateKey); // RSA decryption logic
+    const audioElement = document.getElementById('rsa-audio-output');
+    audioElement.src = decryptedData; // Set decrypted data as audio source
+
+    const downloadLink = document.getElementById('rsa-audio-download-link');
+    downloadLink.href = decryptedData; // Allow downloading decrypted audio
+    downloadLink.style.display = 'inline-block'; // Make link visible
+}
+
+// RSA decryption logic
+function rsaDecrypt(data, privateKey) {
+    // Add RSA decryption logic here (use libraries like NodeRSA or others)
+    return data; // Placeholder
+}
