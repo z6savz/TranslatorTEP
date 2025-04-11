@@ -46,18 +46,6 @@ function encryptHex() {
     outputElement.textContent = hex || "Invalid input!";
 }
 
-/*function decryptHex() {
-    const inputElement = document.querySelector('.hex-input');
-    const outputElement = document.querySelector('.hex-output');
-    const hexString = inputElement.value.trim();
-
-    const text = hexString.split(' ')
-        .map(hex => String.fromCharCode(parseInt(hex, 16)))
-        .join('');
-
-    outputElement.textContent = text || "Invalid hex input!";
-}*/
-
 // Ensure cipher mappings are loaded when the page loads
 loadJacquard();
 
@@ -68,7 +56,7 @@ const alphabetToCipher = {};
 // Function to load cipher mappings
 async function loadJacquard() {
     try {
-        const response = await fetch('jacquard.xml'); // Fetch the mappings XML file
+        const response = await fetch('jacquard.xml'); 
         if (!response.ok) throw new Error(`Failed to load mappings: ${response.statusText}`);
         const xml = await response.text();
         const parser = new DOMParser();
