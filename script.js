@@ -36,7 +36,7 @@ loadMappings();
 // Function to verify the fox input
 async function checkFox() {
     try {
-        const response = await fetch('fox.xml'); // Fetch fox.xml file
+        const response = await fetch('fox.xml');
         if (!response.ok) throw new Error(`Failed to load fox file: ${response.statusText}`);
         const xml = await response.text();
         const parser = new DOMParser();
@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Function to load cipher mappings
 async function loadMappings() {
     try {
-        const response = await fetch('cipher_mapping.xml'); // Fetch the mappings XML file
+        const response = await fetch('cipher_mapping.xml');
         if (!response.ok) throw new Error(`Failed to load mappings: ${response.statusText}`);
         const xml = await response.text();
         const parser = new DOMParser();
@@ -205,22 +205,6 @@ window.onload = () => {
     document.getElementById("foxInput").focus();
     loadMappings();
 };
-
-
-/*document.addEventListener("DOMContentLoaded", function() {
-    const currentPath = window.location.pathname;
-
-    const mappings = {
-        "/index.html": "/",
-        "/about.html": "/about/",
-        "/decrypt.html": "/decrypt/",
-        "/cryptography.html": "/cryptography/"
-    };
-
-    if (mappings[currentPath]) {
-        window.history.replaceState({}, document.title, mappings[currentPath]);
-    }
-});*/
 
 /* Ensure input fields only allow letters and spaces*/
 document.getElementById("foxInput").addEventListener("input", function () {
