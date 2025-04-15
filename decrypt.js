@@ -46,6 +46,18 @@ function encryptHex() {
     outputElement.textContent = hex || "Invalid input!";
 }
 
+function decryptHex() {
+    const inputElement = document.querySelector('.hex-input');
+    const outputElement = document.querySelector('.hex-output');
+    const hexString = inputElement.value.trim();
+
+    const text = hexString.split(' ')
+        .map(hex => String.fromCharCode(parseInt(hex, 16)))
+        .join('');
+
+    outputElement.textContent = text || "Invalid hex input!";
+}
+
 // Ensure cipher mappings are loaded when the page loads
 loadJacquard();
 
