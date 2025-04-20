@@ -75,15 +75,15 @@
     </div>
 
     <!-- Hexadecimal Cipher -->
-    <div class="method">
-        <h2>Hexadecimal Cipher</h2>
-        <textarea class="hex-input" placeholder="Enter text..."></textarea>
-        <div class="button-container">
-            <button onclick="encryptHex()">Encrypt</button>
-            <button onclick="decryptHex()">Decrypt</button>
-        </div>
-        <p class="hex-output"></p>
+<div class="method">
+    <h2>Hexadecimal Cipher</h2>
+    <textarea class="hex-input" placeholder="Enter text..."></textarea>
+    <div class="button-container">
+        <button onclick="encryptHex()">Encrypt</button>
+        <button onclick="decryptHex()">Decrypt</button>
     </div>
+    <p class="hex-output"></p>
+</div>
 
     <!-- Base64 -->
     <div class="method">
@@ -112,212 +112,85 @@
         <p class="morse-output"></p>
     </div>
 
-    <!-- AES
+    <!-- Image Encryption & Decryption -->
     <div class="method">
-        <h2>AES</h2>
-        <textarea class="AES-input" placeholder="Enter text..."></textarea>
-        <input type="text" class="AES-key" placeholder="Enter secret key">
-        <select class="AES-mode">
-            <option value="ECB">ECB (Default)</option>
-            <option value="CBC">CBC (Cipher Block Chaining)</option>
-            <option value="CFB">CFB (Cipher Feedback)</option>
-            <option value="OFB">OFB (Output Feedback)</option>
-        </select>
-        <div class="button-container">
-            <button onclick="encryptCipher('AES', getSelectedMode('AES'))">Encrypt</button>
-            <button onclick="decryptCipher('AES', getSelectedMode('AES'))">Decrypt</button>
+        <h2>Image Encryption & Decryption</h2>
+
+        <!--<div class="sub-method">
+            <h3>Canvas-Based Encryption</h3>
+            <input type="file" class="canvas-image-input">
+            <button onclick="encryptCanvasImage()">Encrypt</button>
+            <textarea class="canvas-encrypted-output" readonly placeholder="Encrypted image data..."></textarea>
+
+            <h3>Canvas-Based Decryption</h3>
+            <button onclick="decryptCanvasImage()">Decrypt</button>
+            <canvas id="canvas-image-output"></canvas>
+            <a id="canvas-download-link" style="display: none;">Download Decrypted Image</a>
+        </div>-->
+
+        <div class="sub-method">
+            <h3>Base64 Encryption</h3>
+            <input type="file" class="base64-image-input">
+            <button onclick="encryptBase64Image()">Encrypt</button>
+            <textarea class="base64-encrypted-output" readonly placeholder="Encrypted Base64 image..."></textarea>
+
+            <h3>Base64 Decryption</h3>
+            <textarea class="base64-decryption-input" placeholder="Enter Base64 encrypted image..."></textarea>
+            <button onclick="decryptBase64Image()">Decrypt</button>
+            <img id="base64-image-output" alt="Decrypted Image" style="display: none;">
+            <a id="base64-download-link" style="display: none;">Download Decrypted Image</a>
         </div>
-        <p class="AES-output"></p>
     </div>
 
-    <!-- DES
+    <!-- Audio Encryption & Decryption
     <div class="method">
-        <h2>DES</h2>
-        <textarea class="DES-input" placeholder="Enter text..."></textarea>
-        <input type="text" class="DES-key" placeholder="Enter secret key">
-        <select class="DES-mode">
-            <option value="ECB">ECB (Default)</option>
-            <option value="CBC">CBC (Cipher Block Chaining)</option>
-        </select>
-        <div class="button-container">
-            <button onclick="encryptCipher('DES', getSelectedMode('DES'))">Encrypt</button>
-            <button onclick="decryptCipher('DES', getSelectedMode('DES'))">Decrypt</button>
+        <h2>Audio Encryption & Decryption</h2>
+        <div class="sub-method">
+            <h3>AES Audio Encryption</h3>
+            <input type="file" class="aes-audio-input">
+            <input type="text" class="aes-audio-key" placeholder="Enter AES key">
+            <button onclick="encryptAESAudio()">Encrypt</button>
+            <textarea class="aes-encrypted-output" readonly placeholder="Encrypted audio data..."></textarea>
+
+            <h3>AES Audio Decryption</h3>
+            <textarea class="aes-audio-input-decrypt" placeholder="Enter AES encrypted audio data..."></textarea>
+            <input type="text" class="aes-audio-key-decrypt" placeholder="Enter AES key">
+            <button onclick="decryptAESAudio()">Decrypt</button>
+            <audio id="aes-audio-output" controls></audio>
+            <a id="aes-audio-download-link" style="display: none;">Download Decrypted Audio</a>
         </div>
-        <p class="DES-output"></p>
+        <div class="sub-method">
+            <h3>RSA Audio Encryption</h3>
+            <input type="file" class="rsa-audio-input">
+            <textarea class="rsa-public-key" placeholder="Enter RSA public key"></textarea>
+            <button onclick="encryptRSAAudio()">Encrypt</button>
+            <textarea class="rsa-encrypted-output" readonly placeholder="Encrypted audio data..."></textarea>
+
+            <h3>RSA Audio Decryption</h3>
+            <textarea class="rsa-audio-input-decrypt" placeholder="Enter RSA encrypted audio data..."></textarea>
+            <textarea class="rsa-private-key" placeholder="Enter RSA private key"></textarea>
+            <button onclick="decryptRSAAudio()">Decrypt</button>
+            <audio id="rsa-audio-output" controls></audio>
+            <a id="rsa-audio-download-link" style="display: none;">Download Decrypted Audio</a>
+        </div>-->
     </div>
 
-    <!-- Triple DES
-    <div class="method">
-        <h2>Triple DES</h2>
-        <textarea class="TripleDES-input" placeholder="Enter text..."></textarea>
-        <input type="text" class="TripleDES-key" placeholder="Enter secret key">
-        <select class="TripleDES-mode">
-            <option value="ECB">ECB (Default)</option>
-            <option value="CBC">CBC (Cipher Block Chaining)</option>
-        </select>
+    <!-- Name to RGB Color Converter -->
+    <div class="method name-to-color-section">
+        <h2>Name to RGB Color Converter</h2>
+        <input type="text" id="firstName" placeholder="First Name" />
+        <input type="text" id="middleName" placeholder="Middle Name (Optional)" />
+        <input type="text" id="lastName" placeholder="Last Name" />
         <div class="button-container">
-            <button onclick="encryptCipher('TripleDES', getSelectedMode('TripleDES'))">Encrypt</button>
-            <button onclick="decryptCipher('TripleDES', getSelectedMode('TripleDES'))">Decrypt</button>
+            <button onclick="generateSingleColor()">Generate Color</button>
+            <button onclick="clearFields()">Clear</button>
         </div>
-        <p class="TripleDES-output"></p>
+        <div id="outputBox" class="colorBox"></div>
+        <p id="outputRGB"></p>
+        <p id="outputName"></p>
     </div>
 
-    <!-- RC4
-    <div class="method">
-        <h2>RC4</h2>
-        <textarea class="RC4-input" placeholder="Enter text..."></textarea>
-        <input type="text" class="RC4-key" placeholder="Enter secret key">
-        <div class="button-container">
-            <button onclick="encryptCipher('RC4', 'ECB')">Encrypt</button>
-            <button onclick="decryptCipher('RC4', 'ECB')">Decrypt</button>
-        </div>
-        <p class="RC4-output"></p>
-    </div>
-
-    <!-- Rabbit
-    <div class="method">
-        <h2>Rabbit</h2>
-        <textarea class="Rabbit-input" placeholder="Enter text..."></textarea>
-        <input type="text" class="Rabbit-key" placeholder="Enter secret key">
-        <div class="button-container">
-            <button onclick="encryptCipher('Rabbit', 'ECB')">Encrypt</button>
-            <button onclick="decryptCipher('Rabbit', 'ECB')">Decrypt</button>
-        </div>
-        <p class="Rabbit-output"></p>
-    </div>
-
-    <!-- SHA-256 Hashing
-    <div class="method">
-        <h2>SHA-256</h2>
-        <textarea class="sha256-input" placeholder="Enter text to hash..."></textarea>
-        <div class="button-container">
-            <button onclick="hashSHA256()">Generate Hash</button>
-        </div>
-        <p class="sha256-output"></p>
-    </div>
-
-    <!-- HMAC Authentication
-    <div class="method">
-        <h2>HMAC Authentication</h2>
-        <textarea class="hmac-input" placeholder="Enter text to generate HMAC..."></textarea>
-        <div class="button-container">
-            <button onclick="generateHMAC()">Generate HMAC</button>
-        </div>
-        <p class="hmac-output"></p>
-    </div>-->
-
-    <!-- Image Encryption and Decryption Methods -->
-<div class="method">
-    <h2>Image Encryption & Decryption</h2>
-    
-    <!-- AES Image Encryption 
-    <div class="sub-method">
-        <h3>AES Encryption</h3>
-        <input type="text" class="aes-image-key" placeholder="Enter AES key">
-        <textarea class="aes-image-plaintext" placeholder="Enter image data to encrypt..."></textarea>
-        <button onclick="encryptAESImage()">Encrypt</button>
-        <textarea class="aes-encrypted-output" readonly placeholder="Encrypted image data..."></textarea>
-        
-        <h3>AES Decryption</h3>
-        <textarea class="aes-image-input" placeholder="Enter encrypted image data..."></textarea>
-        <button onclick="decryptAESImage()">Decrypt</button>
-        <img id="aes-image-output" alt="Decrypted Image">
-        <a id="aes-download-link" style="display: none;">Download Decrypted Image</a>
-    </div>-->
-    
-    <!-- Canvas-Based Encryption -->
-    <div class="sub-method">
-        <h3>Canvas-Based Encryption</h3>
-        <input type="file" class="canvas-image-input">
-        <button onclick="encryptCanvasImage()">Encrypt</button>
-        <textarea class="canvas-encrypted-output" readonly placeholder="Encrypted image data..."></textarea>
-
-        <h3>Canvas-Based Decryption</h3>
-        <button onclick="decryptCanvasImage()">Decrypt</button>
-        <canvas id="canvas-image-output"></canvas>
-        <a id="canvas-download-link" style="display: none;">Download Decrypted Image</a>
-    </div>
-
-    <!-- Base64 Image Encryption -->
-    <div class="sub-method">
-        <h3>Base64 Encryption</h3>
-        <!-- File input for selecting an image -->
-        <input type="file" class="base64-image-input">
-        <!-- Button to trigger the encryption -->
-        <button onclick="encryptBase64Image()">Encrypt</button>
-        <!-- Output field to display the Base64-encoded string -->
-        <textarea class="base64-encrypted-output" readonly placeholder="Encrypted Base64 image..."></textarea>
-    
-        <h3>Base64 Decryption</h3>
-        <!-- Input field for pasting the Base64 string -->
-        <textarea class="base64-decryption-input" placeholder="Enter Base64 encrypted image..."></textarea>
-        <!-- Button to trigger the decryption -->
-        <button onclick="decryptBase64Image()">Decrypt</button>
-        <!-- Image element for displaying the decrypted image -->
-        <img id="base64-image-output" alt="Decrypted Image" style="display: none;">
-        <!-- Download link for saving the decrypted image -->
-        <a id="base64-download-link" style="display: none;">Download Decrypted Image</a>
-    </div>
-
-<!-- Audio Encryption and Decryption Methods -->
-<div class="method">
-    <h2>Audio Encryption & Decryption</h2>
-    
-    <!-- AES Audio Encryption-->
-    <div class="sub-method">
-        <h3>AES Audio Encryption</h3>
-        <input type="file" class="aes-audio-input">
-        <input type="text" class="aes-audio-key" placeholder="Enter AES key">
-        <button onclick="encryptAESAudio()">Encrypt</button>
-        <textarea class="aes-encrypted-output" readonly placeholder="Encrypted audio data..."></textarea>
-
-        <h3>AES Audio Decryption</h3>
-        <textarea class="aes-audio-input-decrypt" placeholder="Enter AES encrypted audio data..."></textarea>
-        <input type="text" class="aes-audio-key-decrypt" placeholder="Enter AES key">
-        <button onclick="decryptAESAudio()">Decrypt</button>
-        <audio id="aes-audio-output" controls></audio>
-        <a id="aes-audio-download-link" style="display: none;">Download Decrypted Audio</a>
-    </div>
-    
-    <!-- RSA Audio Encryption -->
-    <div class="sub-method">
-        <h3>RSA Audio Encryption</h3>
-        <input type="file" class="rsa-audio-input">
-        <textarea class="rsa-public-key" placeholder="Enter RSA public key"></textarea>
-        <button onclick="encryptRSAAudio()">Encrypt</button>
-        <textarea class="rsa-encrypted-output" readonly placeholder="Encrypted audio data..."></textarea>
-
-        <h3>RSA Audio Decryption</h3>
-        <textarea class="rsa-audio-input-decrypt" placeholder="Enter RSA encrypted audio data..."></textarea>
-        <textarea class="rsa-private-key" placeholder="Enter RSA private key"></textarea>
-        <button onclick="decryptRSAAudio()">Decrypt</button>
-        <audio id="rsa-audio-output" controls></audio>
-        <a id="rsa-audio-download-link" style="display: none;">Download Decrypted Audio</a>
-    </div>
-</div>
-
-<!-- Name to Color -->
-<div class="method name-to-color-section">
-    <h2>Name to RGB Color Converter</h2>
-    <!-- Input Fields -->
-    <input type="text" id="firstName" placeholder="First Name" />
-    <input type="text" id="middleName" placeholder="Middle Name (Optional)" />
-    <input type="text" id="lastName" placeholder="Last Name" />
-
-    <!-- Buttons -->
-    <div class="button-container">
-        <button onclick="generateSingleColor()">Generate Color</button>
-        <button onclick="clearFields()">Clear</button>
-    </div>
-
-    <!-- Single Output Box -->
-    <div id="outputBox" class="colorBox"></div>
-    <p id="outputRGB"></p>
-    <p id="outputName"></p> <!-- Full name output -->
-</div>
-    
-    <script src="decrypt.js"></script>
-
+    <!-- Footer and Navigation -->
     <div class="dropdown">
         <button class="dropbtn">⨀Ξ〄⋑</button>
         <div class="dropdown-content">
@@ -328,9 +201,7 @@
         </div>
     </div>
     <footer>
-        <!--<p>The End Project Solvers: <a href="https://discord.com/invite/eJGpsbpM86">Discord</a></p>-->
         <p>&copy; 2025 ⌁⍥◎Ϩ⌖ ∷〄 ⌖⍥Ξ ⨀⟒⚲⍥∷〄Ξ</p>
-        <!--<p>Version 1.0 | Contact: <a href="mailto:zs6avz@proton.me">zs6avz@proton.me</a></p>-->
     </footer>
 </body>
 </html>
