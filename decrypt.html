@@ -239,19 +239,26 @@
     </div>
 
     <!-- Base64 Image Encryption -->
+<!-- Base64 image-->
     <div class="sub-method">
         <h3>Base64 Encryption</h3>
+        <!-- File input for selecting an image -->
         <input type="file" class="base64-image-input">
+        <!-- Button to trigger the encryption -->
         <button onclick="encryptBase64Image()">Encrypt</button>
+        <!-- Output field to display the Base64-encoded string -->
         <textarea class="base64-encrypted-output" readonly placeholder="Encrypted Base64 image..."></textarea>
-
+    
         <h3>Base64 Decryption</h3>
-        <textarea class="base64-image-input" placeholder="Enter Base64 encrypted image..."></textarea>
+        <!-- Input field for pasting the Base64 string -->
+        <textarea class="base64-decryption-input" placeholder="Enter Base64 encrypted image..."></textarea>
+        <!-- Button to trigger the decryption -->
         <button onclick="decryptBase64Image()">Decrypt</button>
-        <img id="base64-image-output" alt="Decrypted Image">
+        <!-- Image element for displaying the decrypted image -->
+        <img id="base64-image-output" alt="Decrypted Image" style="display: none;">
+        <!-- Download link for saving the decrypted image -->
         <a id="base64-download-link" style="display: none;">Download Decrypted Image</a>
     </div>
-</div>
 
 <!-- Audio Encryption and Decryption Methods -->
 <div class="method">
