@@ -495,6 +495,27 @@ function encryptBase64Image() {
     reader.readAsBinaryString(file);
 }
 
+// Function to encrypt an image to Base64
+function encryptBase64Image() {
+    const fileInput = document.querySelector('.base64-image-input');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Please select an image file to encrypt.');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const encryptedData = btoa(event.target.result); // Encode file data to Base64
+        const outputField = document.querySelector('.base64-encrypted-output');
+        outputField.value = encryptedData; // Display encrypted Base64 data
+    };
+
+    // Use readAsDataURL to get Base64-compatible data
+    reader.readAsBinaryString(file);
+}
+
 // Function to decrypt a Base64 string to an image
 function decryptBase64Image() {
     const base64Input = document.querySelector('.base64-encrypted-output').value; // Get Base64 input
@@ -514,7 +535,8 @@ function decryptBase64Image() {
     // Set download link
     downloadLink.href = outputImg.src;
     downloadLink.download = 'decrypted-image.png'; // Suggest a filename for the download
-    downloadLink.style.di
+    downloadLink.style.display = 'inline-block'; // Make the link visible
+}
 
 // AES Audio Decryption
 function encryptAESAudio() {
