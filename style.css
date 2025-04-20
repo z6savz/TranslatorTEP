@@ -476,3 +476,64 @@ a:focus {
 
 /* Change the background color of the dropdown button when the dropdown content is shown
 .dropdown:hover .dropbtn {background-color: #fcad79;}*/
+
+/* Name-to-Color Section */
+.name-to-color-section {
+    background-color: rgba(45, 45, 45, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+}
+
+/* Input Fields */
+input[type="text"] {
+    margin: 10px;
+    padding: 10px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: 1px solid #666;
+    background-color: #515151;
+    color: white;
+}
+
+/* Buttons */
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    background-color: #444;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #666;
+}
+
+/* Single Output Box */
+.colorBox {
+    width: 150px;
+    height: 150px;
+    margin: 20px auto;
+    border-radius: 10px;
+    border: 1px solid #666;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#outputRGB {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #e1e1e1;
+}
+
+#outputName {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 10px;
+    text-align: center;
+    color: white; /* Default fallback color */
+}
