@@ -600,3 +600,61 @@ function rsaDecrypt(data, privateKey) {
     // Add RSA decryption logic here (use libraries like NodeRSA or others)
     return data; // Placeholder
 }
+
+//Convert name to color
+function calculateRGB(names) {
+    // Combine all names into one string
+    const fullName = names.join('').toUpperCase();
+
+    // Convert letters to numerical values (A=1, B=2, ..., Z=26)
+    const letterValues = Array.from(fullName)
+        .filter(char => char >= 'A' && char <= 'Z') // Only process letters
+        .map(char => char.charCodeAt(0) - 64); // Convert letters to numbers
+
+    // Calculate the sum of all letter values
+    const sum = letterValues.reduce((acc, val) => acc + val, 0);
+
+    // Scale RGB components proportionally (not exceeding 255)
+    const red = (sum % 255); // Modulus to wrap within 0-255 range
+    const green = ((sum * 2) % 255); // Example scaling factor
+    const blue = ((sum * 3) % 255); // Another scaling factor
+
+    return { red, green, blue };
+}
+
+function generateSingleColor() {
+    // Input Fields
+    const firstName = document.getElementById('firstName').value || "";
+    const middleName = document.getElementById('middleName').value || "";
+    const lastName = document.getElementById('lastName').value || "";
+
+    // Output Elements
+    const outputBox = document.getElementById('outputBox');
+    const outputRGB = document.getElementById('outputRGB');
+    const outputName = document.getElementById('outputName');
+
+    // Calculate RGB values
+    const { red, green, blue } = calculateRGB([firstName, middleName, lastName]);
+    const color = `rgb(${red}, ${green}, ${blue})`;
+
+    // Apply the color to the output box and display RGB values
+    outputBox.style.backgroundColor = color;
+    outputRGB.textContent = `Generated RGB Color: ${color}`;
+
+    // Display the full name in the generated color
+    const fullName = `${firstName} ${middleName} ${lastName}`.trim(); // Combine names
+    outputName.textContent = fullName || "No name provided";
+    outputName.style.color = color; // Set text color to match the generated color
+}
+
+function clearFields() {
+    // Clear input fields
+    document.getElementById('firstName').value = '';
+    document.getElementById('middleName').value = '';
+    document.getElementById('lastName').value = '';
+
+    // Clear output
+    document.getElementById('outputBox').style.backgroundColor = '';
+    document.getElementById('outputRGB').textContent = '';
+    document.getElementById('outputName').textContent = '';
+}
