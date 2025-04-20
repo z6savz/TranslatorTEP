@@ -68,7 +68,7 @@ const alphabetToCipher = {};
 // Function to load cipher mappings
 async function loadJacquard() {
     try {
-        const response = await fetch('jacquard.xml'); 
+        const response = await fetch('jacquard.xml'); // Fetch the mappings XML file
         if (!response.ok) throw new Error(`Failed to load mappings: ${response.statusText}`);
         const xml = await response.text();
         const parser = new DOMParser();
@@ -368,60 +368,7 @@ function getSelectedMode(method) {
     return document.querySelector(`.${method}-mode`).value;
 }
 
-/* SHA-256 Hashing (Not decryption, but useful for security)
-function hashSHA256() {
-    const inputElement = document.querySelector('.sha256-input');
-    const outputElement = document.querySelector('.sha256-output');
-    const text = inputElement.value.trim();
-
-    outputElement.textContent = CryptoJS.SHA256(text).toString();
-}*/
-
-/* HMAC Authentication
-function generateHMAC() {
-    const inputElement = document.querySelector('.hmac-input');
-    const outputElement = document.querySelector('.hmac-output');
-    const text = inputElement.value.trim();
-    const secretKey = "mysecretkey"; // Change this key
-
-    outputElement.textContent = CryptoJS.HmacSHA256(text, secretKey).toString();
-}*/
-
 const CryptoJS = require("crypto-js");
-
-// AES Image Decryption
-function encryptAESImage() {
-    const plaintext = document.querySelector('.aes-image-plaintext').value;
-    const key = document.querySelector('.aes-image-key').value;
-
-    if (!plaintext || !key) {
-        alert('Please provide image data and the AES key for encryption.');
-        return;
-    }
-
-    const encrypted = CryptoJS.AES.encrypt(plaintext, key).toString();
-    const outputField = document.querySelector('.aes-encrypted-output');
-    outputField.value = encrypted; // Display encrypted data
-}
-
-function decryptAESImage() {
-    const encryptedData = document.querySelector('.aes-image-input').value;
-    const key = document.querySelector('.aes-image-key').value;
-
-    if (!encryptedData || !key) {
-        alert('Please provide both encrypted data and the AES key.');
-        return;
-    }
-
-    const decryptedData = decryptAES(encryptedData, key);
-
-    const outputImg = document.getElementById('aes-image-output');
-    outputImg.src = decryptedData; // Set decrypted image source
-
-    const downloadLink = document.getElementById('aes-download-link');
-    downloadLink.href = decryptedData; // Set download link
-    downloadLink.style.display = 'inline-block'; // Make link visible
-}
 
 // Canvas-Based Image Decryption
 function encryptCanvasImage() {
@@ -474,27 +421,6 @@ function decryptCanvasImage() {
     reader.readAsDataURL(file);
 }
 
-// Base64 Image Decryption
-function encryptBase64Image() {
-    const fileInput = document.querySelector('.base64-image-input');
-    const file = fileInput.files[0];
-
-    if (!file) {
-        alert('Please select an image file to encrypt.');
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function (event) {
-        const encryptedData = btoa(event.target.result); // Encode file data to Base64
-        const outputField = document.querySelector('.base64-encrypted-output');
-        outputField.value = encryptedData; // Display encrypted Base64 data
-    };
-
-    // Use readAsDataURL to get Base64-compatible data
-    reader.readAsBinaryString(file);
-}
-
 // Function to encrypt an image to Base64
 function encryptBase64Image() {
     const fileInput = document.querySelector('.base64-image-input');
@@ -536,6 +462,12 @@ function decryptBase64Image() {
     downloadLink.href = outputImg.src;
     downloadLink.download = 'decrypted-image.png'; // Suggest a filename for the download
     downloadLink.style.display = 'inline-block'; // Make the link visible
+}
+
+// AES Decryption Function
+function decryptAES(encryptedData, key) {
+    let decrypted = CryptoJS.AES.decrypt(encryptedData, key);
+    return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
 // AES Audio Decryption
@@ -623,7 +555,6 @@ function rsaDecrypt(data, privateKey) {
     return data; // Placeholder
 }
 
-//Convert name to color
 function calculateRGB(names) {
     // Combine all names into one string
     const fullName = names.join('').toUpperCase();
@@ -680,3 +611,23 @@ function clearFields() {
     document.getElementById('outputRGB').textContent = '';
     document.getElementById('outputName').textContent = '';
 }
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdownBtn = document.querySelector('.dropbtn');
+    const dropdownContent = document.querySelector('.dropdown-content');
+
+    // Toggle dropdown visibility on button click
+    dropdownBtn.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent click events from propagating
+        dropdownContent.classList.toggle('active'); // Add or remove the "active" class for visibility
+    });
+
+    // Close dropdown menu if clicking outside the dropdown or button
+    document.addEventListener('click', (event) => {
+        if (!dropdownBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
+            dropdownContent.classList.remove('active'); // Hide the dropdown
+        }
+    });
+
+    // Ensure dropdown is hidden on page load
+    dropdownContent.classList.remove('active');
+});
