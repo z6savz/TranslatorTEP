@@ -290,6 +290,26 @@
     </div>
 </div>
 
+<!-- Name to Color -->
+<div class="method name-to-color-section">
+    <h2>Name to RGB Color Converter</h2>
+    <!-- Input Fields -->
+    <input type="text" id="firstName" placeholder="First Name" />
+    <input type="text" id="middleName" placeholder="Middle Name (Optional)" />
+    <input type="text" id="lastName" placeholder="Last Name" />
+
+    <!-- Buttons -->
+    <div class="button-container">
+        <button onclick="generateSingleColor()">Generate Color</button>
+        <button onclick="clearFields()">Clear</button>
+    </div>
+
+    <!-- Single Output Box -->
+    <div id="outputBox" class="colorBox"></div>
+    <p id="outputRGB"></p>
+    <p id="outputName"></p> <!-- Full name output -->
+</div>
+    
     <script src="decrypt.js"></script>
 
     <div class="dropdown">
