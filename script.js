@@ -73,6 +73,19 @@ function showMenu() {
     }
 }
 
+// Add event listener for "Enter" key
+document.addEventListener('DOMContentLoaded', () => {
+    const foxInput = document.getElementById("foxInput");
+    const submitFox = document.getElementById("submitFox");
+
+    foxInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault(); // Prevent default form submission behavior
+            submitFox.click(); // Trigger the button's click event
+        }
+    });
+});
+
 // Function to hide the dropdown menu (specific to the fox screen)
 function hideMenuForFoxScreen() {
     const menu = document.querySelector('.dropdown');
