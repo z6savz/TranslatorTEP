@@ -7,27 +7,22 @@ let alternativeToAlphabet = {};
 document.addEventListener('DOMContentLoaded', () => {
     const dropdownBtn = document.querySelector('.dropbtn'); // Dropdown button
     const dropdownContent = document.querySelector('.dropdown-content'); // Dropdown content
-    const foxScreen = document.getElementById('foxScreen'); // Fox screen container
-    const menu = document.getElementById('menu'); // Dropdown menu container
-
-    // Hide menu if foxScreen is visible
-    if (foxScreen && getComputedStyle(foxScreen).opacity === '1') {
-        menu.style.display = 'none';
-    } else {
-        menu.style.display = 'block';
-    }
 
     // Toggle dropdown visibility on button click
-    dropdownBtn.addEventListener('click', () => {
+    dropdownBtn.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent click events from propagating
         dropdownContent.classList.toggle('active'); // Add or remove the "active" class for visibility
     });
 
-    // Optional: Close dropdown if clicked outside the dropdown button or menu
+    // Optional: Close dropdown menu if clicking outside the dropdown button or menu
     document.addEventListener('click', (event) => {
         if (!dropdownBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
             dropdownContent.classList.remove('active'); // Remove "active" class to hide dropdown
         }
     });
+
+    // Ensure dropdown is hidden on page load
+    dropdownContent.classList.remove('active');
 });
 
 // Ensure cipher mappings are loaded when the page loads
@@ -36,7 +31,7 @@ loadMappings();
 // Function to verify the fox input
 async function checkFox() {
     try {
-        const response = await fetch('fox.xml');
+        const response = await fetch('fox.xml'); // Fetch fox.xml file
         if (!response.ok) throw new Error(`Failed to load fox file: ${response.statusText}`);
         const xml = await response.text();
         const parser = new DOMParser();
@@ -59,11 +54,11 @@ async function checkFox() {
 // Function to hide the fox screen
 function hideFoxScreen() {
     const foxScreen = document.getElementById("foxScreen");
-    foxScreen.style.zIndex = "-1";
-    foxScreen.style.opacity = "0";
-    foxScreen.style.pointerEvents = "none";
+    foxScreen.style.zIndex = "-1"; // Remove from view
+    foxScreen.style.opacity = "0"; // Make it transparent
+    foxScreen.style.pointerEvents = "none"; // Disable interactions
 
-    // Ensure menu visibility is restored when foxScreen is hidden
+    // Ensure menu visibility is restored when the fox screen is hidden
     const menu = document.querySelector('.dropdown');
     if (menu) {
         menu.style.display = 'block';
@@ -78,38 +73,26 @@ function showMenu() {
     }
 }
 
-// Initial Menu Visibility Setup
-document.addEventListener('DOMContentLoaded', () => {
-    const foxScreen = document.getElementById('foxScreen');
+// Function to hide the dropdown menu (specific to the fox screen)
+function hideMenuForFoxScreen() {
     const menu = document.querySelector('.dropdown');
+    const foxScreen = document.getElementById("foxScreen");
 
-    // Only hide the menu if foxScreen is visible
-    if (foxScreen && getComputedStyle(foxScreen).opacity === '1') {
-        menu.style.display = 'none'; // Hide the menu
-    } else {
-        menu.style.display = 'block'; // Show the menu
+    // Hide the navigation menu if the fox screen is visible
+    if (menu && foxScreen && getComputedStyle(foxScreen).opacity === '1') {
+        menu.style.display = 'none'; // Prevent menu from showing on foxScreen
     }
+}
 
-    const dropdownBtn = document.querySelector('.dropbtn'); // Dropdown button
-    const dropdownContent = document.querySelector('.dropdown-content'); // Dropdown content
-
-    // Toggle dropdown visibility on button click
-    dropdownBtn.addEventListener('click', () => {
-        dropdownContent.classList.toggle('active'); // Add or remove the "active" class for visibility
-    });
-
-    // Optional: Close dropdown if clicked outside the dropdown button or menu
-    document.addEventListener('click', (event) => {
-        if (!dropdownBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
-            dropdownContent.classList.remove('active'); // Remove "active" class to hide dropdown
-        }
-    });
+// Initial setup to ensure the dropdown menu is hidden on fox screen
+document.addEventListener('DOMContentLoaded', () => {
+    hideMenuForFoxScreen(); // Hide the navigation menu if foxScreen is active
 });
 
 // Function to load cipher mappings
 async function loadMappings() {
     try {
-        const response = await fetch('cipher_mapping.xml');
+        const response = await fetch('cipher_mapping.xml'); // Fetch the mappings XML file
         if (!response.ok) throw new Error(`Failed to load mappings: ${response.statusText}`);
         const xml = await response.text();
         const parser = new DOMParser();
@@ -199,26 +182,3 @@ function clearFields() {
     document.getElementById("outputText").value = "";
     document.getElementById("alternativeOutputText").value = "";
 }
-
-/* Hide dropdown button while `foxScreen` is active*/
-window.onload = () => {
-    document.getElementById("foxInput").focus();
-    loadMappings();
-};
-
-/* Ensure input fields only allow letters and spaces*/
-document.getElementById("foxInput").addEventListener("input", function () {
-    this.value = this.value.replace(/[^a-zA-Z\s]/g, ''); // Restrict to letters and spaces
-});
-
-// Input and Paste event listeners for `inputText`
-document.getElementById("inputText").addEventListener("input", function () {
-    this.value = this.value; // Allow all characters
-});
-
-document.getElementById("inputText").addEventListener("paste", function (event) {
-    event.preventDefault(); // Prevent default paste behavior
-    const pasteData = event.clipboardData.getData("text");
-    this.value += pasteData; // Allow pasted content without filtering
-});
-
