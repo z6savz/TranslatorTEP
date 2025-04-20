@@ -486,16 +486,18 @@ function encryptBase64Image() {
 
     const reader = new FileReader();
     reader.onload = function (event) {
-        const encryptedData = btoa(event.target.result); // Encode to Base64
+        const encryptedData = btoa(event.target.result); // Encode file data to Base64
         const outputField = document.querySelector('.base64-encrypted-output');
         outputField.value = encryptedData; // Display encrypted Base64 data
     };
 
+    // Use readAsDataURL to get Base64-compatible data
     reader.readAsBinaryString(file);
 }
 
+// Function to decrypt a Base64 string to an image
 function decryptBase64Image() {
-    const base64Input = document.querySelector('.base64-image-input').value;
+    const base64Input = document.querySelector('.base64-encrypted-output').value; // Get Base64 input
 
     if (!base64Input) {
         alert('Please enter Base64 encrypted image data.');
@@ -503,18 +505,16 @@ function decryptBase64Image() {
     }
 
     const outputImg = document.getElementById('base64-image-output');
-    outputImg.src = `data:image/png;base64,${base64Input}`;
-
     const downloadLink = document.getElementById('base64-download-link');
-    downloadLink.href = outputImg.src; // Set download link
-    downloadLink.style.display = 'inline-block'; // Make link visible
-}
 
-// AES Decryption Function
-function decryptAES(encryptedData, key) {
-    let decrypted = CryptoJS.AES.decrypt(encryptedData, key);
-    return decrypted.toString(CryptoJS.enc.Utf8);
-}
+    // Set image source using Base64
+    outputImg.src = `data:image/png;base64,${base64Input}`;
+    outputImg.style.display = 'block'; // Ensure the image is visible
+
+    // Set download link
+    downloadLink.href = outputImg.src;
+    downloadLink.download = 'decrypted-image.png'; // Suggest a filename for the download
+    downloadLink.style.di
 
 // AES Audio Decryption
 function encryptAESAudio() {
