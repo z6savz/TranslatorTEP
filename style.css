@@ -446,19 +446,13 @@ a {
 
 /* Hover effect */
 a:hover {
-    color: #104e8b;
-    text-decoration: underline;
+    color: #fcad79;
     transition: color 0.3s ease;
 }
 
-/* Active link style */
+/* Active link style*/
 a:active {
-    color: #0a3d62;
-}
-
-/* Focus style */
-a:focus {
-    outline: 2px dotted #1d72b8;
+    color: #fcad79;
 }
 
 /* Change color of dropdown links on hover */
