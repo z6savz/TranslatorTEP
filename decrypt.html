@@ -25,6 +25,7 @@
         <div class="button-container">
             <button onclick="encryptBinary(getSelectedBase())">Encrypt</button>
             <button onclick="decryptBinary(getSelectedBase())">Decrypt</button>
+            <button id="clearBinaryFieldsBtn">Clear</button>
         </div>
         <p class="binary-output"></p>
     </div>
@@ -36,6 +37,7 @@
         <div class="button-container">
             <button onclick="encryptJacquard()">Encrypt</button>
             <button onclick="decryptJacquard()">Decrypt</button>
+            <button id="clearJacquardFieldsBtn">Clear</button>
         </div>
         <p class="jacquard-output"></p>
     </div>
@@ -48,6 +50,7 @@
         <div class="button-container">
             <button onclick="encryptCaesar(getShiftValue())">Encrypt</button>
             <button onclick="decryptCaesar(getShiftValue())">Decrypt</button>
+            <button id="clearCaesarFieldsBtn">Clear</button>
         </div>
         <p class="caesar-output"></p>
     </div>
@@ -60,6 +63,7 @@
         <div class="button-container">
             <button class="encrypt-btn">Encrypt</button>
             <button class="decrypt-btn">Decrypt</button>
+            <button id="clearVigenereFieldsBtn">Clear</button>
         </div>
         <p class="vigenere-output"></p>
     </div>
@@ -71,6 +75,7 @@
         <div class="button-container">
             <button onclick="encryptAtbash()">Encrypt</button>
             <button onclick="decryptAtbash()">Decrypt</button>
+            <button id="clearAtbashFieldsBtn">Clear</button>
         </div>
         <p class="atbash-output"></p>
     </div>
@@ -82,6 +87,7 @@
     <div class="button-container">
         <button onclick="encryptHex()">Encrypt</button>
         <button onclick="decryptHex()">Decrypt</button>
+        <button id="clearHexFieldsBtn">Clear</button>
     </div>
     <p class="hex-output"></p>
 </div>
@@ -93,6 +99,7 @@
         <div class="button-container">
             <button onclick="encryptBase64()">Encode</button>
             <button onclick="decryptBase64()">Decode</button>
+            <button id="clearBase64FieldsBtn">Clear</button>
         </div>
         <p class="base64-output"></p>
     </div>
@@ -109,6 +116,7 @@
         <div class="button-container">
             <button onclick="encryptMorse(document.querySelector('.morse-separator').value)">Encrypt</button>
             <button onclick="decryptMorse(document.querySelector('.morse-separator').value)">Decrypt</button>
+            <button id="clearMorseFieldsBtn">Clear</button>
         </div>
         <p class="morse-output"></p>
     </div>
@@ -138,6 +146,7 @@
             <h3>Base64 Decryption</h3>
             <textarea class="base64-decryption-input" placeholder="Enter Base64 encrypted image..."></textarea>
             <button onclick="decryptBase64Image()">Decrypt</button>
+            <button id="clearBase64ImageFieldsBtn">Clear</button>
             <img id="base64-image-output" alt="Decrypted Image" style="display: none;">
             <a id="base64-download-link" style="display: none;">Download Decrypted Image</a>
         </div>
@@ -197,7 +206,7 @@
         <div class="dropdown-content">
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
-            <!--<a href="decrypt.html">Encrypt/Decrypt</a>-->
+            <a href="decrypt.html">Encrypt/Decrypt</a>
             <a href="cryptography.html">Cryptography</a>
         </div>
     </div>
