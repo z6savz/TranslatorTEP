@@ -33,6 +33,25 @@ function getSelectedBase() {
     return document.querySelector('.binary-base').value;
 }
 
+// Function to clear binary fields
+function clearBinaryFields() {
+    const inputElement = document.querySelector('.binary-input');
+    const outputElement = document.querySelector('.binary-output');
+    const baseSelect = document.querySelector('.binary-base');
+
+    if (inputElement) inputElement.value = ''; // Clear input
+    if (outputElement) outputElement.textContent = ''; // Clear output
+    if (baseSelect) baseSelect.selectedIndex = 0; // Reset dropdown
+}
+
+// Attach event listener
+document.addEventListener('DOMContentLoaded', () => {
+    const clearButton = document.getElementById('clearBinaryFieldsBtn');
+    if (clearButton) {
+        clearButton.addEventListener('click', clearBinaryFields);
+    }
+});
+
 // Hexadecimal Encryption & Decryption
 function encryptHex() {
     const inputElement = document.querySelector('.hex-input');
@@ -58,12 +77,29 @@ function decryptHex() {
     outputElement.textContent = text || "Invalid hex input!";
 }
 
+// Function to clear hex fields
+function clearHexFields() {
+    const inputElement = document.querySelector('.hex-input');
+    const outputElement = document.querySelector('.hex-output');
+
+    if (inputElement) inputElement.value = ''; // Clear input
+    if (outputElement) outputElement.textContent = ''; // Clear output
+}
+
+// Attach event listener
+document.addEventListener('DOMContentLoaded', () => {
+    const clearButton = document.getElementById('clearHexFieldsBtn');
+    if (clearButton) {
+        clearButton.addEventListener('click', clearHexFields);
+    }
+});
+
 // Ensure cipher mappings are loaded when the page loads
 loadJacquard();
 
 // Define mapping objects
-const cipherToAlphabet = {};
-const alphabetToCipher = {};
+const jacquardToAlphabet = {};
+const alphabetToJacquard = {};
 
 // Function to load cipher mappings
 async function loadJacquard() {
@@ -81,8 +117,8 @@ async function loadJacquard() {
             const alphabet = mapping.getAttribute("alphabet");
 
             // Populate mapping objects
-            cipherToAlphabet[cipher] = alphabet;
-            alphabetToCipher[alphabet] = cipher;
+            jacquardToAlphabet[cipher] = alphabet;
+            alphabetToJacquard[alphabet] = cipher;
         }
 
         console.log("Mappings loaded successfully:", cipherToAlphabet, alphabetToCipher);
@@ -99,7 +135,7 @@ function encryptJacquard() {
 
     // Translate each character to cipher using the mapping
     const cipherText = text.split('')
-        .map(char => alphabetToCipher[char] || "[?]") // Use [?] for unknown characters
+        .map(char => alphabetToJacquard[char] || "[?]") // Use [?] for unknown characters
         .join(' ');
 
     outputElement.textContent = cipherText || "Invalid input!";
@@ -113,11 +149,28 @@ function decryptJacquard() {
 
     // Split the cipher text by spaces and translate each to alphabet
     const text = cipherText.split(' ')
-        .map(code => cipherToAlphabet[code] || "[?]") // Use [?] for unknown cipher codes
+        .map(code => jacquardToAlphabet[code] || "[?]") // Use [?] for unknown cipher codes
         .join('');
 
     outputElement.textContent = text || "Invalid cipher text!";
 }
+
+// Function to clear Jacquard fields
+function clearJacquardFields() {
+    const inputElement = document.querySelector('.jacquard-input');
+    const outputElement = document.querySelector('.jacquard-output');
+
+    if (inputElement) inputElement.value = ''; // Clear input
+    if (outputElement) outputElement.textContent = ''; // Clear output
+}
+
+// Attach event listener
+document.addEventListener('DOMContentLoaded', () => {
+    const clearButton = document.getElementById('clearJacquardFieldsBtn');
+    if (clearButton) {
+        clearButton.addEventListener('click', clearJacquardFields);
+    }
+});
 
 // Caesar Cipher Encryption & Decryption
 function encryptCaesar(shift) {
@@ -162,8 +215,26 @@ function getShiftValue() {
     return parseInt(document.querySelector('.caesar-shift').value, 10);
 }
 
+// Clear fields for Caesar Cipher
+function clearCaesarFields() {
+    const inputElement = document.querySelector('.caesar-input');
+    const outputElement = document.querySelector('.caesar-output');
+    const shiftElement = document.querySelector('.caesar-shift');
+
+    if (inputElement) inputElement.value = ''; // Clear input
+    if (outputElement) outputElement.textContent = ''; // Clear output
+    if (shiftElement) shiftElement.value = 3; // Reset shift to default value
+}
+
+// Attach event listener
+document.addEventListener('DOMContentLoaded', () => {
+    const clearCaesarButton = document.getElementById('clearCaesarFieldsBtn');
+    if (clearCaesarButton) {
+        clearCaesarButton.addEventListener('click', clearCaesarFields);
+    }
+});
+
 // Vigenère Cipher Encryption & Decryption
-// Event Listeners for Buttons
 document.querySelector('.encrypt-btn').addEventListener('click', function () {
     const key = document.querySelector('.vigenere-key').value.trim();
     const text = document.querySelector('.vigenere-input').value.trim();
@@ -234,6 +305,25 @@ function vigenereDecrypt(cipherText, key) {
     return plainText;
 }
 
+// Clear fields for Vigenère Cipher
+function clearVigenereFields() {
+    const inputElement = document.querySelector('.vigenere-input');
+    const keyElement = document.querySelector('.vigenere-key');
+    const outputElement = document.querySelector('.vigenere-output');
+
+    if (inputElement) inputElement.value = ''; // Clear input
+    if (keyElement) keyElement.value = ''; // Clear key
+    if (outputElement) outputElement.textContent = ''; // Clear output
+}
+
+// Attach event listener
+document.addEventListener('DOMContentLoaded', () => {
+const clearVigenereButton = document.getElementById('clearVigenereFieldsBtn');
+    if (clearVigenereButton) {
+        clearVigenereButton.addEventListener('click', clearVigenereFields);
+    }
+});
+
 // Atbash Cipher Encryption & Decryption
 function encryptAtbash() {
     const inputElement = document.querySelector('.atbash-input');
@@ -271,31 +361,80 @@ function decryptAtbash() {
     outputElement.textContent = text || "Invalid cipher text!";
 }
 
-// 🟢 Base64 Encoding
+function clearAtbashFields() {
+    const inputElement = document.querySelector('.atbash-input');
+    const outputElement = document.querySelector('.atbash-output');
+
+    if (inputElement) inputElement.value = ''; // Clear input
+    if (outputElement) outputElement.textContent = ''; // Clear output
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+const clearAtbashButton = document.getElementById('clearAtbashFieldsBtn');
+    if (clearAtbashButton) {
+        clearAtbashButton.addEventListener('click', clearAtbashFields);
+    }
+});
+
+// Base64 Encoding
 function encryptBase64() {
     const inputElement = document.querySelector('.base64-input');
     const outputElement = document.querySelector('.base64-output');
     const text = inputElement.value.trim();
 
+    if (!text) {
+        outputElement.textContent = "Error: Input cannot be empty!";
+        return;
+    }
+
     try {
-        outputElement.textContent = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(text));
-    } catch {
+        const encoded = btoa(unescape(encodeURIComponent(text))); // Properly encode text to Base64
+        outputElement.textContent = encoded;
+    } catch (error) {
         outputElement.textContent = "Error: Invalid input!";
+        console.error(error);
     }
 }
 
-// 🔴 Base64 Decoding
+// Base64 Decoding
 function decryptBase64() {
     const inputElement = document.querySelector('.base64-input');
     const outputElement = document.querySelector('.base64-output');
     const encodedText = inputElement.value.trim();
 
+    if (!encodedText) {
+        outputElement.textContent = "Error: Input cannot be empty!";
+        return;
+    }
+
     try {
-        outputElement.textContent = CryptoJS.enc.Base64.parse(encodedText).toString(CryptoJS.enc.Utf8);
-    } catch {
+        const decoded = decodeURIComponent(escape(atob(encodedText))); // Properly decode Base64 to text
+        outputElement.textContent = decoded;
+    } catch (error) {
         outputElement.textContent = "Error: Invalid Base64 input!";
+        console.error(error);
     }
 }
+
+// Clear Base64 Fields
+function clearBase64Fields() {
+    const inputElement = document.querySelector('.base64-input');
+    const outputElement = document.querySelector('.base64-output');
+
+    if (inputElement) inputElement.value = ''; // Clear input
+    if (outputElement) outputElement.textContent = ''; // Clear output
+}
+
+// Attach event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    const encryptButton = document.getElementById('encryptBase64Btn');
+    const decryptButton = document.getElementById('decryptBase64Btn');
+    const clearButton = document.getElementById('clearBase64FieldsBtn');
+
+    if (encryptButton) encryptButton.addEventListener('click', encryptBase64);
+    if (decryptButton) decryptButton.addEventListener('click', decryptBase64);
+    if (clearButton) clearButton.addEventListener('click', clearBase64Fields);
+});
 
 // Morse Code Encryption & Decryption
 const morseCodeMap = {
@@ -331,7 +470,26 @@ function decryptMorse() {
     outputElement.textContent = text || "Invalid Morse input!";
 }
 
-// 🔵 Function to encrypt using selected cipher & mode
+// Clear fields for Morse Code
+function clearMorseFields() {
+    const inputElement = document.querySelector('.morse-input');
+    const outputElement = document.querySelector('.morse-output');
+    const separatorElement = document.querySelector('.morse-separator');
+
+    if (inputElement) inputElement.value = ''; // Clear input
+    if (outputElement) outputElement.textContent = ''; // Clear output
+    if (separatorElement) separatorElement.selectedIndex = 0; // Reset separator to default
+}
+
+// Attach event listener
+document.addEventListener('DOMContentLoaded', () => {
+const clearMorseButton = document.getElementById('clearMorseFieldsBtn');
+    if (clearMorseButton) {
+        clearMorseButton.addEventListener('click', clearMorseFields);
+    }
+});
+
+/* 🔵 Function to encrypt using selected cipher & mode
 function encryptCipher(method, mode) {
     const inputElement = document.querySelector(`.${method}-input`);
     const keyElement = document.querySelector(`.${method}-key`);
@@ -366,11 +524,11 @@ function decryptCipher(method, mode) {
 // Function to get selected encryption mode
 function getSelectedMode(method) {
     return document.querySelector(`.${method}-mode`).value;
-}
+}*/
 
 const CryptoJS = require("crypto-js");
 
-// Canvas-Based Image Decryption
+/* Canvas-Based Image Decryption
 function encryptCanvasImage() {
     const fileInput = document.querySelector('.canvas-image-input');
     const file = fileInput.files[0];
@@ -419,7 +577,7 @@ function decryptCanvasImage() {
     };
 
     reader.readAsDataURL(file);
-}
+}*/
 
 // Function to encrypt an image to Base64
 function encryptBase64Image() {
@@ -464,7 +622,29 @@ function decryptBase64Image() {
     downloadLink.style.display = 'inline-block'; // Make the link visible
 }
 
-// AES Decryption Function
+// Clear fields for Base64 Image
+function clearBase64ImageFields() {
+    const fileInput = document.querySelector('.base64-image-input');
+    const encryptedOutput = document.querySelector('.base64-encrypted-output');
+    const decryptionInput = document.querySelector('.base64-decryption-input');
+    const imageOutput = document.getElementById('base64-image-output');
+    const downloadLink = document.getElementById('base64-download-link');
+
+    if (fileInput) fileInput.value = ''; // Clear file input
+    if (encryptedOutput) encryptedOutput.value = ''; // Clear encrypted output
+    if (decryptionInput) decryptionInput.value = ''; // Clear decryption input
+    if (imageOutput) imageOutput.style.display = 'none'; // Hide image output
+    if (downloadLink) downloadLink.style.display = 'none'; // Hide download link
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+const clearBase64ImageButton = document.getElementById('clearBase64ImageFieldsBtn');
+    if (clearBase64ImageButton) {
+        clearBase64ImageButton.addEventListener('click', clearBase64ImageFields);
+    }
+});
+
+/* AES Decryption Function
 function decryptAES(encryptedData, key) {
     let decrypted = CryptoJS.AES.decrypt(encryptedData, key);
     return decrypted.toString(CryptoJS.enc.Utf8);
@@ -553,8 +733,9 @@ function decryptRSAAudio() {
 function rsaDecrypt(data, privateKey) {
     // Add RSA decryption logic here (use libraries like NodeRSA or others)
     return data; // Placeholder
-}
+}*/
 
+// Function to calculate RGB values based on names
 function calculateRGB(names) {
     // Combine all names into one string
     const fullName = names.join('').toUpperCase();
@@ -611,23 +792,3 @@ function clearFields() {
     document.getElementById('outputRGB').textContent = '';
     document.getElementById('outputName').textContent = '';
 }
-document.addEventListener('DOMContentLoaded', () => {
-    const dropdownBtn = document.querySelector('.dropbtn');
-    const dropdownContent = document.querySelector('.dropdown-content');
-
-    // Toggle dropdown visibility on button click
-    dropdownBtn.addEventListener('click', (event) => {
-        event.stopPropagation(); // Prevent click events from propagating
-        dropdownContent.classList.toggle('active'); // Add or remove the "active" class for visibility
-    });
-
-    // Close dropdown menu if clicking outside the dropdown or button
-    document.addEventListener('click', (event) => {
-        if (!dropdownBtn.contains(event.target) && !dropdownContent.contains(event.target)) {
-            dropdownContent.classList.remove('active'); // Hide the dropdown
-        }
-    });
-
-    // Ensure dropdown is hidden on page load
-    dropdownContent.classList.remove('active');
-});
