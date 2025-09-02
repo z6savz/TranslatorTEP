@@ -31,24 +31,31 @@
         <ul>Ada always tells the truth.</ul>
         <ul>B25Y tells the truth only when Ada is lying.</ul>
         <ul>Charles answers randomly-truth or lie, you won't know.</ul>
-    You may ask one question to one person only.
+    You may ask one question to one person only. (The puzzle will automatically reset after 10 seconds, each round will have a new passcode holder.)
     What question will you ask to discover who holds the passcode?
     </p>
 
     <select id="questionSelect">
-        <option value="0">Is the passcode held by Ada?</option>
-        <option value="1">Is the passcode held by B25Y?</option>
-        <option value="2">Is the passcode held by Charles?</option>
-    </select>
+  <option value="0">Is the passcode held by Ada?</option>
+  <option value="1">Is the passcode held by B25Y?</option>
+  <option value="2">Is the passcode held by Charles?</option>
+  <option value="3">Who holds the passcode?</option>
+</select>
 
-    <div class="characters">
-        <button onclick="askAda()">Ask Ada</button>
-        <button onclick="askB25Y()">Ask B25Y</button>
-        <button onclick="askCharles()">Ask Charles</button>
-    </div>
+<div class="characters">
+  <button onclick="askAda()">Ask Ada</button>
+  <button onclick="askB25Y()">Ask B25Y</button>
+  <button onclick="askCharles()">Ask Charles</button>
+</div>
 
-    
-    <button onclick="revealPasscode()" class="reveal-button">Reveal Passcode Holder</button>
+<div class="controls">
+  <button onclick="resetGame()" class="reset-button">Reset</button>
+</div>
+
+<div id="actualHolder" class="actual-holder"></div>
+<div id="response" class="response"></div>
+<div id="result" class="result"></div>
+<div id="deduction" class="deduction"></div>
     
     <div id="actualHolder" class="actual-holder"></div>
     <div id="response" class="response"></div>
