@@ -96,6 +96,7 @@ button {
 
 button:hover {
     background-color: rgb(100, 100, 100);
+    box-shadow: 0px 4px 6px #fcad79
 }
 
 /* Button container styling */
@@ -120,6 +121,7 @@ button:hover {
 
 #keyboardPanel button:hover {
     background-color: rgb(100, 100, 100);
+    box-shadow: 0px 4px 6px #fcad79
 }
 
 #keyboardPanel {
@@ -171,7 +173,7 @@ footer {
     z-index: 1;
     right: 0;
     border-radius: 4px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px #fcad79;
 }
 
 /* Links inside the dropdown */
@@ -201,7 +203,7 @@ footer {
 
 .method:hover {
     transform: scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 12px #fcad79;
 }
 
 /* Selector styling */
@@ -268,16 +270,7 @@ p.caesar-output,
 p.vigenere-output,
 p.atbash-output,
 p.base64-output,
-p.morse-output,
-p.AES-output,
-p.RSA-output,
-p.RC4-output,
-p.DES-output,
-p.TripleDES-output,
-p.Rabbit-output,
-p.SHA-256-output,
-p.SHA-512-output,
-p.HMAC-output {
+p.morse-output{
     font-size: 18px;
     font-weight: lighter;
     color: #fcad79;
@@ -327,7 +320,7 @@ section {
     max-width: 800px;
     background-color: rgba(45, 45, 45, 0.9);
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px #fcad79;
     text-align: center;
 }
 
@@ -347,7 +340,7 @@ section {
     background-color: rgba(45, 45, 45, 0.9);
     border: 1px solid #444;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 8px #fcad79;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -360,7 +353,7 @@ section {
 
 .image-decryption:hover {
     transform: scale(1.02);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 12px #fcad79;
 }
 
 /* Sub-method container */
@@ -512,7 +505,7 @@ button:hover {
     margin: 20px auto;
     border-radius: 10px;
     border: 1px solid #666;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 8px #fcad79;
 }
 
 #outputRGB {
@@ -527,4 +520,120 @@ button:hover {
     margin-top: 10px;
     text-align: center;
     color: white; /* Default fallback color */
+}
+
+/* Blog Page Styles */
+.blog-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 32px 0;
+}
+
+.blog-post-preview {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: #515151;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 8px #fcad79;
+}
+
+.blog-thumbnail {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px #fcad79;
+    transition: transform 0.2s;
+}
+.blog-thumbnail:hover {
+    transform: scale(1.05);
+}
+
+.blog-preview-content h3 {
+    margin: 0 0 8px 0;
+    color: #fcad79;
+}
+.blog-preview-content p {
+    margin: 0 0 8px 0;
+}
+
+.blog-date {
+    font-size: 0.9em;
+    color: #aaa;
+}
+
+.blog-post-full {
+    max-width: 700px;
+    margin: 40px auto;
+    background: #515151;
+    border-radius: 8px;
+    padding: 32px;
+    box-shadow: 0 2px 8px #fcad79;
+}
+
+.blog-thumbnail-full {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    display: block;
+    margin: 0 auto 24px auto;
+    border-radius: 8px;
+}
+
+p {
+    color: #e1e1e1; /* or any color you prefer */
+}
+
+.blog-page {
+    background-color: #444; /* Change this to your preferred color */
+    background-size: cover;
+    background-position: center;
+}
+
+.blog-post-page {
+    background-color: #444; /* Change this to your preferred color */
+    background-size: cover;
+    background-position: center;
+}
+
+.blog-video {
+    margin: 32px 0;
+    text-align: center;
+}
+
+.blog-video iframe {
+    max-width: 100%;
+    height: 315px;
+    border-radius: 8px;
+}
+
+.echoes-page {
+    background-color: #222;
+    color: #e1e1e1;
+    min-height: 100vh;
+}
+
+.game-container {
+    max-width: 700px;
+    margin: 60px auto;
+    background: rgba(45, 45, 45, 0.95);
+    border-radius: 8px;
+    padding: 32px 24px;
+    box-shadow: 0 4px 12px #fcad79;
+    text-align: center;
+}
+
+.game-container h1 {
+    color: #fcad79;
+    margin-bottom: 18px;
+}
+
+.game-container p {
+    color: #e1e1e1;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 18px;
 }
