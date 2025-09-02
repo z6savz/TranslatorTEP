@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ϟ⌇◎⌁</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Favicon Links -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="script.js" defer></script>
+</head>
+<body class="blog-page">
+    <h1>ϟ⌇◎⌁</h1>
+    <h2>Updates & Insights</h2>
+    <h3>This blog reflects interpretive and speculative insights based on the themes examined
+        throughout the solving of The End Project. From the symbols of Enlightenment logic to
+        the revelations of Romantic introspection, from fugues and formulas to mythopoetic visions
+        and mechanized minds, this blog traces the dialogue between reason and imagination.</h3>
+    
+    <!-- Menu Button -->
+    <div class="dropdown">
+        <button class="dropbtn">⨀Ξ〄⋑</button>
+        <div class="dropdown-content">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="decrypt.html">Encrypt/Decrypt</a>
+            <a href="cryptography.html">Cryptography</a>
+            <a href="blog.html">Blog</a>
+            <a href="echoes.html">The Threshold of Echoes</a>
+        </div>
+    </div>
+
+    <!-- Blog Posts Section (populated by XML) -->
+    <div class="blog-posts" id="blogPosts"></div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 ⌁⍥◎Ϩ⌖ ∷〄 ⌖⍥Ξ ⨀⟒⚲⍥∷〄Ξ</p>
+    </footer>
+
+    <script>
+    // Fetch and display blog posts from XML
+    fetch('blog-posts.xml')
+    .then(response => response.text())
+    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+    .then(data => {
+        const posts = data.getElementsByTagName('post');
+        const container = document.getElementById('blogPosts');
+        for (let post of posts) {
+        const title = post.getElementsByTagName('title')[0].textContent;
+        const date = post.getElementsByTagName('date')[0].textContent;
+        const thumbnail = post.getElementsByTagName('thumbnail')[0].textContent;
+        const excerpt = post.getElementsByTagName('excerpt')[0].textContent;
+        const link = post.getElementsByTagName('link')[0].textContent;
+
+        const html = `
+            <div class="blog-post-preview">
+            <a href="${link}">
+                <img src="${thumbnail}" alt="${title}" class="blog-thumbnail">
+            </a>
+            <div class="blog-preview-content">
+                <a href="${link}"><h3>${title}</h3></a>
+                <p>${excerpt}</p>
+                <p class="blog-date">${date}</p>
+            </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        }
+    });
+    </script>
+</body>
+</html>
