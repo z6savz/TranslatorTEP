@@ -622,29 +622,8 @@ function decryptBase64Image() {
     downloadLink.style.display = 'inline-block'; // Make the link visible
 }
 
-// Clear fields for Base64 Image
-function clearBase64ImageFields() {
-    const fileInput = document.querySelector('.base64-image-input');
-    const encryptedOutput = document.querySelector('.base64-encrypted-output');
-    const decryptionInput = document.querySelector('.base64-decryption-input');
-    const imageOutput = document.getElementById('base64-image-output');
-    const downloadLink = document.getElementById('base64-download-link');
 
-    if (fileInput) fileInput.value = ''; // Clear file input
-    if (encryptedOutput) encryptedOutput.value = ''; // Clear encrypted output
-    if (decryptionInput) decryptionInput.value = ''; // Clear decryption input
-    if (imageOutput) imageOutput.style.display = 'none'; // Hide image output
-    if (downloadLink) downloadLink.style.display = 'none'; // Hide download link
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-const clearBase64ImageButton = document.getElementById('clearBase64ImageFieldsBtn');
-    if (clearBase64ImageButton) {
-        clearBase64ImageButton.addEventListener('click', clearBase64ImageFields);
-    }
-});
-
-/* AES Decryption Function
+/* AES Decryption Function*/
 function decryptAES(encryptedData, key) {
     let decrypted = CryptoJS.AES.decrypt(encryptedData, key);
     return decrypted.toString(CryptoJS.enc.Utf8);
@@ -733,7 +712,7 @@ function decryptRSAAudio() {
 function rsaDecrypt(data, privateKey) {
     // Add RSA decryption logic here (use libraries like NodeRSA or others)
     return data; // Placeholder
-}*/
+}
 
 // Function to calculate RGB values based on names
 function calculateRGB(names) {
