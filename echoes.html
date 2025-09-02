@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Threshold of Echoes</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Favicon Links -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="script.js" defer></script>
+</head>
+<body class="echoes-page">
+    <div class="dropdown">
+        <button class="dropbtn">⨀Ξ〄⋑</button>
+        <div class="dropdown-content">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="decrypt.html">Encrypt/Decrypt</a>
+            <a href="cryptography.html">Cryptography</a>
+            <a href="blog.html">Blog</a>
+            <a href="echoes.html">The Threshold of Echoes</a>
+        </div>
+    </div>
+    <div class="game-container">
+    <h1>The Threshold of Echoes</h1>
+    <p>Three stand before you. Only one holds the passcode. But none will answer plainly.</p>
+    <p>
+        <ul>Ada always tells the truth.</ul>
+        <ul>B25Y tells the truth only when Ada is lying.</ul>
+        <ul>Charles answers randomly-truth or lie, you won't know.</ul>
+    You may ask one question to one person only.
+    What question will you ask to discover who holds the passcode?
+    </p>
+
+    <select id="questionSelect">
+        <option value="0">Is the passcode held by Ada?</option>
+        <option value="1">Is the passcode held by B25Y?</option>
+        <option value="2">Is the passcode held by Charles?</option>
+    </select>
+
+    <div class="characters">
+        <button onclick="askAda()">Ask Ada</button>
+        <button onclick="askB25Y()">Ask B25Y</button>
+        <button onclick="askCharles()">Ask Charles</button>
+    </div>
+
+    
+    <button onclick="revealPasscode()" class="reveal-button">Reveal Passcode Holder</button>
+    
+    <div id="actualHolder" class="actual-holder"></div>
+    <div id="response" class="response"></div>
+    <div id="result" class="result"></div>
+    </div>
+
+    <script src="echoes.js"></script>
+    <footer>
+        <p>&copy; 2025 ⌁⍥◎Ϩ⌖ ∷〄 ⌖⍥Ξ ⨀⟒⚲⍥∷〄Ξ</p>
+    </footer>
+</body>
+</html>
