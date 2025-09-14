@@ -36,6 +36,11 @@ videoUpload.addEventListener("change", e => {
     [redGain, greenGain, blueGain, contrast, lsbChannel].forEach(ctrl => ctrl.disabled = false);
     document.getElementById("startAnalysisBtn").disabled = false;
   };
+
+  // Safely disable controls
+  [redGain, greenGain, blueGain, contrast].forEach(ctrl => {
+    if (ctrl) ctrl.disabled = true;
+  });
 });
 
 // Start Analysis button handler
@@ -106,6 +111,7 @@ replayBtn.addEventListener("click", async () => {
 // Main frame processing logic
 async function processVideoFrames() {
   // Show loading indicator and disable controls
+  const loadingText = document.getElementById("loadingText");
   if (loadingDiv) loadingDiv.style.display = 'block';
   [redGain, greenGain, blueGain, contrast].forEach(ctrl => ctrl.disabled = true);
 
@@ -115,7 +121,7 @@ async function processVideoFrames() {
   tempCanvas.height = video.videoHeight;
   const tempCtx = tempCanvas.getContext('2d');
 
-  const step = 1.0; // seconds between frames
+  const step = 1.37; // seconds between frames
   textOutput.textContent = "";
   //lsbOutputText = ""; // Reset before processing
 
@@ -170,10 +176,10 @@ async function processVideoFrames() {
     //lsbOutputText += `Frame @ ${t.toFixed(2)}s:\n${lsbBits}\n`;
 
     // Update loading text
-    if (loadingDiv) loadingDiv.textContent = `Processing frame at ${t.toFixed(1)}s...`;
-  }
+    if (loadingText) loadingText.textContent = `Processing frame at ${t.toFixed(1)}s...`;
 
     // Hide loading indicator and re-enable controls
   if (loadingDiv) loadingDiv.style.display = 'none';
   [redGain, greenGain, blueGain, contrast].forEach(ctrl => ctrl.disabled = false);
+}
 }
