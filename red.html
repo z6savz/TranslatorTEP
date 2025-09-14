@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Steganography Tool</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Video Steganography Tool</h1>
+
+  <!-- Upload Section -->
+  <section>
+    <label for="videoUpload">Upload Video:</label>
+    <input type="file" id="videoUpload" accept="video/*">
+  </section>
+
+  <!-- Video Preview-->
+  <section>
+    <video id="video" controls width="480"></video>
+  </section>
+
+  <!-- Processing Controls-->
+  <section>
+    <h2>Color & Contrast</h2>
+    <label>Red <input type="range" id="redGain" min="0" max="2" step="0.01" value="1"></label>
+    <label>Green <input type="range" id="greenGain" min="0" max="2" step="0.01" value="1"></label>
+    <label>Blue <input type="range" id="blueGain" min="0" max="2" step="0.01" value="1"></label>
+    <label>Contrast <input type="range" id="contrast" min="0" max="2" step="0.01" value="1"></label>
+  </section>
+
+  <!--<label>
+  LSB Channel:
+  <select id="lsbChannel">
+    <option value="red">Red</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+    <option value="all">All</option>
+  </select>
+</label>-->
+
+<button id="startAnalysisBtn">Start Analysis</button>
+
+  <!-- Output Preview -->
+  <section>
+    <h2>Output Preview</h2>
+    <canvas id="canvas"></canvas>
+    <button id="playBtn">Play</button>
+    <button id="pauseBtn">Pause</button>
+    <button id="replayBtn">Replay & Analyse</button>
+    <div id="loadingDiv" style="display:none;">Processing frames, please wait...</div>
+  </section>
+
+  
+
+  <!-- Forensics/Steganography Panel
+  <section>
+    <h2>Steganography & Forensics</h2>
+    <label>Mode
+      <select id="forensicsMode">
+        <option value="normal">Normal</option>
+        <option value="bitplane">Bit-plane</option>
+        <option value="temporal">Temporal Diff</option>
+        <option value="lsb">LSB Extraction</option>
+      </select>
+    </label>
+    <label>Channel
+      <select id="forensicsChannel">
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="blue">Blue</option>
+      </select>
+    </label>
+    <label>Bit-plane <input type="number" id="bitPlane" min="0" max="7" value="0"></label>
+    <button id="extractLSB">Extract LSB</button>
+  </section>-->
+
+  <!-- Decoded Output-->
+  </section>
+  <h2>Output Text</h2>
+  <!--<canvas id="textCanvas"></canvas>-->
+  <!--<button id="downloadLSBBtn">Download LSB Data</button>-->
+  <pre id="decodeOutput"></pre>
+  <pre id="textOutput"></pre>
+  </section>
+
+  <!-- JS Modules -->
+  <script type="module" src="main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</body>
+</html>
+
+
+
