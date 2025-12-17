@@ -365,13 +365,6 @@ async function processVideoFrames() {
   if (loadingText) loadingText.textContent = "Starting analysis...";
   [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => ctrl.disabled = true);
   // preview window removed — no preview button to disable
-  // Prepare ZIP (if JSZip is loaded) to collect per-frame files
-  let zip = null;
-  try {
-    if (typeof JSZip !== 'undefined') zip = new JSZip();
-  } catch (e) {
-    zip = null;
-  }
 
   const tempCanvas = document.createElement('canvas');
   tempCanvas.width = video.videoWidth;
@@ -432,18 +425,9 @@ async function processVideoFrames() {
       lsbOutput.green += timestamp + greenBits + "\n";
       lsbOutput.blue  += timestamp + blueBits + "\n";
       lsbOutput.all   += timestamp + allBits + "\n";
-      if (zip) {
-        zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_red.txt`, redBits);
-        zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_green.txt`, greenBits);
-        zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_blue.txt`, blueBits);
-        zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_all.txt`, allBits);
-      }
     } else {
       const bits = getLSBBits(imageData, channel);
       lsbOutput[channel] += timestamp + bits + "\n";
-      if (zip) {
-        zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_${channel}.txt`, bits);
-      }
     }
 
     if (loadingText) loadingText.textContent = `Processing frame at ${t.toFixed(1)}s...`;
@@ -458,25 +442,6 @@ async function processVideoFrames() {
   if (loadingDiv) loadingDiv.style.display = 'none';
   [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => ctrl.disabled = false);
   // preview window removed — no preview button to enable
-
-  // If a ZIP was prepared, generate and trigger download
-  if (zip) {
-    try {
-      const blob = await zip.generateAsync({ type: 'blob' });
-      const zipName = `${currentVideoName}_lsb_frames.zip`;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.style.display = 'none';
-      a.href = url;
-      a.download = zipName;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      setTimeout(() => URL.revokeObjectURL(url), 2000);
-    } catch (err) {
-      console.error('ZIP generation failed', err);
-    }
-  }
 }
 
 // Frame timing control
