@@ -887,17 +887,18 @@ button:hover {
 }
 
 #copyLSBBtn {
-  margin-top: 8px;
-  padding: 6px 12px;
-  font-family: 'Courier New', monospace;
-  background-color: #222;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 4px;
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #FE7743 0%, #FE7743 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  background-color: #2a2a2a;
+  border: 1px solid #FE7743;
+  border-radius: 5px;
   cursor: pointer;
 }
 #copyLSBBtn:hover {
-  background-color: #333;
+  background-color: #3a3a3a;
+  box-shadow: 0px 4px 6px #FE7743;
 }
 .loading-sticky {
       position: fixed;
@@ -1251,20 +1252,20 @@ button:hover {
 }
 
 .translator-buttons button {
-    padding: 12px 25px;
-    background: #447D9B;
-    background: linear-gradient(135deg, #447D9B 0%, #FE7743 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    border: none;
-    border-radius: 25px;
-    font-size: 1rem;
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #FE7743 0%, #FE7743 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    background-color: #2a2a2a;
+    border: 1px solid #FE7743;
+    border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
-    font-weight: bold;
 }
 
 .translator-buttons button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(69, 104, 130, 0.6);
+    background-color: #3a3a3a;
+    box-shadow: 0px 4px 6px #FE7743;
 }
 
 /* Responsive Design */
