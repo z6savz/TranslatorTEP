@@ -28,16 +28,29 @@ export function initGL(canvas) {
     uniform sampler2D uVideo;
     uniform vec3 uGain;
     uniform float uContrast;
+    uniform float uBrightness;
+    uniform float uBrilliance;
+    uniform float uSaturation;
     varying vec2 vTexCoord;
 
     vec3 applyContrast(vec3 color, float contrast) {
       return clamp((color - 0.5) * contrast + 0.5, 0.0, 1.0);
     }
 
+    vec3 applySaturation(vec3 color, float saturation) {
+      float gray = dot(color, vec3(0.299, 0.587, 0.114));
+      return mix(vec3(gray), color, saturation);
+    }
+
     void main() {
       vec3 color = texture2D(uVideo, vTexCoord).rgb;
       color *= uGain;
       color = applyContrast(color, uContrast);
+      color = applySaturation(color, uSaturation);
+      color += vec3(uBrightness); 
+      // apply brilliance as a multiplier around 1.0
+      color *= (1.0 + uBrilliance);
+      color = clamp(color, 0.0, 1.0);
       gl_FragColor = vec4(color, 1.0);
     }
   `;
@@ -71,8 +84,11 @@ export function initGL(canvas) {
     }
     gl.useProgram(program);
   } catch (err) {
-    alert("WebGL shader error: " + err.message);
-    throw err;
+    console.error("WebGL shader error:", err.message);
+    return {
+      renderFrame() {},
+      extractImageData() { return null; }
+    };
   }
 
   // Attribute locations for quad vertices and texture coordinates
@@ -89,7 +105,7 @@ export function initGL(canvas) {
      1,  1, 1, 0
   ]), gl.STATIC_DRAW);
 
-  //Enable and set up attributes
+  // Enable and set up attributes
   gl.enableVertexAttribArray(positionLoc);
   gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 16, 0);
   gl.enableVertexAttribArray(texCoordLoc);
@@ -107,6 +123,9 @@ export function initGL(canvas) {
   const uVideoLoc    = gl.getUniformLocation(program, "uVideo");
   const uGainLoc     = gl.getUniformLocation(program, "uGain");
   const uContrastLoc = gl.getUniformLocation(program, "uContrast");
+  const uBrightnessLoc = gl.getUniformLocation(program, "uBrightness");
+  const uBrillianceLoc = gl.getUniformLocation(program, "uBrilliance");
+  const uSaturationLoc = gl.getUniformLocation(program, "uSaturation");
 
   gl.uniform1i(uVideoLoc, 0); // TEXTURE0
 
@@ -115,8 +134,8 @@ export function initGL(canvas) {
       // No-op for color/contrast only
     },
 
-    // Render current video frame with given gain and contrast
-    renderFrame(videoEl, gain, contrast) {
+    // Render current video frame with given gain, contrast, brightness, brilliance, and saturation
+    renderFrame(videoEl, gain, contrast, brightness, brilliance, saturation) {
       const w = canvas.width, h = canvas.height;
       gl.viewport(0, 0, w, h);
       gl.clearColor(0, 0, 0, 1);
@@ -124,6 +143,9 @@ export function initGL(canvas) {
 
       gl.uniform3fv(uGainLoc, gain);
       gl.uniform1f(uContrastLoc, contrast);
+      gl.uniform1f(uBrightnessLoc, brightness || 0.0);
+      gl.uniform1f(uBrillianceLoc, brilliance || 0.0);
+      gl.uniform1f(uSaturationLoc, saturation || 1.0);
 
       // Upload current video frame into videoTex (unit 0)
       gl.activeTexture(gl.TEXTURE0);
