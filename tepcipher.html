@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Translator | AEON LOGIC</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Favicon Links -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <script src="script.js" defer></script>
+</head>
+<body class="home-page">
+    <!-- Foxy Input Screen -->
+    <div id="foxScreen"
+         style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                display: flex; flex-direction: column; justify-content: center; align-items: center;
+                background-size: cover; background-position: center; background-repeat: no-repeat;
+                background-color: rgb(120, 120, 120); z-index: 10; opacity: 1; transition: z-index 0.3s, opacity 0.3s;">
+        <img src="/fennfox.png" class="center-image" alt=""
+             style="width: 150px; height: auto;">
+        <textarea id="foxInput" placeholder="..." class="fox-box"
+                  style="width: 20%; height: 30px; font-size: large; color: rgb(225, 225, 225);
+                         background-color: rgb(81, 81, 81); border: 1px solid rgb(120, 120, 120);
+                         border-radius: 5px; text-align: center; padding-top: 7px;"></textarea>
+        <button id="submitFox" onclick="checkFox()"
+                style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; color: rgb(225, 225, 225);
+                       background-color: rgb(81, 81, 81); border: 1px solid rgb(120, 120, 120);
+                       border-radius: 5px; cursor: pointer; width: 100px;">
+            Submit
+        </button>
+    </div>
+
+    <!-- Menu Button -->
+    <div class="dropdown">
+        <button class="dropbtn">⨀Ξ〄⋑</button>
+        <div class="dropdown-content">
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="tepcipher.html">Cipher Translator</a>
+            <a href="decrypt.html">Encrypt/Decrypt</a>
+            <a href="red.html">Video Steganography</a>
+            <a href="cryptography.html">Cryptography</a>
+            <!--<a href="blog.html">Blog</a>-->
+        </div>
+    </div>
+
+    <!-- Quick Translator Section -->
+    <section class="quick-translator" id="translator">
+        <img src="/fennfox.png" class="hero-logo" alt="AEON LOGIC">
+        <h1 class="section-title">⏁⋑∷⚲Ϟ ⌖⎐⟒〄Ϩ⌇⟒⌖◎⎐</h1>
+        <div class="translator-container">
+            <textarea id="inputText" placeholder="Enter text here..."></textarea>
+            <div id="keyboardPanel"></div>
+            <div class="translator-buttons">
+                <button onclick="translateToAlphabet()">⟶ To Alphabet</button>
+                <button onclick="translateToCipher()">⟶ To Cipher</button>
+                <button onclick="clearFields()">Clear</button>
+            </div>
+            <textarea id="outputText" readonly placeholder="Translation..."></textarea>
+            <textarea id="alternativeOutputText" readonly placeholder="Alternative Translation..."></textarea>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 ⌁⍥◎Ϩ⌖ ∷〄 ⌖⍥Ξ ⨀⟒⚲⍥∷〄Ξ</p>
+        <p><a href="mailto:aeonlogic@protonmail.com">Aeon Logic</a></p>
+    </footer>
+</body>
+</html>
