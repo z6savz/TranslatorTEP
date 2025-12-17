@@ -1,7 +1,13 @@
 export function initGL(canvas) {
   // Initialize WebGL context and shaders
   const gl = canvas.getContext("webgl");
-  if (!gl) throw new Error("WebGL not supported");
+  if (!gl) {
+    console.warn("WebGL not supported");
+    return {
+      renderFrame() {},
+      extractImageData() { return null; }
+    };
+  }
 
   // Vertex shader
   // Sets up a full-screen quad and passes texture coordinates
