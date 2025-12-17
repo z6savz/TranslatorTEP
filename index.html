@@ -30,64 +30,84 @@ x<!DOCTYPE html>
     <script src="script.js" defer></script>
 </head>
 <body class="home-page">
-    <!-- Foxy Input Screen -->
-<div id="foxScreen"
-style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    background-size: cover; background-position: center; background-repeat: no-repeat;
-    background-color: rgb(120, 120, 120); z-index: 10; opacity: 1; transition: z-index 0.3s, opacity 0.3s;">
-<img src="/fennfox.png" class="center-image" alt=""
-    style="width: 150px; height: auto;">
-    <textarea id="foxInput" placeholder="..." class="fox-box"
-    style="width: 20%; height: 30px; font-size: large; color: rgb(225, 225, 225);
-        background-color: rgb(81, 81, 81); border: 1px solid rgb(120, 120, 120);
-        border-radius: 5px; text-align: center; padding-top: 7px;">
-</textarea>
-<button id="submitFox" onclick="checkFox()"
-        style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; color: rgb(225, 225, 225);
-            background-color: rgb(81, 81, 81); border: 1px solid rgb(120, 120, 120);
-            border-radius: 5px; cursor: pointer;width: 100px;">
-    Submit
-</button>
-</div>
 
-    <!-- Main Content -->
-    <h1>⌖⎐⟒〄Ϩ⌇⟒⌖◎⎐</h1>
-    <h2>⌖⍥Ξ Ξ〄⍠ Ϩ◎⚲∷Ξ⌖⚷</h2>
-    
     <!-- Menu Button -->
     <div class="dropdown">
         <button class="dropbtn">⨀Ξ〄⋑</button>
         <div class="dropdown-content">
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
+            <a href="tepcipher.html">Cipher Translator</a>
             <a href="decrypt.html">Encrypt/Decrypt</a>
             <a href="red.html">Video Steganography</a>
             <a href="cryptography.html">Cryptography</a>
-            <a href="blog.html">Blog</a>
+            <!--<a href="blog.html">Blog</a>-->
             <!--<a href="echoes.html">The Threshold of Echoes</a>-->
         </div>
     </div>
 
-    <!-- Input field -->
-    <textarea id="inputText" placeholder="Enter text here..."></textarea>
-    
-    <!-- Keyboard panel for cipher buttons -->
-    <div id="keyboardPanel"></div>
-    
-    <!-- Control buttons -->
-    <button onclick="translateToAlphabet()">Translate to Alphabet</button>
-    <button onclick="translateToCipher()">Translate to Cipher</button>
-    <button onclick="clearFields()">Clear</button>
-    
-    <!-- Output fields -->
-    <textarea id="outputText" readonly placeholder="Translation..."></textarea>
-    <textarea id="alternativeOutputText" readonly placeholder="Alternative Translation..."></textarea>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <img src="/fennfox.png" class="hero-logo" alt="AEON LOGIC">
+    </section>
 
+    <!-- Feature Cards Grid -->
+    <section class="features-grid">
+        
+        <div class="card-grid">
+            <!-- Cipher Translator Card -->
+            <div class="feature-card" data-keywords="cipher translate alphabet symbols encrypt decrypt">
+                <div class="card-icon">⌖</div>
+                <h3>Cipher Translator</h3>
+                <p>Translate between the alphabet and the TEP Cipher</p>
+                <a href="index.html" class="card-link">Enter ⟶</a>
+            </div>
+
+            <!-- Encrypt/Decrypt Card -->
+            <div class="feature-card" data-keywords="encrypt decrypt caesar vigenere rail fence atbash substitution">
+                <div class="card-icon">⍥</div>
+                <h3>Encrypt/Decrypt</h3>
+                <p>Caesar, Vigenère, Atbash, and more.</p>
+                <a href="decrypt.html" class="card-link">Enter ⟶</a>
+            </div>
+
+            <!-- Video Steganography Card -->
+            <div class="feature-card" data-keywords="video steganography lsb hidden message frame analysis ocr">
+                <div class="card-icon">◎</div>
+                <h3>Video Steganography</h3>
+                <p>Extract hidden data from video frames. LSB analysis, OCR, and color manipulation tools.</p>
+                <a href="red.html" class="card-link">Enter ⟶</a>
+            </div>
+
+            <!-- Cryptography Card -->
+            <div class="feature-card" data-keywords="cryptography theory mathematics encryption security algorithms">
+                <div class="card-icon">Ϩ</div>
+                <h3>Cryptography</h3>
+                <p>Learn the fundamentals of cryptographic theory, algorithms, and security principles.</p>
+                <a href="cryptography.html" class="card-link">Enter ⟶</a>
+            </div>
+
+            <!-- Blog Card -->
+            <div class="feature-card" data-keywords="blog articles writing thoughts philosophy mathematics computation">
+                <div class="card-icon">⊙</div>
+                <h3>Blog</h3>
+                <p>Essays on rationalism, computation, classical music, poetry, and the intersection of art and logic.</p>
+                <a href="blog.html" class="card-link">Enter ⟶</a>
+            </div>
+
+            <!-- About Card -->
+            <div class="feature-card" data-keywords="about contact aeon logic information">
+                <div class="card-icon">∷</div>
+                <h3>About</h3>
+                <p>Learn about AEON LOGIC and the philosophy behind these cryptographic tools.</p>
+                <a href="about.html" class="card-link">Enter ⟶</a>
+            </div>
+        </div>
+    </section>
     <!-- Footer Section -->
     <footer>
         <p>&copy; 2025 ⌁⍥◎Ϩ⌖ ∷〄 ⌖⍥Ξ ⨀⟒⚲⍥∷〄Ξ</p>
-        <!--<p>Version 1.1 | Contact: <a href="mailto:aeonlogic@protonmail.com">Aeon Logic</a></p>-->
+        <a href="mailto:aeonlogic@protonmail.com">Aeon Logic</a>
     </footer>
 </body>
 </html>
