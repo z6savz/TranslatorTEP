@@ -109,6 +109,18 @@
         <p>&copy; 2025 ⌁⍥◎Ϩ⌖ ∷〄 ⌖⍥Ξ ⨀⟒⚲⍥∷〄Ξ</p>
         <a href="mailto:aeonlogic@protonmail.com">Aeon Logic</a>
     </footer>
+    <script>
+        // Make entire card clickable
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function(e) {
+                const link = this.querySelector('.card-link');
+                if (link && e.target.tagName !== 'A') {
+                    window.location.href = link.href;
+                }
+            });
+        });
+    </script>
 </body>
 </html>
 
