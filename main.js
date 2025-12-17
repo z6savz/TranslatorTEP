@@ -126,9 +126,24 @@ videoUpload.addEventListener("change", e => {
 
 // Start Analysis button handler
 const startAnalysisBtn = document.getElementById("startAnalysisBtn");
+let analysisAborted = false;
 startAnalysisBtn.addEventListener("click", async () => {
-  startAnalysisBtn.disabled = true;
+  if (startAnalysisBtn.textContent.includes("Stop")) {
+    // Stop current analysis
+    analysisAborted = true;
+    startAnalysisBtn.textContent = "Start Analysis";
+    if (loadingDiv) loadingDiv.style.display = 'none';
+    [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => ctrl.disabled = false);
+    return;
+  }
+  
+  // Start new analysis
+  analysisAborted = false;
+  startAnalysisBtn.textContent = "Stop Analysis";
   await processVideoFrames();
+  if (!analysisAborted) {
+    startAnalysisBtn.textContent = "Start Analysis";
+  }
 });
 
 // Replay button handler (optional)
@@ -367,6 +382,12 @@ async function processVideoFrames() {
   lsbOutput = { red: "", green: "", blue: "", all: "" };
 
   for (let t = 0; t < video.duration; t += step) {
+    // Check if analysis was aborted
+    if (analysisAborted) {
+      if (loadingText) loadingText.textContent = "Analysis stopped.";
+      break;
+    }
+    
     await seekTo(t);
 
     // frame index for filenames
@@ -416,20 +437,12 @@ async function processVideoFrames() {
         zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_green.txt`, greenBits);
         zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_blue.txt`, blueBits);
         zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_all.txt`, allBits);
-      } else {
-        // fallback: trigger downloads immediately if JSZip unavailable
-        triggerDownload(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_red.txt`, redBits);
-        triggerDownload(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_green.txt`, greenBits);
-        triggerDownload(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_blue.txt`, blueBits);
-        triggerDownload(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_all.txt`, allBits);
       }
     } else {
       const bits = getLSBBits(imageData, channel);
       lsbOutput[channel] += timestamp + bits + "\n";
       if (zip) {
         zip.file(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_${channel}.txt`, bits);
-      } else {
-        triggerDownload(`${currentVideoName}_frame_${String(frameIdx).padStart(4,'0')}_${t.toFixed(2)}s_${channel}.txt`, bits);
       }
     }
 
