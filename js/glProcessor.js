@@ -4,6 +4,7 @@ function initGL(canvas) {
   if (!gl) {
     console.warn("WebGL not supported");
     return {
+      supported: false,
       renderFrame() {},
       extractImageData() { return null; }
     };
@@ -149,6 +150,7 @@ function initGL(canvas) {
   });
 
   return {
+    supported: true,
     setMode() {
       // No-op for color/contrast only
     },

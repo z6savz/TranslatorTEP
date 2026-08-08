@@ -1,26 +1,18 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
     <!-- Clickjacking Defense (Frame-Busting) -->
     <style id="antiClickjack">body{display:none !important;}</style>
-    <script type="text/javascript">
-        // Allow same-origin iframes (for VS Code preview) but block cross-origin
-        if (self === top || self.origin === top.origin) {
-            var antiClickjack = document.getElementById("antiClickjack");
-            if (antiClickjack) antiClickjack.parentNode.removeChild(antiClickjack);
-        } else {
-            top.location = self.location;
-        }
-    </script>
+    <script src="js/anti-clickjack.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Frequency Chamber — Cryptic Fox</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
         integrity="sha384-vsrfeLOOY6KuIYKDlmVH5UiBmgIdB1oEf7p01YgWHuqmOHfZr374+odEv96n9tNC"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous" async></script>
     <script src="js/components.js"></script>
     <script src="js/script.js" defer></script>
     <script src="js/porter-stemmer.js"></script>
@@ -44,14 +36,14 @@
     <meta property="og:title" content="The Frequency Chamber — Cryptic Fox">
     <meta property="og:description"
         content="Break substitution ciphers using analysis and word-level pattern matching.">
-    <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.jpg">
+    <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="The Frequency Chamber — Cryptic Fox">
     <meta name="twitter:description"
         content="Break substitution ciphers using frequency analysis and word-level pattern matching.">
-    <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.jpg">
+    <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
 
     <style>
         .frequency-container {
@@ -85,6 +77,27 @@
             margin-top: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 10px;
+        }
+
+        .alt-suggestions.has-alts {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .alt-suggestions-label {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .alt-suggestion-item {
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: var(--color-text-muted);
+            padding: 3px 0;
         }
 
         .mapping-grid {
@@ -420,7 +433,7 @@
 
     <!-- Menu Button -->
     <div class="dropdown" role="navigation" aria-label="Site navigation">
-        <button class="dropbtn" aria-label="Navigation menu" aria-expanded="false">⨀Ξ〄⋑</button>
+        <button class="dropbtn" aria-label="Navigation menu" aria-expanded="false">MENU</button>
         <div class="dropdown-content">
             <a href="index.html">Home</a>
             <a href="about.html">About</a>
@@ -474,6 +487,7 @@
             <div class="crypt-box">
                 <div id="ciphertext" class="ciphertext empty-state">Your ciphertext will appear here...</div>
                 <div id="resolvedText" class="resolved-text empty-state">Decoded message will appear here as you map letters...</div>
+                <div id="altSuggestions" class="alt-suggestions"></div>
             </div>
 
             <h3>Substitution Map</h3>
@@ -543,12 +557,7 @@
         </div>
     </div>
 
-    <footer>
-        <p>&copy; 2025–2026 Cryptic Fox &nbsp;|&nbsp; <a href='https://ko-fi.com/S6S81YLIDM' target='_blank'
-                rel='noopener noreferrer'><img height='36' style='border:0px;height:36px;'
-                    src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' border='0'
-                    alt='Buy Me a Coffee at ko-fi.com' /></a></p>
-    </footer>
+    <footer></footer>
 
 </body>
 

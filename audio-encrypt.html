@@ -2,18 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob:; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
     <!-- Clickjacking Defense (Frame-Busting) -->
     <style id="antiClickjack">body{display:none !important;}</style>
-    <script type="text/javascript">
-        // Allow same-origin iframes (for VS Code preview) but block cross-origin
-        if (self === top || self.origin === top.origin) {
-            var antiClickjack = document.getElementById("antiClickjack");
-            if (antiClickjack) antiClickjack.parentNode.removeChild(antiClickjack);
-        } else {
-            top.location = self.location;
-        }
-    </script>
+    <script src="js/anti-clickjack.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Encryption & Decryption — Cryptic Fox</title>
@@ -40,14 +32,14 @@
     <meta property="og:title" content="Audio Encryption & Decryption — Cryptic Fox">
     <meta property="og:description"
         content="Encrypt and decrypt audio files using AES and RSA encryption. Part of the Cryptic Fox cryptography toolkit.">
-    <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.jpg">
+    <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Audio Encryption & Decryption — Cryptic Fox">
     <meta name="twitter:description"
         content="Encrypt and decrypt audio files using AES and RSA encryption. Part of the Cryptic Fox cryptography toolkit.">
-    <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.jpg">
+    <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
     <script src="js/components.js"></script>
 </head>
 

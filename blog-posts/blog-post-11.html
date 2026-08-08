@@ -2,18 +2,10 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
     <!-- Clickjacking Defense (Frame-Busting) -->
     <style id="antiClickjack">body{display:none !important;}</style>
-    <script type="text/javascript">
-        // Allow same-origin iframes (for VS Code preview) but block cross-origin
-        if (self === top || self.origin === top.origin) {
-            var antiClickjack = document.getElementById("antiClickjack");
-            if (antiClickjack) antiClickjack.parentNode.removeChild(antiClickjack);
-        } else {
-            top.location = self.location;
-        }
-    </script>
+    <script src="../js/anti-clickjack.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>History and Fundamentals of Modern Cryptography — Cryptic Fox</title>
@@ -112,13 +104,13 @@
         <h2>III. Primary Security Services</h2>
         <p>Cryptography provides four fundamental services to ensure the security of digital information:</p>
         <ul style="list-style: none; padding-left: 0;">
-            <li style="margin-bottom: 15px;">🛡️ <strong>Confidentiality:</strong> Ensures that information remains
+            <li style="margin-bottom: 15px;"><strong>Confidentiality:</strong> Ensures that information remains
                 inaccessible to unauthorized parties.</li>
-            <li style="margin-bottom: 15px;">✅ <strong>Data Integrity:</strong> Allows for the detection of any
+            <li style="margin-bottom: 15px;"><strong>Data Integrity:</strong> Allows for the detection of any
                 unauthorized alterations to data during transmission or storage.</li>
-            <li style="margin-bottom: 15px;">👤 <strong>Authentication:</strong> Confirms the identity of the sender
+            <li style="margin-bottom: 15px;"><strong>Authentication:</strong> Confirms the identity of the sender
                 (message authentication) or the specific entity, such as a website (entity authentication).</li>
-            <li style="margin-bottom: 15px;">📝 <strong>Non-repudiation:</strong> Ensures that an entity cannot deny a
+            <li style="margin-bottom: 15px;"><strong>Non-repudiation:</strong> Ensures that an entity cannot deny a
                 previous commitment or action, such as an electronic purchase order.</li>
         </ul>
 
@@ -170,14 +162,14 @@
             innovations:</p>
         <ul style="list-style: none; padding-left: 0;">
             <li style="margin-bottom: 25px;">
-                <strong style="color: var(--color-accent); display: block; font-size: 1.1rem;">• Quantum
+                <strong style="color: var(--color-accent); display: block; font-size: 1.1rem;">Quantum
                     Cryptography</strong>
                 Unlike traditional math-based encryption, this is based on physics (quantum mechanics). It utilizes the
                 "no-cloning theorem," which states that any attempt to observe quantum data shifts its state, alerting
                 the parties to an eavesdropper.
             </li>
             <li style="margin-bottom: 25px;">
-                <strong style="color: var(--color-accent); display: block; font-size: 1.1rem;">• Homomorphic
+                <strong style="color: var(--color-accent); display: block; font-size: 1.1rem;">Homomorphic
                     Encryption</strong>
                 This advanced method allows users to perform computations on encrypted data without decrypting it first.
                 This allows sensitive data to be processed in the cloud while remaining completely secure from the

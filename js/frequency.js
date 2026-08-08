@@ -7,17 +7,59 @@ const ENGLISH_FREQ = {
 };
 
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+// English letters sorted by descending frequency (E=most common … Z=least)
+const ENGLISH_BY_FREQ = Object.entries(ENGLISH_FREQ).sort((a, b) => b[1] - a[1]).map(e => e[0]);
 let ciphertext = "";
 let currentMap = {}; // CipherChar -> UserInput
 let chart = null;
 let letterModeCorpusHints = {}; // Store word suggestions for resolved text
+
+// Punctuation/whitespace/digits are left as-is; every other character is treated as a
+// substitution-cipher symbol (covers both plain A-Z ciphers and symbolic/Unicode ciphers).
+const PASSTHROUGH_CHAR = /[\s.,!?;:'"()\[\]{}\-\u2013\u2014\d]/;
+function isCipherChar(ch) {
+    return !!ch && !PASSTHROUGH_CHAR.test(ch);
+}
+function escapeForCharClass(ch) {
+    return ch.replace(/[\]\\^-]/g, '\\$&');
+}
+// Returns every maximal run of known cipher characters in the ciphertext (i.e. "words")
+function getCipherWords() {
+    const chars = Object.keys(currentMap).map(escapeForCharClass).join('');
+    if (!chars) return [];
+    // 'u' flag: treat surrogate-pair (supplementary-plane) cipher symbols as single code points
+    return ciphertext.match(new RegExp(`[${chars}]+`, 'gu')) || [];
+}
+
+// Debounce utility for performance optimization
+function debounce(func, wait = 300) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func.apply(this, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Debounced version of updateCorpusHints for better performance
+const debouncedUpdateCorpusHints = debounce(function() {
+    updateCorpusHints();
+}, 50);
 
 function processUserInput() {
     // Get user input from textarea
     const input = document.getElementById("letter-cipher-input");
     if (!input) return;
     
-    ciphertext = input.value.toUpperCase().trim();
+    // Strip invisible Unicode formatting chars (variation selectors, zero-width joiners, BOM, etc.)
+    // that some symbol sets/fonts attach — left in, they'd be miscounted as extra cipher letters.
+    ciphertext = input.value
+        .replace(/[\u200B-\u200F\u202A-\u202E\u2060\uFEFF\uFE00-\uFE0F]/g, '')
+        .toUpperCase()
+        .trim();
     
     if (!ciphertext) {
         alert("Please enter ciphertext to analyze.");
@@ -42,8 +84,8 @@ function processUserInput() {
     
     // Get unique characters from ciphertext and sort by frequency
     const charCounts = {};
-    ciphertext.split("").forEach(char => {
-        if (alphabet.includes(char)) {
+    Array.from(ciphertext).forEach(char => {
+        if (isCipherChar(char)) {
             charCounts[char] = (charCounts[char] || 0) + 1;
         }
     });
@@ -51,17 +93,22 @@ function processUserInput() {
     const presentChars = Object.keys(charCounts).sort((a, b) => charCounts[b] - charCounts[a]);
     
     presentChars.forEach(char => {
-        currentMap[char] = ""; // Initialize map
+        currentMap[char] = "";
         const card = document.createElement("div");
         card.className = "map-card";
-        card.innerHTML = `
-            <label>${char}</label>
-            <input type="text" maxlength="1" data-char="${char}" oninput="handleMapInput(this)">
-        `;
+        const label = document.createElement("label");
+        label.textContent = char;
+        const input = document.createElement("input");
+        input.type = "text";
+        input.maxLength = 1;
+        input.dataset.char = char;
+        input.addEventListener("input", function() { handleMapInput(this); });
+        card.appendChild(label);
+        card.appendChild(input);
         grid.appendChild(card);
     });
-    
-    updateResolvedText();
+
+    autoSolveByWordPattern();
     initChart(presentChars);
 }
 
@@ -71,12 +118,12 @@ function handleMapInput(input) {
     input.value = val;
     currentMap[cipherChar] = val;
     updateResolvedText();
-    updateCorpusHints(); // Update word suggestions
+    debouncedUpdateCorpusHints(); // Debounced for better performance
 }
 
 function updateResolvedText() {
-    const resolved = ciphertext.split("").map(char => {
-        if (!alphabet.includes(char)) return char;
+    const resolved = Array.from(ciphertext).map(char => {
+        if (!Object.prototype.hasOwnProperty.call(currentMap, char)) return char;
         const userChar = currentMap[char];
         return userChar ? userChar : "_";
     }).join("");
@@ -90,14 +137,226 @@ function updateResolvedText() {
     }
 }
 
+// Full cryptogram solver: performs a backtracking constraint-satisfaction search over all
+// cipher words at once, rather than resolving each
+// word in isolation. Each candidate assignment for one word restricts which words/candidates
+// remain valid for every other cipher character, guaranteeing a globally consistent mapping.
+// Falls back to plain letter-frequency ranking for any cipher characters that can't be pinned
+// down by dictionary matches (e.g. words not present in the corpus).
+function autoSolveByWordPattern() {
+    clearAlternativeSuggestions();
+    if (!wordModeInitialized || Object.keys(structuralPatternIndex).length === 0) {
+        applyFrequencyRankMapping();
+        return;
+    }
+
+    const cipherWords = [...new Set(getCipherWords())];
+    if (cipherWords.length === 0) {
+        applyFrequencyRankMapping();
+        return;
+    }
+
+    const CANDIDATE_LIMIT = 60;
+    const MAX_NODES = 250000;
+
+    // Gather dictionary candidates per cipher word (matching length + repeated-letter structure)
+    // cwChars: code-point array (not cw.length/cw[i], which count UTF-16 code units and break
+    // on supplementary-plane cipher symbols) so indexing lines up with the matched candidate word.
+    let wordOrder = cipherWords
+        .map(cw => ({
+            cw,
+            cwChars: Array.from(cw),
+            candidates: (structuralPatternIndex[computeStructuralPattern(cw)] || []).slice(0, CANDIDATE_LIMIT)
+        }))
+        .filter(w => w.candidates.length > 0);
+
+    if (wordOrder.length === 0) {
+        applyFrequencyRankMapping();
+        return;
+    }
+
+    // Most-constrained-variable heuristic: solve words with fewest candidates first,
+    // and prefer longer words as a tie-break since they pin down more characters.
+    wordOrder.sort((a, b) => a.candidates.length - b.candidates.length || b.cwChars.length - a.cwChars.length);
+
+    const cipherToPlain = new Map();
+    const plainToCipher = new Map();
+    let currentScore = 0;
+    let nodes = 0;
+
+    // Keep the top few distinct complete assignments (by score) so we can offer alternative
+    // readings, not just the single best guess.
+    const TOP_K = 3;
+    const topSolutions = [];
+    const seenSignatures = new Set();
+    const signatureOf = map => [...map.entries()].sort().join(',');
+
+    function backtrack(index) {
+        if (nodes++ > MAX_NODES) return;
+        if (index === wordOrder.length) {
+            if (topSolutions.length < TOP_K || currentScore > topSolutions[topSolutions.length - 1].score) {
+                const sig = signatureOf(cipherToPlain);
+                if (!seenSignatures.has(sig)) {
+                    seenSignatures.add(sig);
+                    topSolutions.push({ score: currentScore, map: new Map(cipherToPlain) });
+                    topSolutions.sort((a, b) => b.score - a.score);
+                    if (topSolutions.length > TOP_K) topSolutions.length = TOP_K;
+                }
+            }
+            return;
+        }
+
+        const { cwChars, candidates } = wordOrder[index];
+        let anyApplied = false;
+
+        for (const englishWord of candidates) {
+            const added = [];
+            let conflict = false;
+            for (let i = 0; i < cwChars.length; i++) {
+                const cc = cwChars[i];
+                const pc = englishWord[i].toUpperCase();
+                const existingP = cipherToPlain.get(cc);
+                const existingC = plainToCipher.get(pc);
+                if (existingP !== undefined) {
+                    if (existingP !== pc) { conflict = true; break; }
+                    continue;
+                }
+                if (existingC !== undefined) {
+                    if (existingC !== cc) { conflict = true; break; }
+                    continue;
+                }
+                cipherToPlain.set(cc, pc);
+                plainToCipher.set(pc, cc);
+                added.push([cc, pc]);
+            }
+
+            if (!conflict) {
+                anyApplied = true;
+                const wordScore = wordFrequency[englishWord.toLowerCase()] || 1;
+                currentScore += wordScore;
+                backtrack(index + 1);
+                currentScore -= wordScore;
+            }
+
+            added.forEach(([cc, pc]) => { cipherToPlain.delete(cc); plainToCipher.delete(pc); });
+            if (nodes > MAX_NODES) return;
+        }
+
+        // No dictionary candidate fit this word (or all conflicted) — skip it and keep solving
+        // the rest so a missing word doesn't block resolution of the others.
+        if (!anyApplied) backtrack(index + 1);
+    }
+
+    backtrack(0);
+
+    const resolvedMap = completeMapFromPartial(topSolutions[0] ? Object.fromEntries(topSolutions[0].map) : {});
+
+    Object.assign(currentMap, resolvedMap);
+    document.querySelectorAll('#mappingGrid input[data-char]').forEach(input => {
+        const v = resolvedMap[input.dataset.char];
+        if (v) input.value = v;
+    });
+
+    updateResolvedText();
+    renderAlternativeSuggestions(topSolutions, resolvedTextFromMap(resolvedMap));
+    debouncedUpdateCorpusHints();
+}
+
+// Fills any cipher chars a partial solution left unmapped using frequency rank, without touching currentMap.
+function completeMapFromPartial(partialMap) {
+    const map = Object.assign({}, partialMap);
+    const usedPlain = new Set(Object.values(map));
+    const charCounts = {};
+    Array.from(ciphertext).forEach(c => { if (isCipherChar(c)) charCounts[c] = (charCounts[c] || 0) + 1; });
+    const unmapped = Object.keys(currentMap)
+        .filter(cc => !map[cc])
+        .sort((a, b) => (charCounts[b] || 0) - (charCounts[a] || 0));
+    let freqIdx = 0;
+    unmapped.forEach(cc => {
+        while (freqIdx < ENGLISH_BY_FREQ.length && usedPlain.has(ENGLISH_BY_FREQ[freqIdx])) freqIdx++;
+        if (freqIdx < ENGLISH_BY_FREQ.length) {
+            map[cc] = ENGLISH_BY_FREQ[freqIdx];
+            usedPlain.add(ENGLISH_BY_FREQ[freqIdx]);
+            freqIdx++;
+        }
+    });
+    return map;
+}
+
+function resolvedTextFromMap(map) {
+    return Array.from(ciphertext).map(ch => (isCipherChar(ch) ? (map[ch] || '_') : ch)).join('');
+}
+
+function clearAlternativeSuggestions() {
+    const container = document.getElementById('altSuggestions');
+    if (!container) return;
+    container.innerHTML = '';
+    container.classList.remove('has-alts');
+}
+
+// Renders up to 2 alternative full decodings (distinct from the main one) below the resolved text.
+function renderAlternativeSuggestions(topSolutions, mainText) {
+    const container = document.getElementById('altSuggestions');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const seenTexts = new Set([mainText]);
+    const alts = [];
+    for (let i = 1; i < topSolutions.length && alts.length < 2; i++) {
+        const text = resolvedTextFromMap(completeMapFromPartial(Object.fromEntries(topSolutions[i].map)));
+        if (!seenTexts.has(text)) {
+            seenTexts.add(text);
+            alts.push(text);
+        }
+    }
+
+    if (alts.length === 0) {
+        container.classList.remove('has-alts');
+        return;
+    }
+
+    container.classList.add('has-alts');
+    const label = document.createElement('div');
+    label.className = 'alt-suggestions-label';
+    label.textContent = 'Other possible readings:';
+    container.appendChild(label);
+    alts.forEach(text => {
+        const item = document.createElement('div');
+        item.className = 'alt-suggestion-item';
+        item.textContent = text;
+        container.appendChild(item);
+    });
+}
+
+// Fallback: map cipher chars to English letters by raw frequency rank
+function applyFrequencyRankMapping() {
+    const charCounts = {};
+    Array.from(ciphertext).forEach(c => { if (isCipherChar(c)) charCounts[c] = (charCounts[c] || 0) + 1; });
+    const ordered = Object.keys(currentMap).sort((a, b) => (charCounts[b] || 0) - (charCounts[a] || 0));
+    const usedPlain = new Set();
+    let freqIdx = 0;
+    ordered.forEach(cc => {
+        while (freqIdx < ENGLISH_BY_FREQ.length && usedPlain.has(ENGLISH_BY_FREQ[freqIdx])) freqIdx++;
+        if (freqIdx < ENGLISH_BY_FREQ.length) {
+            currentMap[cc] = ENGLISH_BY_FREQ[freqIdx];
+            usedPlain.add(ENGLISH_BY_FREQ[freqIdx]);
+            freqIdx++;
+        }
+    });
+    document.querySelectorAll('#mappingGrid input[data-char]').forEach(input => {
+        if (currentMap[input.dataset.char]) input.value = currentMap[input.dataset.char];
+    });
+    updateResolvedText();
+}
+
 function initChart(presentChars) {
     const ctx = document.getElementById('freqChart').getContext('2d');
 
     // Calculate ciphertext frequencies
     const counts = {};
     let totalAlpha = 0;
-    ciphertext.split("").forEach(char => {
-        if (alphabet.includes(char)) {
+    Array.from(ciphertext).forEach(char => {
+        if (isCipherChar(char)) {
             counts[char] = (counts[char] || 0) + 1;
             totalAlpha++;
         }
@@ -107,21 +366,13 @@ function initChart(presentChars) {
         return ((counts[char] || 0) / totalAlpha * 100).toFixed(2);
     });
 
-    // We don't know which English letter maps to which ciphertext letter yet for the "Target" label, 
-    // so we just show the English distribution sorted by frequency next to the Ciphertext distribution sorted?
-    // No, standard practice is to show English reference.
-
-    const englishRef = presentChars.map(char => {
-        // This is tricky. We'll just show the English values for the solution if we want to help, 
-        // OR just show the list of English frequencies in general.
-        // Let's show English freq for the letter the user MIGHT THINK it is?
-        return ENGLISH_FREQ[char] || 0;
-    });
+    const englishRef = presentChars.map((_, i) => ENGLISH_FREQ[ENGLISH_BY_FREQ[i]] || 0);
 
     if (chart) {
         chart.destroy();
     }
-    
+
+    if (typeof Chart === 'undefined') return;
     chart = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -136,8 +387,10 @@ function initChart(presentChars) {
                 },
                 {
                     label: 'English Standard (%)',
-                    data: presentChars.map(c => ENGLISH_FREQ[c] || 0),
-                    hidden: true
+                    data: englishRef,
+                    backgroundColor: 'rgba(120, 160, 255, 0.5)',
+                    borderColor: 'rgba(120, 160, 255, 1)',
+                    borderWidth: 1
                 }
             ]
         },
@@ -157,20 +410,6 @@ function initChart(presentChars) {
             }
         }
     });
-
-    // Add a second chart or dataset for reference
-    addEnglishReference(chart);
-}
-
-function addEnglishReference(chart) {
-    // Show top English letters for comparison
-    const sortedEnglish = Object.entries(ENGLISH_FREQ).sort((a, b) => b[1] - a[1]);
-    const labels = sortedEnglish.map(e => e[0]);
-    const data = sortedEnglish.map(e => e[1]);
-
-    // Let's just create a static reference chart below or as a separate dataset on a different axis?
-    // User wants "similar to English"
-    // I'll add a section in the UI for English frequency reference instead of a cluttered chart.
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -229,11 +468,15 @@ let wordModeInitialized = false;
 let wordFrequency = {};
 let patternIndex = {};
 let lengthIndex = {};
+let structuralPatternIndex = {};
 let vocabularySize = 0;
 let corpusMode = 'fallback';
 let documentCount = 0;
 
-// Top 5000 most common English words (fallback dictionary)
+// Curated common-English word list (fallback dictionary) used for cryptogram solving.
+// A complete dictionary (170k+ words) isn't practical to ship client-side, so this covers
+// thousands of the most common words/word-forms, which is sufficient to solve most substitution
+// ciphers via structural pattern matching + constraint propagation (see autoSolveByWordPattern).
 const COMMON_WORDS = [
     "the", "be", "to", "of", "and", "a", "in", "that", "have", "i", "it", "for", "not", "on", "with",
     "he", "as", "you", "do", "at", "this", "but", "his", "by", "from", "they", "we", "say", "her", "she",
@@ -243,8 +486,8 @@ const COMMON_WORDS = [
     "then", "now", "look", "only", "come", "its", "over", "think", "also", "back", "after", "use", "two",
     "how", "our", "work", "first", "well", "way", "even", "new", "want", "because", "any", "these", "give",
     "day", "most", "us", "is", "was", "are", "been", "has", "had", "were", "said", "did", "having", "may",
-    "should", "am", "being", "ought", "might", "does", "must", "shall", "doing", "done", "made", "make",
-    "quick", "brown", "fox", "jumps", "over", "lazy", "dog", "hello", "world", "test", "example", "word",
+    "should", "am", "being", "ought", "might", "does", "must", "shall", "doing", "done", "made",
+    "quick", "brown", "fox", "jumps", "jump", "lazy", "dog", "hello", "world", "test", "example", "word",
     "text", "message", "cipher", "code", "secret", "hidden", "mystery", "puzzle", "solve", "find", "search",
     "through", "under", "where", "before", "between", "same", "each", "feel", "seem", "hand", "eye", "place",
     "case", "tell", "own", "leave", "ask", "man", "old", "right", "mean", "keep", "let", "begin", "help",
@@ -255,23 +498,141 @@ const COMMON_WORDS = [
     "buy", "wait", "serve", "die", "send", "expect", "build", "stay", "fall", "cut", "reach", "kill",
     "remain", "suggest", "raise", "pass", "sell", "require", "report", "decide", "pull", "break", "pick",
     "wear", "catch", "choose", "fly", "return", "hope", "carry", "draw", "produce", "eat", "force", "throw",
-    "such", "every", "much", "own", "while", "still", "try", "another", "great", "little", "large", "big",
-    "small", "long", "early", "young", "important", "few", "public", "bad", "same", "able", "woman", "here",
+    "such", "every", "much", "while", "still", "try", "another", "great", "little", "large", "big",
+    "small", "long", "early", "young", "important", "few", "public", "bad", "able", "woman", "here",
     "national", "human", "both", "far", "present", "next", "social", "past", "possible", "true", "certain",
     "ever", "real", "full", "available", "whole", "likely", "economic", "hard", "strong", "necessary",
     "clear", "common", "recent", "simple", "main", "political", "personal", "sure", "ready", "similar",
     "easy", "serious", "wrong", "fine", "less", "dark", "several", "close", "professional", "special",
-    "free", "dead", "military", "able", "current", "happy", "white", "black", "red", "blue", "green",
+    "free", "dead", "military", "current", "happy", "white", "black", "red", "blue", "green",
     "room", "house", "home", "family", "door", "water", "food", "book", "paper", "name", "number", "part",
     "line", "area", "money", "story", "fact", "month", "lot", "study", "business", "issue", "side", "kind",
-    "head", "mother", "father", "power", "country", "able", "top", "whole", "end", "point", "member",
-    "law", "car", "city", "community", "change", "information", "history", "party", "result", "morning",
-    "reason", "research", "girl", "guy", "moment", "air", "teacher", "force", "education", "foot", "boy",
-    "age", "policy", "everything", "love", "process", "music", "including", "art", "company", "president",
+    "head", "mother", "father", "power", "country", "top", "end", "point", "member",
+    "law", "car", "city", "community", "information", "history", "party", "result", "morning",
+    "reason", "research", "girl", "guy", "moment", "air", "teacher", "education", "foot", "boy",
+    "age", "policy", "everything", "process", "music", "including", "art", "company", "president",
     "until", "record", "million", "ago", "difference", "management", "control", "upon", "although", "within",
-    "during", "without", "toward", "upon", "once", "enough", "almost", "phone", "might", "away", "around",
+    "during", "without", "toward", "once", "enough", "almost", "phone", "away", "around",
     "something", "actually", "nothing", "thought", "perhaps", "rather", "quite", "especially", "else",
-    "ever", "course", "someone", "around", "simply", "itself", "often", "please", "therefore", "whether"
+    "course", "someone", "simply", "itself", "often", "please", "therefore", "whether",
+    "goes", "going", "went", "gone", "comes", "coming", "came", "gets", "getting", "got", "gotten",
+    "makes", "making", "knows", "knowing", "knew", "known", "thinks", "thinking", "thought",
+    "takes", "taking", "took", "taken", "sees", "seeing", "saw", "seen", "wants", "wanting", "wanted",
+    "looks", "looking", "looked", "uses", "using", "used", "finds", "finding", "found",
+    "gives", "giving", "gave", "given", "tells", "telling", "told", "works", "working", "worked",
+    "calls", "calling", "called", "tries", "trying", "tried", "asks", "asking", "asked",
+    "needs", "needing", "needed", "feels", "feeling", "felt", "becomes", "becoming", "became",
+    "leaves", "leaving", "left", "puts", "putting", "means", "meaning", "meant",
+    "keeps", "keeping", "kept", "lets", "letting", "begins", "beginning", "began", "begun",
+    "seems", "seeming", "seemed", "helps", "helping", "helped", "talks", "talking", "talked",
+    "turns", "turning", "turned", "starts", "starting", "started", "shows", "showing", "showed", "shown",
+    "hears", "hearing", "heard", "plays", "playing", "played", "runs", "running", "ran",
+    "moves", "moving", "moved", "lives", "living", "lived", "believes", "believing", "believed",
+    "brings", "bringing", "brought", "happens", "happening", "happened", "writes", "writing", "wrote", "written",
+    "provides", "providing", "provided", "sits", "sitting", "sat", "stands", "standing", "stood",
+    "loses", "losing", "lost", "pays", "paying", "paid", "meets", "meeting", "met",
+    "includes", "including", "included", "continues", "continuing", "continued", "sets", "setting",
+    "learns", "learning", "learned", "learnt", "changes", "changing", "changed", "leads", "leading", "led",
+    "understands", "understanding", "understood", "watches", "watching", "watched", "follows", "following", "followed",
+    "stops", "stopping", "stopped", "creates", "creating", "created", "speaks", "speaking", "spoke", "spoken",
+    "reads", "reading", "allows", "allowing", "allowed", "adds", "adding", "added",
+    "spends", "spending", "spent", "grows", "growing", "grew", "grown", "opens", "opening", "opened",
+    "walks", "walking", "walked", "wins", "winning", "won", "offers", "offering", "offered",
+    "remembers", "remembering", "remembered", "loves", "loving", "loved", "considers", "considering", "considered",
+    "appears", "appearing", "appeared", "buys", "buying", "bought", "waits", "waiting", "waited",
+    "serves", "serving", "served", "dies", "dying", "died", "sends", "sending", "sent",
+    "expects", "expecting", "expected", "builds", "building", "built", "stays", "staying", "stayed",
+    "falls", "falling", "fell", "fallen", "cuts", "cutting", "reaches", "reaching", "reached",
+    "kills", "killing", "killed", "remains", "remaining", "remained", "suggests", "suggesting", "suggested",
+    "raises", "raising", "raised", "passes", "passing", "passed", "sells", "selling", "sold",
+    "requires", "requiring", "required", "reports", "reporting", "reported", "decides", "deciding", "decided",
+    "pulls", "pulling", "pulled", "breaks", "breaking", "broke", "broken", "picks", "picking", "picked",
+    "wears", "wearing", "wore", "worn", "catches", "catching", "caught", "chooses", "choosing", "chose", "chosen",
+    "flies", "flying", "flew", "flown", "returns", "returning", "returned", "hopes", "hoping", "hoped",
+    "carries", "carrying", "carried", "draws", "drawing", "drew", "drawn", "produces", "producing", "produced",
+    "eats", "eating", "ate", "eaten", "forces", "forcing", "forced", "throws", "throwing", "threw", "thrown",
+    "crack", "cracks", "cracking", "cracked", "always", "never", "sometimes", "usually", "rarely",
+    "child", "children", "night", "week", "government", "service", "job", "friend",
+    "hour", "game", "member", "minute", "idea", "body", "back", "parent", "face", "level",
+    "office", "health", "person", "war", "party", "change", "reason", "moment",
+    "voice", "wife", "police", "mind", "price", "report", "decision", "son", "hospital", "church",
+    "chair", "lawyer", "daughter", "bird", "list", "dog", "wall", "staff", "blood", "letter", "cat",
+    "action", "table", "king", "queen", "ship", "boat", "river", "lake", "sea", "ocean",
+    "forest", "tree", "flower", "garden", "park", "street", "road", "bridge", "mountain", "valley",
+    "island", "beach", "desert", "jungle", "cloud", "sky", "sun", "moon", "star", "storm",
+    "rain", "snow", "wind", "fire", "earth", "stone", "rock", "sand", "cave", "castle",
+    "tower", "palace", "village", "town", "nation", "planet", "universe", "space", "science", "secret",
+    "note", "page", "chapter", "tale", "legend", "myth", "dream", "nightmare", "memory",
+    "goal", "fear", "anger", "joy", "sadness", "happiness", "sorrow", "pain", "pleasure", "hate",
+    "trust", "doubt", "faith", "truth", "lie", "honesty", "courage", "bravery", "cowardice",
+    "wisdom", "knowledge", "ignorance", "freedom", "justice", "peace", "battle", "fight", "struggle",
+    "victory", "defeat", "quick", "slow", "fast", "strong", "weak", "brave", "afraid", "happy",
+    "sad", "angry", "calm", "quiet", "loud", "soft", "hard", "smooth", "rough", "sharp",
+    "dull", "bright", "dim", "clear", "cloudy", "sunny", "rainy", "windy", "cold", "hot",
+    "warm", "cool", "wet", "dry", "clean", "dirty", "empty", "full", "heavy", "light",
+    "thick", "thin", "wide", "narrow", "deep", "shallow", "tall", "short", "fat", "ugly",
+    "beautiful", "pretty", "handsome", "plain", "simple", "complex", "difficult", "safe", "dangerous",
+    "hidden", "open", "closed", "free", "busy", "tired", "sick", "healthy", "alive", "dead",
+    "real", "fake", "true", "false", "correct", "incorrect", "possible", "impossible", "certain",
+    "uncertain", "sure", "unsure", "careful", "careless", "honest", "dishonest", "kind", "cruel",
+    "gentle", "friendly", "unfriendly", "polite", "rude", "patient", "impatient", "nervous",
+    "excited", "bored", "interested", "curious", "confused", "ancient", "modern",
+    "quickly", "slowly", "carefully", "carelessly", "quietly", "loudly", "happily", "sadly", "angrily",
+    "calmly", "bravely", "honestly", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday",
+    "sunday", "january", "february", "march", "april", "june", "july", "august", "september",
+    "october", "november", "december", "spring", "summer", "autumn", "winter", "north", "south",
+    "east", "west", "above", "below", "inside", "outside", "behind", "beyond", "beside",
+    "toward", "against", "along", "among", "throughout", "shadow", "light", "dark",
+    "whisper", "shout", "silence", "sound", "noise", "echo", "voice", "song", "melody",
+    "rhythm", "dance", "story", "poem", "novel", "chapter", "verse", "riddle", "clue",
+    "answer", "solution", "problem", "mystery", "detective", "witness", "evidence", "suspect",
+    "criminal", "victim", "murder", "theft", "crime", "justice", "trial", "judge", "jury",
+    "verdict", "sentence", "prison", "escape", "chase", "hunt", "search", "discover", "reveal",
+    "expose", "conceal", "protect", "defend", "attack", "invade", "conquer", "surrender",
+    "retreat", "advance", "army", "soldier", "general", "captain", "sergeant", "weapon",
+    "sword", "shield", "armor", "arrow", "bow", "spear", "knife", "blade", "gun", "bullet",
+    "explosion", "bomb", "danger", "threat", "risk", "safety", "rescue", "save", "help",
+    "friend", "enemy", "ally", "traitor", "hero", "villain", "monster", "creature", "beast",
+    "dragon", "wolf", "bear", "lion", "tiger", "eagle", "hawk", "snake", "spider", "insect",
+    "animal", "plant", "flower", "seed", "root", "branch", "leaf", "fruit", "harvest",
+    "field", "farm", "crop", "grain", "wheat", "corn", "rice", "bread", "meat", "fish",
+    "milk", "egg", "sugar", "salt", "spice", "flavor", "taste", "smell", "touch", "sight",
+    "hearing", "sense", "feeling", "emotion", "thought", "opinion", "belief", "value", "moral",
+    "ethic", "principle", "rule", "law", "order", "chaos", "system", "structure", "pattern",
+    "design", "plan", "project", "task", "goal", "purpose", "mission", "duty", "responsibility",
+    "obligation", "promise", "agreement", "contract", "deal", "trade", "exchange", "gift", "reward",
+    "prize", "award", "honor", "praise", "blame", "criticism", "compliment", "insult", "argument",
+    "debate", "discussion", "conversation", "dialogue", "speech", "lecture", "lesson", "class",
+    "school", "student", "professor", "university", "college", "degree", "diploma", "exam",
+    "test", "grade", "score", "result", "success", "failure", "mistake", "error", "correction",
+    "improvement", "progress", "development", "growth", "change", "transformation", "evolution",
+    "revolution", "rebellion", "protest", "riot", "conflict", "crisis", "emergency", "disaster",
+    "accident", "injury", "wound", "illness", "disease", "cure", "medicine", "doctor", "nurse",
+    "patient", "hospital", "clinic", "surgery", "treatment", "recovery", "health", "wellness",
+    "exercise", "diet", "nutrition", "sleep", "rest", "energy", "strength", "power", "weakness",
+    "ability", "skill", "talent", "gift", "craft", "trade", "profession", "career", "job",
+    "employer", "employee", "worker", "manager", "leader", "follower", "team", "group", "organization",
+    "corporation", "company", "business", "industry", "market", "economy", "trade", "commerce",
+    "finance", "money", "cash", "coin", "currency", "bank", "account", "deposit", "withdrawal",
+    "loan", "debt", "credit", "interest", "profit", "loss", "budget", "expense", "income",
+    "salary", "wage", "tax", "fund", "investment", "wealth", "poverty", "rich", "poor",
+    "castle", "kingdom", "empire", "republic", "democracy", "monarchy", "dictator", "citizen",
+    "voter", "election", "campaign", "politician", "senator", "governor", "mayor", "minister",
+    "ambassador", "diplomat", "treaty", "alliance", "border", "territory", "region", "province",
+    "capital", "metropolis", "suburb", "neighborhood", "district", "zone", "area", "location",
+    "position", "direction", "distance", "journey", "trip", "travel", "adventure", "expedition",
+    "voyage", "flight", "arrival", "departure", "destination", "route", "path", "trail", "map",
+    "compass", "guide", "explorer", "traveler", "pilgrim", "wanderer", "nomad", "settler",
+    "pioneer", "colony", "settlement", "civilization", "culture", "tradition", "custom", "ritual",
+    "ceremony", "festival", "celebration", "holiday", "vacation", "rest", "relaxation", "leisure",
+    "hobby", "sport", "exercise", "competition", "contest", "tournament", "champion", "medal",
+    "trophy", "record", "achievement", "accomplishment", "milestone", "landmark", "monument",
+    "statue", "sculpture", "painting", "drawing", "artwork", "gallery", "museum", "exhibition",
+    "collection", "treasure", "artifact", "relic", "antique", "ancient", "modern", "future",
+    "past", "present", "history", "legacy", "heritage", "generation", "ancestor", "descendant",
+    "family", "relative", "cousin", "uncle", "aunt", "nephew", "niece", "sibling", "brother",
+    "sister", "husband", "wife", "spouse", "partner", "marriage", "wedding", "divorce",
+    "childhood", "youth", "adult", "elder", "senior", "infant", "baby", "toddler", "teenager"
 ];
 
 function initWordMode() {
@@ -349,6 +710,7 @@ function buildFallbackDictionary() {
 function buildIndexes() {
     patternIndex = {};
     lengthIndex = {};
+    structuralPatternIndex = {};
     vocabularySize = Object.keys(wordFrequency).length;
     
     // Build pattern and length indexes
@@ -363,12 +725,31 @@ function buildIndexes() {
         const pattern = '_'.repeat(len);
         if (!patternIndex[pattern]) patternIndex[pattern] = [];
         patternIndex[pattern].push(word);
+
+        // Structural pattern index (repeated-char structure, e.g. "were" → "0,1,2,1")
+        const sp = computeStructuralPattern(word);
+        if (!structuralPatternIndex[sp]) structuralPatternIndex[sp] = [];
+        structuralPatternIndex[sp].push(word);
     });
     
     // Sort by frequency
     Object.keys(lengthIndex).forEach(len => {
         lengthIndex[len].sort((a, b) => wordFrequency[b] - wordFrequency[a]);
     });
+    Object.keys(structuralPatternIndex).forEach(sp => {
+        structuralPatternIndex[sp].sort((a, b) => wordFrequency[b] - wordFrequency[a]);
+    });
+}
+
+// Returns a comma-joined pattern of integer indices representing repeated chars (e.g. "were" → "0,1,2,1")
+function computeStructuralPattern(word) {
+    const seen = {};
+    let counter = 0;
+    // Array.from (not split) so supplementary-plane cipher symbols count as one character each
+    return Array.from(word).map(c => {
+        if (!(c in seen)) seen[c] = counter++;
+        return seen[c];
+    }).join(',');
 }
 
 function tokenize(text) {
@@ -711,14 +1092,19 @@ function checkForSuggestedWords() {
         data.terms.forEach(term => {
             const lower = term.toLowerCase();
             wordFrequency[lower] = (wordFrequency[lower] || 0) + 100000;
-            // Ensure it appears in the length index
             const len = lower.length;
             if (!lengthIndex[len]) lengthIndex[len] = [];
             if (!lengthIndex[len].includes(lower)) lengthIndex[len].push(lower);
+            const sp = computeStructuralPattern(lower);
+            if (!structuralPatternIndex[sp]) structuralPatternIndex[sp] = [];
+            if (!structuralPatternIndex[sp].includes(lower)) structuralPatternIndex[sp].push(lower);
         });
-        // Re-sort length indexes so boosted terms bubble to the top
+        // Re-sort length and structural indexes so boosted terms bubble to the top
         Object.keys(lengthIndex).forEach(len => {
             lengthIndex[len].sort((a, b) => (wordFrequency[b] || 0) - (wordFrequency[a] || 0));
+        });
+        Object.keys(structuralPatternIndex).forEach(sp => {
+            structuralPatternIndex[sp].sort((a, b) => (wordFrequency[b] || 0) - (wordFrequency[a] || 0));
         });
 
         // Switch to word mode and pre-populate the textarea

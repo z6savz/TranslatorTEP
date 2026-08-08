@@ -3,22 +3,14 @@
 
 <head>
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
+        content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
     <!-- Clickjacking Defense (Frame-Busting) -->
     <style id="antiClickjack">
         body {
             display: none !important;
         }
     </style>
-    <script type="text/javascript">
-        // Allow same-origin iframes (for VS Code preview) but block cross-origin
-        if (self === top || self.origin === top.origin) {
-            var antiClickjack = document.getElementById("antiClickjack");
-            if (antiClickjack) antiClickjack.parentNode.removeChild(antiClickjack);
-        } else {
-            top.location = self.location;
-        }
-    </script>
+    <script src="../js/anti-clickjack.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Rabbitholes: Beyond the Cipher — Cryptic Fox</title>
@@ -146,7 +138,7 @@
         </section>
 
         <section class="truth-section">
-            <span class="truth-number">SECTION 1</span>
+            <span class="truth-number"></span>
             <h2>A Puzzle That Escaped the Screen</h2>
             <p>The first puzzle used OutGuess, a real steganography tool, to reveal hidden text. Solvers were then led
                 through a series of steps involving:</p>
@@ -162,7 +154,7 @@
         </section>
 
         <section class="truth-section">
-            <span class="truth-number">SECTION 2</span>
+            <span class="truth-number"></span>
             <h2>What Cicada 3301 Actually Said About Itself</h2>
             <p>Over the years, many theories circulated about Cicada’s purpose — from intelligence‑agency recruitment to
                 hacktivist operations. However, the only authenticated communications from Cicada are those
@@ -179,13 +171,11 @@
         </section>
 
         <section class="truth-section">
-            <span class="truth-number">SECTION 3</span>
+            <span class="truth-number"></span>
             <h2>Collaboration, Then Isolation</h2>
             <p>Early solvers worked together publicly, but Cicada eventually instructed participants to stop
                 collaborating. This shift is documented in the puzzles themselves, which emphasized individual effort
                 and warned against “followers.”</p>
-            <p>Some participants reported being contacted privately or asked to continue on less public channels, but no
-                verifiable evidence confirms:</p>
             <ul>
                 <li>a structured “Dark Web phase”</li>
                 <li>individualized RSA key assignments</li>
@@ -195,7 +185,7 @@
         </section>
 
         <section class="truth-section">
-            <span class="truth-number">SECTION 4</span>
+            <span class="truth-number"></span>
             <h2>The Liber Primus</h2>
             <p>In 2014, Cicada released the Liber Primus, a book written largely in runes. It contains philosophical
                 passages and encoded sections, many of which remain unsolved. What is known:</p>
@@ -211,7 +201,7 @@
         </section>
 
         <section class="truth-section">
-            <span class="truth-number">SECTION 5</span>
+            <span class="truth-number"></span>
             <h2>What Happened to the “Winners”?</h2>
             <p>Stories about solvers reaching an “inner sanctum” or discovering a dysfunctional secret group are
                 unverified. No participant has ever provided cryptographic proof or verifiable documentation
@@ -223,7 +213,7 @@
         </section>
 
         <section class="truth-section">
-            <span class="truth-number">SECTION 6</span>
+            <span class="truth-number"></span>
             <h2>Where Cicada Stands Today</h2>
             <p>The last authenticated message from Cicada 3301 appeared in 2017. Since then:</p>
             <ul>
@@ -231,19 +221,15 @@
                 <li>the Liber Primus remains partially unsolved</li>
                 <li>the group’s status is unknown</li>
             </ul>
-            <p>The “emergent protocol” theory — the idea that Cicada is a self‑activating system responding to
-                censorship — is a community theory, not a documented fact.</p>
         </section>
 
         <section class="conclusion-box">
             <div class="conclusion-content">
                 <h3>Conclusion</h3>
-                <p>Cicada 3301 remains one of the most intriguing cryptographic phenomena of the internet era. What is
-                    verifiable paints a picture of a highly sophisticated puzzle‑maker with a strong interest in
-                    cryptography, privacy, and philosophy. What lies beyond that — motives, membership, internal
-                    structure — remains unproven.</p>
-                <p>The mystery endures not because of hidden truths, but because Cicada left behind just enough verified
-                    material to spark endless speculation.</p>
+                <p>Cicada 3301 remains one of the most intriguing cryptographic phenomena of the internet era. Painting a picture of a highly sophisticated puzzle‑maker with a strong interest in
+                    cryptography, privacy, and philosophy. What lies beyond that, such as their motives, membership, and internal
+                    structure, remains a mystery.</p>
+                <p>Cicada left behind just enough verified material to spark endless speculation.</p>
             </div>
         </section>
 

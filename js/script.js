@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!document.body.classList.contains('home-page')) {
         const backBtn = document.createElement('button');
         backBtn.id = "backBtn";
-        backBtn.innerHTML = "<span>←</span> ϟ⟒⚲Ϟ";
+        backBtn.innerHTML = "<span>←</span> BACK";
         backBtn.title = "Go to previous page";
         document.body.appendChild(backBtn);
 

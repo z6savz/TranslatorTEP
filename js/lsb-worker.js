@@ -72,64 +72,74 @@ self.onmessage = function (e) {
     let byteIndex = 0;
     let bitIndexInByte = 0;
     let currentByte = 0;
-    let textOutput = "";
+    // Accumulate text segments in an array to avoid O(n²) string concatenation
+    const textParts = [];
     let totalTextChars = 0;
-    let maxTextChars = 50000; // Limit text to avoid DOM freeze
+    const maxTextChars = 50000;
 
-    const pushBit = (bit) => {
-        if (bit) {
-            currentByte |= (1 << (7 - bitIndexInByte));
-        }
-        bitIndexInByte++;
-        if (bitIndexInByte === 8) {
-            binaryData[byteIndex++] = currentByte;
-            currentByte = 0;
-            bitIndexInByte = 0;
-        }
-    };
+    // Pre-compute which channel byte offsets to read
+    const channelOffsets = [];
+    if (channel === "all" || channel === "red")   channelOffsets.push(0);
+    if (channel === "all" || channel === "green") channelOffsets.push(1);
+    if (channel === "all" || channel === "blue")  channelOffsets.push(2);
 
-    const getBitsFromValue = (val) => {
-        let bits = [];
-        for (let b of selectedBits) {
-            bits.push((val >> b) & 1);
-        }
-        return bits;
-    };
+    // Report progress based on total pixels so single-frame files show meaningful progress
+    const progressStep = Math.max(1, Math.floor(totalPixels / 100));
+    let processedPixels = 0;
+    let lastReportedPercent = -1;
 
     for (let fi = 0; fi < framesData.length; fi++) {
         const f = framesData[fi];
 
-        // Report progress every ~10% of frames so the UI can update
-        if (fi % Math.max(1, Math.ceil(framesData.length / 10)) === 0) {
-            self.postMessage({ type: 'progress', percent: Math.round((fi / framesData.length) * 100) });
+        if (totalTextChars < maxTextChars) {
+            const frameStr = `Frame @ ${f.timestamp}:\n`;
+            textParts.push(frameStr);
+            totalTextChars += frameStr.length;
         }
 
-        let frameStr = `Frame @ ${f.timestamp}:\n`;
-        textOutput += frameStr;
-        totalTextChars += frameStr.length;
-
-        let data = f.data;
+        const data = f.data;
         for (let i = 0; i < data.length; i += 4) {
-            // process bits
-            let bits = [];
-            if (channel === "all" || channel === "red") bits.push(...getBitsFromValue(data[i]));
-            if (channel === "all" || channel === "green") bits.push(...getBitsFromValue(data[i + 1]));
-            if (channel === "all" || channel === "blue") bits.push(...getBitsFromValue(data[i + 2]));
+            // Report progress every ~1% of total pixels for smooth updates on single frames
+            if (processedPixels % progressStep === 0) {
+                const percent = Math.min(99, Math.round((processedPixels / totalPixels) * 100));
+                if (percent !== lastReportedPercent) {
+                    self.postMessage({ type: 'progress', percent });
+                    lastReportedPercent = percent;
+                }
+            }
+            processedPixels++;
 
-            for (let b of bits) {
-                pushBit(b);
-                if (totalTextChars < maxTextChars) {
-                    textOutput += b;
-                    totalTextChars++;
+            // Inline bit extraction to avoid per-pixel array allocation
+            for (let ci = 0; ci < channelOffsets.length; ci++) {
+                const val = data[i + channelOffsets[ci]];
+                for (let bi = 0; bi < selectedBits.length; bi++) {
+                    const bit = (val >> selectedBits[bi]) & 1;
+                    if (bit) currentByte |= (1 << (7 - bitIndexInByte));
+                    bitIndexInByte++;
+                    if (bitIndexInByte === 8) {
+                        binaryData[byteIndex++] = currentByte;
+                        currentByte = 0;
+                        bitIndexInByte = 0;
+                    }
+                    if (totalTextChars < maxTextChars) {
+                        textParts.push(bit ? '1' : '0');
+                        totalTextChars++;
+                    }
                 }
             }
             if (totalTextChars < maxTextChars && ((i / 4 + 1) % f.width) === 0) {
-                textOutput += "\n";
+                textParts.push('\n');
                 totalTextChars++;
             }
         }
-        textOutput += "\n";
+
+        if (totalTextChars < maxTextChars) {
+            textParts.push('\n');
+            totalTextChars++;
+        }
     }
+
+    let textOutput = textParts.join('');
 
     // Push remaining partial byte if any
     if (bitIndexInByte > 0) {

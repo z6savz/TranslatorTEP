@@ -1,23 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self' blob:; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://storage.ko-fi.com https://i.ytimg.com; connect-src 'self' https://cdn.jsdelivr.net https://tessdata.projectnaptha.com https://unpkg.com; frame-src https://www.youtube.com; worker-src 'self' blob: https://unpkg.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
-  <!-- Clickjacking Defense (Frame-Busting) -->
-  <style id="antiClickjack">
-    body {
-      display: none !important;
-    }
-  </style>
-  <script type="text/javascript">
-    if (self === top) {
-      var antiClickjack = document.getElementById("antiClickjack");
-      if (antiClickjack) antiClickjack.parentNode.removeChild(antiClickjack);
-    } else {
-      top.location = self.location;
-    }
-  </script>
+    content="default-src 'self' blob:; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://storage.ko-fi.com https://i.ytimg.com; connect-src 'self' https://cdn.jsdelivr.net https://tessdata.projectnaptha.com https://unpkg.com; frame-src https://www.youtube.com; worker-src 'self' blob: https://unpkg.com; base-uri 'self'; form-action 'self';">
+  <style id="antiClickjack">body{display:none !important;}</style>
+  <script src="js/anti-clickjack.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Red Fox: Advanced Steganalysis & Forensic Suite — Cryptic Fox</title>
@@ -38,14 +26,14 @@
   <meta property="og:title" content="Red Fox: Advanced Steganalysis — Cryptic Fox">
   <meta property="og:description"
     content="A professional-grade forensic workbench for deep media analysis. Extract hidden data and spectral audio signatures.">
-  <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.jpg">
+  <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Red Fox: Advanced Steganalysis — Cryptic Fox">
   <meta name="twitter:description"
     content="A professional-grade forensic workbench for deep media analysis. Extract hidden data and spectral audio signatures.">
-  <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.jpg">
+  <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
 
   <script src="js/components.js"></script>
   <script src="js/script.js" defer></script>
@@ -59,13 +47,6 @@
 
   <h1>Red Fox: Steganalysis</h1>
   <img src="images/fennfox.png" class="center-image" alt="Cryptic Fox logo" style="width: 150px; height: auto;">
-  <h3>A forensic workbench for media analysis.</h3>
-
-  <!-- Error Banner -->
-  <div id="errorBanner" class="red-error-banner" style="display: none;">
-    <span id="errorText"></span>
-    <button id="errorDismiss" class="error-dismiss-btn" aria-label="Dismiss error">✕</button>
-  </div>
 
   <!-- Upload Section with Drag-and-Drop -->
   <details class="red-section red-upload-section" open>
@@ -128,8 +109,7 @@
   </details>
 
   <!-- Hidden video element for processing -->
-  <video id="video" playsinline
-    style="position: fixed; top: -1000px; left: -1000px; opacity: 0; pointer-events: none; width: 320px; height: 180px;"></video>
+  <video id="video" playsinline class="red-video-offscreen"></video>
 
   <!-- Color & Contrast -->
   <details id="colorContrast" class="red-section">
@@ -282,7 +262,7 @@
     </div>
   </details>
 
-  <!-- DISABLED: Visual Payload Analysis - Feature not functioning
+  <!-- Visual Payload Analysis -->
   <details id="signalPanel" class="signal-panel red-section">
     <summary>
       <h2 style="display: inline-flex; align-items: center; justify-content: center; gap: 10px;">
@@ -347,9 +327,8 @@
       <button id="saveSignalBtn" class="red-save-btn">💾 Save Signal Map</button>
     </div>
   </details>
-  -->
 
-  <!-- DISABLED: Statistical Analysis - Feature not functioning
+  <!-- DISABLED: Statistical Analysis -->
   <details class="red-section">
     <summary>
       <h2 style="display: inline-flex; align-items: center; justify-content: center; gap: 10px;">
@@ -392,7 +371,6 @@
         Analysis</button>
     </div>
   </details>
-  -->
 
   <!-- DISABLED: Audio Spectrogram Visualizer - Feature not functioning
   <details id="audioSection" class="red-section">
@@ -436,12 +414,11 @@
       <button id="saveAudioBtn" class="red-save-btn">💾 Save Spectrogram</button>
     </div>
   </details>
-  -->
 
   <!-- Loading Overlay -->
   <div id="loadingDiv" class="loading-sticky" style="display: none;">
     <div class="spinner"></div>
-    <p id="loadingText">Processing frames, please wait...</p>
+    <p id="loadingText">Processing, please wait...</p>
     <div class="loading-progress-wrap">
       <div class="loading-progress-track">
         <div id="loadingProgressBar" class="loading-progress-fill"></div>
@@ -460,8 +437,7 @@
       style="padding: 15px 40px; font-size: 1.2rem; background: linear-gradient(135deg, #eb3f7b 0%, #ff7eb3 100%); margin-top: 10px;">
       🚀 Start Full Deep Scan
     </button>
-  </section>
-  -->
+  </section>-->
 
   <details class="red-section">
     <summary>

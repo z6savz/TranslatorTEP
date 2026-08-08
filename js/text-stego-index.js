@@ -497,8 +497,8 @@ function clearCorpus() {
     if(confirm('Are you sure you want to clear the entire corpus?')) {
         corpus.clear();
         refreshCorpusUI();
-        document.getElementById('indexStatsPanel').style.display = 'none';
-        document.getElementById('queryPanel').style.display = 'none';
+        document.getElementById('indexStatsPanel').classList.add('hidden');
+        document.getElementById('queryPanel').classList.add('hidden');
     }
 }
 
@@ -539,8 +539,8 @@ function buildIndex() {
         corpusIndex.buildIndex();
     }
     
-    document.getElementById('indexStatsPanel').style.display = 'block';
-    document.getElementById('queryPanel').style.display = 'block';
+    document.getElementById('indexStatsPanel').classList.remove('hidden');
+    document.getElementById('queryPanel').classList.remove('hidden');
     
     displayIndexStats();
 }

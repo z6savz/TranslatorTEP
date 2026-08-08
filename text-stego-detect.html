@@ -1,19 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
     <!-- Clickjacking Defense (Frame-Busting) -->
     <style id="antiClickjack">body{display:none !important;}</style>
-    <script type="text/javascript">
-        // Allow same-origin iframes (for VS Code preview) but block cross-origin
-        if (self === top || self.origin === top.origin) {
-            var antiClickjack = document.getElementById("antiClickjack");
-            if (antiClickjack) antiClickjack.parentNode.removeChild(antiClickjack);
-        } else {
-            top.location = self.location;
-        }
-    </script>
+    <script src="js/anti-clickjack.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Stego Detector — Cryptic Fox</title>
@@ -26,7 +18,7 @@
     <script src="js/smoke.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"
         integrity="sha384-vsrfeLOOY6KuIYKDlmVH5UiBmgIdB1oEf7p01YgWHuqmOHfZr374+odEv96n9tNC"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous" async></script>
 
     <!-- Favicon Links -->
     <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
@@ -44,28 +36,61 @@
     <meta property="og:title" content="Text Stego Detector — Cryptic Fox">
     <meta property="og:description"
         content="Advanced text steganography detection through linguistic analysis and pattern recognition.">
-    <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.jpg">
+    <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Text Stego Detector — Cryptic Fox">
     <meta name="twitter:description"
         content="Advanced text steganography detection through linguistic analysis and pattern recognition.">
-    <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.jpg">
+    <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
 
     <style>
-        .hero {
-            margin-top: 80px;
-        }
-
         .analysis-container {
             max-width: 1200px;
             margin: 80px auto 0 auto;
             padding: 20px;
         }
 
+        .hero {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--color-primary);
+        }
+
+        .hero .tagline {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
         .method {
-            margin: 0 auto;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            margin: 0 auto 30px auto;
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .method h2 {
+            color: var(--color-primary);
+            margin-top: 0;
+            font-size: 1.8rem;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            text-align: center;
         }
 
         .info-icon {
@@ -222,8 +247,8 @@
         }
 
         .anomaly-meter {
-            background: var(--color-card-bg);
-            border: 2px solid var(--color-border);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
             padding: 20px;
             margin-bottom: 20px;
@@ -283,11 +308,16 @@
         }
 
         .expandable-section {
-            background: var(--color-card-bg);
-            border: 2px solid var(--color-border);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
             border-radius: var(--radius-md);
             margin-bottom: 20px;
             overflow: hidden;
+            transition: var(--transition-base);
+        }
+
+        .expandable-section:hover {
+            border-color: var(--color-primary);
         }
 
         .section-header {
@@ -484,12 +514,12 @@
 <body>
     <div class="dropdown" role="navigation"></div>
 
-    <section class="hero">
-        <h1>🔍 Text Stego Detector</h1>
-        <p class="tagline">Advanced steganography detection through stylometric analysis, TF-IDF weighting, and similarity scoring</p>
-    </section>
-
     <div class="analysis-container">
+        <section class="hero">
+            <h1>🔍 Text Stego Detector</h1>
+            <p class="tagline">Advanced steganography detection through stylometric analysis, TF-IDF weighting, and similarity scoring</p>
+        </section>
+
         <div class="method">
             <div class="method-header">
                 <h2 style="display: flex; align-items: center; justify-content: center; gap: 10px;">
@@ -655,6 +685,8 @@
             </div>
         </div>
     </div>
+
+    <footer></footer>
 
     <script src="js/suppress.js"></script>
 </body>

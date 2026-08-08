@@ -28,11 +28,11 @@ const channelSelect = document.getElementById("channelSelect");
 const roiInput = document.getElementById("roiInput");
 const analyzeBtn = document.getElementById("analyzeBtn");
 const signalCanvas = document.getElementById("signalCanvas");
-const startAudioAnalysisBtn = document.getElementById("startAudioAnalysisBtn");
-const stopAudioAnalysisBtn = document.getElementById("stopAudioAnalysisBtn");
-const masterAnalysisBtn = document.getElementById("masterAnalysisBtn");
-const audioCanvas = document.getElementById("audioCanvas");
-const signalCtx = signalCanvas ? signalCanvas.getContext("2d") : null;
+// const startAudioAnalysisBtn = document.getElementById("startAudioAnalysisBtn"); // disabled
+// const stopAudioAnalysisBtn = document.getElementById("stopAudioAnalysisBtn"); // disabled
+// const masterAnalysisBtn = document.getElementById("masterAnalysisBtn"); // disabled
+// const audioCanvas = document.getElementById("audioCanvas"); // disabled
+const signalCtx = signalCanvas?.getContext("2d") || null;
 const bitPlaneSelect = document.getElementById("bitPlaneSelect");
 const ocrToggle = document.getElementById("ocrToggle");
 const dropZone = document.getElementById("dropZone");
@@ -50,7 +50,7 @@ const errorText = document.getElementById("errorText");
 const errorDismiss = document.getElementById("errorDismiss");
 const savePreviewBtn = document.getElementById("savePreviewBtn");
 const saveSignalBtn = document.getElementById("saveSignalBtn");
-const saveAudioBtn = document.getElementById("saveAudioBtn");
+// const saveAudioBtn = document.getElementById("saveAudioBtn"); // disabled
 const histogramCanvas = document.getElementById("histogramCanvas");
 const statsOutput = document.getElementById("statsOutput");
 const runStatsBtn = document.getElementById("runStatsBtn");
@@ -176,7 +176,7 @@ function loadImageFile(file) {
     // Enable controls
     const startBtn = document.getElementById('startAnalysisBtn');
     if (startBtn) startBtn.disabled = false;
-    if (masterAnalysisBtn) masterAnalysisBtn.disabled = false;
+    // if (masterAnalysisBtn) masterAnalysisBtn.disabled = false; // disabled
     if (runStatsBtn) runStatsBtn.disabled = false;
     [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, lsbChannel].forEach(c => { if (c) c.disabled = false; });
     if (analyzeBtn) { analyzeBtn.disabled = false; runSignalAnalysis(); }
@@ -301,7 +301,7 @@ function loadVideoFile(file) {
 
   [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => {
     if (ctrl) ctrl.disabled = true;
-    if (masterAnalysisBtn) masterAnalysisBtn.disabled = false;
+    // if (masterAnalysisBtn) masterAnalysisBtn.disabled = false; // disabled
     if (runStatsBtn) runStatsBtn.disabled = false;
   });
 }
@@ -354,7 +354,7 @@ function startRenderLoop() {
   isPlaying = true;
 
   function loop() {
-    if (!glContext || video.paused || video.ended) {
+    if (!glContext || !glContext.supported || video.paused || video.ended) {
       isPlaying = false;
       return;
     }
@@ -369,7 +369,10 @@ function startRenderLoop() {
     const saturationVal = parseFloat(saturation ? saturation.value : 1);
     try {
       // ensure playbackRate is applied during playback
-      if (playbackRate) video.playbackRate = parseFloat(playbackRate.value);
+      if (playbackRate) {
+        const rate = parseFloat(playbackRate.value);
+        if (isFinite(rate) && rate > 0) video.playbackRate = rate;
+      }
       glContext.renderFrame(video, gain, contrastVal, brightnessVal, brillianceVal, saturationVal);
       if (outputTime) outputTime.textContent = `${video.currentTime.toFixed(2)}s`;
     } catch (err) {
@@ -385,6 +388,11 @@ if (playPauseBtn) {
   playPauseBtn.addEventListener('click', () => {
     if (!video) return;
     if (video.paused) {
+      // Ensure video is ready to play
+      if (video.readyState < 2) {
+        showError("Video is still loading. Please wait a moment.");
+        return;
+      }
       video.play().then(() => {
         startRenderLoop();
         if (playPauseBtn) { playPauseBtn.textContent = '⏸'; playPauseBtn.setAttribute('aria-label', 'Pause'); }
@@ -403,6 +411,7 @@ if (playPauseBtn) {
 // Reset all UI and outputs
 function resetAll() {
   try {
+    // stopAudioAnalysis(); // disabled
     if (video) {
       video.pause();
       isPlaying = false;
@@ -554,24 +563,35 @@ function getLSBBits(imageData, channel) {
 
 /* Signal panel wiring*/
 function runSignalAnalysis() {
-  if (!glContext || !canvas) return;
   if (!modeSelect || !channelSelect) return; // signal panel not in DOM
+
+  // Read pixel data from the stored source canvas (image mode) or re-render WebGL (video mode).
+  // Bypassing extractImageData() for images avoids reading a cleared WebGL buffer.
+  let imageData;
+  if (isImageMode && window._imageSource) {
+    const srcCtx = window._imageSource.getContext('2d');
+    imageData = srcCtx.getImageData(0, 0, window._imageSource.width, window._imageSource.height);
+  } else {
+    if (!glContext || !canvas) return;
+    renderPreviewIfAvailable();
+    imageData = glContext.extractImageData();
+  }
+  if (!imageData) return;
+
   const mode = modeSelect.value;
   const channel = channelSelect.value;
-  let roi = [0, 0, canvas.width, canvas.height];
+  let roi = [0, 0, imageData.width, imageData.height];
   if (roiInput && roiInput.value) {
     const parsed = roiInput.value.split(',').map(v => parseInt(v.trim()));
     if (parsed.length === 4 && !parsed.some(isNaN)) {
-      // Clamp every dimension to valid canvas bounds so negative or oversized values can't crash
-      const cx = Math.max(0, Math.min(parsed[0], canvas.width - 1));
-      const cy = Math.max(0, Math.min(parsed[1], canvas.height - 1));
-      const cw = Math.max(1, Math.min(parsed[2], canvas.width - cx));
-      const ch = Math.max(1, Math.min(parsed[3], canvas.height - cy));
+      const cx = Math.max(0, Math.min(parsed[0], imageData.width - 1));
+      const cy = Math.max(0, Math.min(parsed[1], imageData.height - 1));
+      const cw = Math.max(1, Math.min(parsed[2], imageData.width - cx));
+      const ch = Math.max(1, Math.min(parsed[3], imageData.height - cy));
       roi = [cx, cy, cw, ch];
     }
   }
 
-  const imageData = glContext.extractImageData();
   const roiData = extractROI(imageData, roi);
 
   if (signalCanvas) {
@@ -666,7 +686,7 @@ function renderEntropyMap(data, channel) {
 
 // Main frame processing
 async function processVideoFrames() {
-  if (loadingDiv) loadingDiv.style.display = 'block';
+  if (loadingDiv) loadingDiv.style.display = 'flex';
   if (loadingText) loadingText.textContent = "Initializing multi-channel analysis...";
   [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => ctrl.disabled = true);
 
@@ -767,7 +787,7 @@ async function processVideoFrames() {
 
     if (loadingText) {
       const progress = Math.round((currentStep / totalSteps) * 100);
-      loadingText.textContent = `Phase 1 — Collecting frames: ${currentStep}/${totalSteps}`;
+      loadingText.textContent = isImageMode ? `Phase 1 — Processing image...` : `Phase 1 — Collecting frames: ${currentStep}/${totalSteps}`;
       if (progressContainer) progressContainer.style.display = 'flex';
       if (progressBar) progressBar.style.width = `${progress}%`;
       if (progressText) progressText.textContent = `${progress}%`;
@@ -796,67 +816,92 @@ async function processVideoFrames() {
     if (currentWorker) { try { currentWorker.terminate(); } catch(e) {} }
     const worker = new Worker('js/lsb-worker.js');
     currentWorker = worker;
-    // Transfer pixel buffer ownership to the worker (zero-copy) instead of structured-cloning.
-    // This avoids doubling memory usage for large videos.
-    const transferList = framesToProcess.map(f => f.data.buffer);
-    worker.postMessage({
-      framesData: framesToProcess,
-      channel: channel,
-      selectedBits: selectedBits
-    }, transferList);
 
-    worker.onmessage = function (e) {
-      // Progress update from worker
-      if (e.data.type === 'progress') {
-        if (loadingText) loadingText.textContent = `Phase 2 — Processing bits: ${e.data.percent}%`;
-        if (progressText) progressText.textContent = `${e.data.percent}%`;
-        if (progressBar) progressBar.style.width = `${e.data.percent}%`;
-        if (loadingProgressBar) loadingProgressBar.style.width = `${e.data.percent}%`;
-        if (loadingProgressLabel) loadingProgressLabel.textContent = `${e.data.percent}%`;
-        return;
-      }
-      const { textOutput, binaryData, signatures } = e.data;
-      if (lsbOutputDisplay) lsbOutputDisplay.textContent = textOutput;
+    // Wrap the worker in a Promise so callers can await Phase 2 completion
+    await new Promise((resolve) => {
+      // Safety timeout: terminate the worker if it doesn't finish within 120 seconds
+      const workerTimeout = setTimeout(() => {
+        worker.terminate();
+        showError("Phase 2 timed out. Try fewer frames, fewer bit planes, or a smaller file.");
+        if (loadingDiv) loadingDiv.style.display = 'none';
+        if (progressContainer) progressContainer.style.display = 'none';
+        [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => { if (ctrl) ctrl.disabled = false; });
+        startAnalysisBtn.textContent = "Start Analysis";
+        resolve();
+      }, 120000);
 
-      // Store binary data globally for download
-      window._currentBinaryData = binaryData;
+      // Transfer pixel buffer ownership to the worker (zero-copy) instead of structured-cloning.
+      // This avoids doubling memory usage for large videos.
+      const transferList = framesToProcess.map(f => f.data.buffer);
+      worker.postMessage({
+        framesData: framesToProcess,
+        channel: channel,
+        selectedBits: selectedBits
+      }, transferList);
 
-      // Display signatures
-      if (magicNumberOutput && magicNumberList) {
-        if (signatures && signatures.length > 0) {
-          magicNumberOutput.style.display = 'block';
-          magicNumberList.innerHTML = signatures.map(s => `<li>${s}</li>`).join('');
-        } else {
-          magicNumberOutput.style.display = 'none';
+      worker.onmessage = function (e) {
+        // Progress update from worker
+        if (e.data.type === 'progress') {
+          if (loadingText) loadingText.textContent = `Phase 2 — Processing bits: ${e.data.percent}%`;
+          if (progressText) progressText.textContent = `${e.data.percent}%`;
+          if (progressBar) progressBar.style.width = `${e.data.percent}%`;
+          if (loadingProgressBar) loadingProgressBar.style.width = `${e.data.percent}%`;
+          if (loadingProgressLabel) loadingProgressLabel.textContent = `${e.data.percent}%`;
+          return;
         }
-      }
+        clearTimeout(workerTimeout);
+        // Use a non-shadowing name so the outer textOutput DOM element stays accessible
+        const { textOutput: lsbResult, binaryData, signatures } = e.data;
+        if (lsbOutputDisplay) lsbOutputDisplay.textContent = lsbResult;
 
-      if (loadingDiv) loadingDiv.style.display = 'none';
-      if (progressContainer) progressContainer.style.display = 'none';
-      // Wire up decodeOutput with summary
-      if (decodeOutput) {
-        let summary = `Analysis complete.\nFrames: ${framesToProcess.length}\n`;
-        if (signatures && signatures.length > 0) summary += `Signatures: ${signatures.join(', ')}\n`;
-        if (textOutput && textOutput.textContent) summary += `\nOCR Text:\n${textOutput.textContent}`;
-        decodeOutput.textContent = summary;
-        decodeOutput.style.fontStyle = 'normal';
-        decodeOutput.style.color = '';
-      }
-      [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => { if (ctrl) ctrl.disabled = false; });
-      startAnalysisBtn.textContent = "Start Analysis";
-    };
+        // Store binary data globally for download
+        window._currentBinaryData = binaryData;
 
-    worker.onerror = function (err) {
-      console.error("Worker error:", err);
-      if (loadingDiv) loadingDiv.style.display = 'none';
-      if (progressContainer) progressContainer.style.display = 'none';
-      [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => { if (ctrl) ctrl.disabled = false; });
-      startAnalysisBtn.textContent = "Start Analysis";
-    };
+        // Display signatures
+        if (magicNumberOutput && magicNumberList) {
+          if (signatures && signatures.length > 0) {
+            magicNumberOutput.style.display = 'block';
+            magicNumberList.innerHTML = signatures.map(s => `<li>${s}</li>`).join('');
+          } else {
+            magicNumberOutput.style.display = 'none';
+          }
+        }
+
+        if (loadingDiv) loadingDiv.style.display = 'none';
+        if (progressContainer) progressContainer.style.display = 'none';
+        // Build summary for Extracted Text section
+        if (decodeOutput) {
+          let summary = `Analysis complete.\nFrames: ${framesToProcess.length}\n`;
+          if (signatures && signatures.length > 0) summary += `Signatures: ${signatures.join(', ')}\n`;
+          // textOutput here is the outer DOM element — contains OCR text from Phase 1
+          if (textOutput && textOutput.textContent) summary += `\nOCR Text:\n${textOutput.textContent}`;
+          decodeOutput.textContent = summary;
+          decodeOutput.style.fontStyle = 'normal';
+          decodeOutput.style.color = '';
+        }
+        [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => { if (ctrl) ctrl.disabled = false; });
+        startAnalysisBtn.textContent = "Start Analysis";
+        resolve();
+      };
+
+      worker.onerror = function (err) {
+        clearTimeout(workerTimeout);
+        console.error("Worker error:", err);
+        showError("Analysis failed: " + (err.message || "worker could not load. Try serving the page over HTTP."));
+        if (loadingDiv) loadingDiv.style.display = 'none';
+        if (progressContainer) progressContainer.style.display = 'none';
+        [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => { if (ctrl) ctrl.disabled = false; });
+        startAnalysisBtn.textContent = "Start Analysis";
+        resolve();
+      };
+    });
   } else {
     if (loadingDiv) loadingDiv.style.display = 'none';
     if (progressContainer) progressContainer.style.display = 'none';
     [redGain, greenGain, blueGain, contrast, brightness, brilliance, saturation, playbackRate, scrubber].forEach(ctrl => { if (ctrl) ctrl.disabled = false; });
+    if (!analysisAborted) {
+      showError('No frames could be captured. Check that the file loaded correctly and WebGL is supported.');
+    }
   }
 }
 
@@ -891,15 +936,14 @@ if (resetBtn) {
   });
 }
 
+/* DISABLED: Deep Analysis Suite
 if (masterAnalysisBtn) {
   masterAnalysisBtn.addEventListener('click', async () => {
-    // 1. Run full frame/bit analysis
     await processVideoFrames();
-    // 2. Run statistical analysis
     await runStatisticalAnalysis();
-    // 3. Audio analysis is handled within processVideoFrames for video
   });
 }
+*/
 
 async function exportReport() {
   if (!JSZip) {
@@ -991,16 +1035,15 @@ function formatBytes(bytes, decimals = 2) {
 function showError(msg) {
   if (!errorBanner || !errorText) return;
   errorText.textContent = msg;
-  errorBanner.style.display = 'flex';
-  setTimeout(() => {
-    errorBanner.style.opacity = '1';
-  }, 10);
+  errorBanner.style.removeProperty('display');
+  errorBanner.classList.add('is-showing');
 }
 
 // Dismiss error banner
 if (errorDismiss) {
   errorDismiss.addEventListener('click', () => {
-    errorBanner.style.display = 'none';
+    errorBanner.classList.remove('is-showing');
+    errorBanner.style.removeProperty('display');
   });
 }
 
@@ -1016,15 +1059,21 @@ function saveCanvasAsPNG(canvasId, defaultName) {
 
 if (savePreviewBtn) savePreviewBtn.addEventListener('click', () => saveCanvasAsPNG('canvas', 'preview'));
 if (saveSignalBtn) saveSignalBtn.addEventListener('click', () => saveCanvasAsPNG('signalCanvas', 'signal'));
-if (saveAudioBtn) saveAudioBtn.addEventListener('click', () => saveCanvasAsPNG('audioCanvas', 'spectrogram'));
+// if (saveAudioBtn) saveAudioBtn.addEventListener('click', () => saveCanvasAsPNG('audioCanvas', 'spectrogram')); // disabled
 
 // Statistical Analysis Implementation
 async function runStatisticalAnalysis() {
-  if (!glContext) return;
-  
-  // Get raw pixels from current preview
-  const imageData = glContext.extractImageData();
-  if (!imageData) return; // WebGL context lost
+  // Read pixel data from the stored source canvas (image mode) or re-render WebGL (video mode).
+  let imageData;
+  if (isImageMode && window._imageSource) {
+    const srcCtx = window._imageSource.getContext('2d');
+    imageData = srcCtx.getImageData(0, 0, window._imageSource.width, window._imageSource.height);
+  } else {
+    if (!glContext) return;
+    renderPreviewIfAvailable();
+    imageData = glContext.extractImageData();
+  }
+  if (!imageData) return;
   const data = imageData.data;
   
   // 1. Calculate Histograms (specifically for LSBs)
@@ -1302,12 +1351,9 @@ if (scrubber) {
     }
   });
 }
-// preview window support removed; no click listener to register
 
 // initialize display values
 updateSliderDisplays();
-
-// (frameStep listener registered above, near step declaration)
 
 // Copy LSB output button
 const copyLSBBtn = document.getElementById("copyLSBBtn");
@@ -1341,24 +1387,23 @@ if (lsbChannel) lsbChannel.addEventListener("change", () => {
   // worker now handles output parsing. Live updates currently wait for new analysis.
 });
 
-// Audio Spectrogram Logic
+/* DISABLED: Audio Spectrogram Logic
 let audioCtx, audioSource, analyser, audioAnimId;
 
-function startAudioAnalysis() {
+async function startAudioAnalysis() {
   if (!video || !video.src) {
     showError("Upload a video first.");
     return;
   }
-  // Unmute video so audio data flows to the analyser
   video.muted = false;
+  video.volume = 1;
   if (!audioCtx) {
     try {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       audioSource = audioCtx.createMediaElementSource(video);
       analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 2048;
+      analyser.fftSize = 4096; // higher resolution for better frequency detail
       audioSource.connect(analyser);
-      // Connect analyser to destination so audio is audible
       analyser.connect(audioCtx.destination);
     } catch (e) {
       console.error("Audio Context Init Failed:", e);
@@ -1367,10 +1412,17 @@ function startAudioAnalysis() {
     }
   }
   if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
+    await audioCtx.resume();
+  }
+  // Restart from the beginning so the spectrogram captures the full audio track
+  video.currentTime = 0;
+  try {
+    await video.play();
+  } catch (err) {
+    showError('Could not play video for audio analysis: ' + err.message);
+    return;
   }
   drawSpectrogram();
-  video.play();
 }
 
 function stopAudioAnalysis() {
@@ -1387,57 +1439,53 @@ if (stopAudioAnalysisBtn) {
 
 function drawSpectrogram() {
   if (!audioCanvas || !analyser || !audioCtx) return;
-  const ctx = audioCanvas.getContext("2d", { alpha: false });
+  const ctx = audioCanvas.getContext("2d", { alpha: false, willReadFrequently: true });
   const bufferLength = analyser.frequencyBinCount;
   const dataArray = new Uint8Array(bufferLength);
   const width = audioCanvas.width;
   const height = audioCanvas.height;
 
-  // 1. Shift existing image left
-  const imgData = ctx.getImageData(1, 0, width - 1, height);
-  ctx.putImageData(imgData, 0, 0);
-
-  // 2. Capture new frequency data
   analyser.getByteFrequencyData(dataArray);
 
-  // 3. Determine frequency range and scaling
+  // Shift existing image left by 1 pixel (waterfall scroll)
+  const shifted = ctx.getImageData(1, 0, width - 1, height);
+  ctx.putImageData(shifted, 0, 0);
+
+  // Build the new rightmost column via ImageData (avoids 256 fillRect calls per frame)
+  const col = ctx.createImageData(1, height);
+  const cd = col.data;
+
   const focusMode = document.getElementById("freqFocus")?.value || "full";
   const useLog = document.getElementById("logScale")?.checked || false;
-  const sampleRate = audioCtx.sampleRate;
-  const nyquist = sampleRate / 2;
-
-  let fMin = 0;
-  let fMax = nyquist;
-
-  if (focusMode === "low") fMax = 2000;
+  const nyquist = audioCtx.sampleRate / 2;
+  let fMin = 0, fMax = nyquist;
+  if (focusMode === "low")  fMax = 2000;
   if (focusMode === "high") fMin = 15000;
 
-  // 4. Draw new column (pixel by pixel for accurate mapping)
   for (let y = 0; y < height; y++) {
     const percent = y / height;
     let freq;
-
     if (useLog) {
-      const actualMin = Math.max(20, fMin);
-      const actualMax = fMax;
-      freq = actualMin * Math.pow(actualMax / actualMin, percent);
+      const lo = Math.max(20, fMin);
+      const hi = Math.max(lo + 1, fMax);
+      freq = lo * Math.pow(hi / lo, percent);
     } else {
       freq = fMin + percent * (fMax - fMin);
     }
-
-    const binIndex = Math.round((freq / nyquist) * bufferLength);
-    const value = dataArray[Math.min(binIndex, bufferLength - 1)] || 0;
-
-    const r = Math.min(255, value * 1.5);
-    const g = Math.min(255, value * 0.5);
-    const b = Math.min(255, 255 - value + (value > 128 ? value : 0));
-    
-    ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-    ctx.fillRect(width - 1, height - y - 1, 1, 1);
+    const bin = Math.min(Math.round((freq / nyquist) * bufferLength), bufferLength - 1);
+    const v = dataArray[bin] || 0;
+    // bottom of canvas = low freq; top = high freq
+    const idx = (height - 1 - y) * 4;
+    cd[idx]     = Math.min(255, v * 1.5);
+    cd[idx + 1] = Math.min(255, v * 0.5);
+    cd[idx + 2] = Math.min(255, 255 - v + (v > 128 ? v : 0));
+    cd[idx + 3] = 255;
   }
+  ctx.putImageData(col, width - 1, 0);
 
   audioAnimId = requestAnimationFrame(drawSpectrogram);
 }
+*/
 
   // Prevent info-icon clicks from toggling collapsible section headers
   document.querySelectorAll('.info-icon').forEach(el => {

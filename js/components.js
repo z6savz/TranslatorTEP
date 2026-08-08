@@ -2,13 +2,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Inject Navigation
     const navPlaceholder = document.querySelector('[role="navigation"]');
     if (navPlaceholder) {
-        // We assume the placeholder exists. In some files it's already there.
-        // If we want to be robust, we could create it if missing.
+        // Skip link must be the first focusable element — inject before the nav
+        const skipLink = document.createElement('a');
+        skipLink.href = '#main-content';
+        skipLink.className = 'skip-link';
+        skipLink.textContent = 'Skip to main content';
+        navPlaceholder.parentNode.insertBefore(skipLink, navPlaceholder);
+
+        // Anchor the skip-link target to the first h1 on the page
+        document.addEventListener('DOMContentLoaded', () => {
+            const h1 = document.querySelector('h1');
+            if (h1 && !h1.id) h1.id = 'main-content';
+        });
+        
         const isRoot = !window.location.pathname.includes('blog-posts/');
         const prefix = isRoot ? '' : '../';
         
         const navHtml = `
-            <button class="dropbtn" aria-label="Navigation menu" aria-expanded="false">⨀Ξ〄⋑</button>
+            <button class="dropbtn" aria-label="Navigation menu" aria-expanded="false">MENU</button>
             <div class="dropdown-content">
                 <a href="${prefix}index.html">Home</a>
                 <a href="${prefix}about.html">About</a>
@@ -21,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="${prefix}text-stego-index.html">Forensic Index</a>
                 <a href="${prefix}note-g.html">Note G: Bernoulli Numbers</a>
                 <a href="${prefix}lovelace-music.html">Lovelace Music</a>
-                <!-- <a href="${prefix}puzzles.html">Puzzles</a> -->
+                <a href="${prefix}cryptograms.html">Puzzles</a>
                 <a href="${prefix}cryptography.html">Resources</a>
                 <a href="${prefix}tepcipher.html">⌖Ξ⎔ ⚲∷⎔⍥Ξ⎐</a>
             </div>
@@ -82,8 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         footer.innerHTML = `
             <p>&copy; 2025–2026 Cryptic Fox &nbsp;|&nbsp; 
                 <a href='https://ko-fi.com/S6S81YLIDM' target='_blank' rel='noopener noreferrer'>
-                    <img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' 
-                        border='0' alt='Support me on Ko-fi' loading="lazy" />
+                    <img src='https://storage.ko-fi.com/cdn/kofi6.png?v=6' alt='Support me on Ko-fi' />
                 </a>
             </p>
         `;

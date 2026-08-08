@@ -84,7 +84,7 @@ function updateResolvedArea() {
     const area = document.getElementById("resolvedArea");
     area.innerHTML = "";
 
-    // We want to render the resolved text character by character
+    // render the resolved text character by character
     // and highlight which ones are filled.
     ciphertext.split("").forEach(char => {
         const span = document.createElement("span");

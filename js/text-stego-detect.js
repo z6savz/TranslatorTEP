@@ -833,14 +833,14 @@ function displayResults() {
 
     // Display N-gram divergence
     displayNgrams(results);
-    
+
     // Highlight anomalies in text
     displayHighlightedText(results.suspiciousText, results.anomalies, results.topTerms);
-    
+
     // Display decoded messages
     displayDecodedMessages(results.whitespaceDecoded, results.punctuationDecoded, results.suspiciousTerms);
-    
-    // Scroll to results
+
+    // Scroll to results — placed after non-chart work so it runs even if Chart.js is unavailable
     document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -950,6 +950,7 @@ function createStylometryChart(metrics) {
         return parseFloat(val) * 100;
     };
     
+    if (typeof Chart === 'undefined') return;
     charts.stylometry = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -1042,6 +1043,7 @@ function createTFIDFChart(topTerms) {
     
     const displayTerms = topTerms.slice(0, 15);
     
+    if (typeof Chart === 'undefined') return;
     charts.tfidf = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -1267,7 +1269,7 @@ function displayRadarChart(results) {
     const ctx = canvas.getContext('2d');
     
     if (charts.radar) charts.radar.destroy();
-    
+    if (typeof Chart === 'undefined') return;
     charts.radar = new Chart(ctx, {
         type: 'radar',
         data: {
@@ -1330,7 +1332,7 @@ function displayEntropy(results) {
 
     const ctx = canvas.getContext('2d');
     if (charts.entropy) charts.entropy.destroy();
-    
+    if (typeof Chart === 'undefined') return;
     charts.entropy = new Chart(ctx, {
         type: 'line',
         data: {

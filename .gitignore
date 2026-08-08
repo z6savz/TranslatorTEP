@@ -10,3 +10,9 @@ Thumbs.db
 
 # Local analysis report (do not commit)
 analysis_report.md
+README_IMPLEMENTATION.md
+IMPLEMENTATION_SUMMARY.md
+node_modules/
+test-results/
+red-fox.test.js
+
