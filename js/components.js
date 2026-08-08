@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="${prefix}text-stego-index.html">Forensic Index</a>
                 <a href="${prefix}note-g.html">Note G: Bernoulli Numbers</a>
                 <a href="${prefix}lovelace-music.html">Lovelace Music</a>
-                <a href="${prefix}cryptograms.html">Puzzles</a>
                 <a href="${prefix}cryptography.html">Resources</a>
+                <a href="${prefix}blog.html">Blog</a>
                 <a href="${prefix}tepcipher.html">⌖Ξ⎔ ⚲∷⎔⍥Ξ⎐</a>
             </div>
         `;
