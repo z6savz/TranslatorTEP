@@ -83,6 +83,42 @@
         </div>
     </div>
 
+    <!-- Base64 Image Encoding -->
+    <div class="method">
+        <h2>Base64 Image Encoding</h2>
+        <p style="text-align:center;color:var(--color-text-muted);font-size:0.9rem;">
+            Simple Base64 encoding/decoding for images. Note: Base64 is NOT encryption — it only encodes data.
+            All processing is done locally in your browser.
+        </p>
+
+        <div class="sub-method">
+            <h3>Encode Image to Base64</h3>
+            <label for="base64-encode-input" style="display:block;margin-bottom:6px;color:var(--color-text-muted);font-size:0.9rem;">Select image file</label>
+            <input type="file" id="base64-encode-input" accept="image/*">
+            <div class="button-container">
+                <button id="encodeBase64Btn" class="primary-btn">Encode</button>
+            </div>
+            <p id="base64-encode-status" style="color:var(--color-text-muted);font-size:0.9rem;min-height:1.2em;margin-top:8px;"></p>
+            <textarea id="base64-encode-output" readonly placeholder="Base64 encoded data will appear here…" style="margin-top:10px;"></textarea>
+
+            <div class="button-group" style="display:flex;gap:10px;margin:15px 0;justify-content:center;">
+                <button id="copyBase64Btn" class="tool-btn">📋 Copy</button>
+                <button id="swapBase64Btn" class="tool-btn">⇄ Swap to Decode</button>
+                <button id="clearBase64Btn" class="tool-btn">Clear All</button>
+            </div>
+
+            <h3 style="margin-top:20px;">Decode Base64 to Image</h3>
+            <label for="base64-decode-input" style="display:block;margin-bottom:6px;color:var(--color-text-muted);font-size:0.9rem;">Paste Base64 data</label>
+            <textarea id="base64-decode-input" placeholder="Paste Base64 image data here…"></textarea>
+            <div class="button-container">
+                <button id="decodeBase64Btn" class="primary-btn">Decode</button>
+            </div>
+            <p id="base64-decode-status" style="color:var(--color-text-muted);font-size:0.9rem;min-height:1.2em;margin-top:8px;"></p>
+            <img id="base64-decoded-output" alt="Decoded Image" style="display:none;max-width:100%;margin-top:12px;">
+            <a id="base64-decoded-download" style="display:none;margin-top:8px;">⬇ Download Decoded Image</a>
+        </div>
+    </div>
+
     <footer></footer>
 </body>
 

@@ -137,13 +137,146 @@ function clearImageFields() {
     if (s2) s2.textContent = '';
 }
 
+// ── Base64 Image Encoding ────────────────────────────────────────────
+
+function encodeImageToBase64() {
+    const fileInput = document.getElementById('base64-encode-input');
+    const file      = fileInput?.files[0];
+    const statusEl  = document.getElementById('base64-encode-status');
+    const outputEl  = document.getElementById('base64-encode-output');
+
+    if (!file) {
+        statusEl.textContent = 'Error: Please select an image file.';
+        return;
+    }
+
+    statusEl.textContent = 'Encoding…';
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        try {
+            const base64Data = e.target.result;
+            outputEl.value = base64Data;
+            outputEl.dataset.originalName = file.name;
+            statusEl.textContent = 'Encoded successfully. Copy the output or use Swap to move it to the decode field.';
+        } catch (err) {
+            console.error(err);
+            statusEl.textContent = 'Error: ' + err.message;
+        }
+    };
+    
+    reader.onerror = function() {
+        statusEl.textContent = 'Error reading file.';
+    };
+    
+    reader.readAsDataURL(file);
+}
+
+function decodeBase64ToImage() {
+    const inputEl   = document.getElementById('base64-decode-input');
+    const base64    = inputEl?.value.trim();
+    const statusEl  = document.getElementById('base64-decode-status');
+    const outputImg = document.getElementById('base64-decoded-output');
+    const dlLink    = document.getElementById('base64-decoded-download');
+
+    if (!base64) {
+        statusEl.textContent = 'Error: Please paste Base64 data.';
+        return;
+    }
+
+    statusEl.textContent = 'Decoding…';
+    try {
+        // Validate it's a data URL
+        if (!base64.startsWith('data:image/')) {
+            throw new Error('Invalid Base64 image data. Must start with "data:image/"');
+        }
+
+        // Convert base64 to blob
+        const arr = base64.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        const blob = new Blob([u8arr], { type: mime });
+        const url = URL.createObjectURL(blob);
+
+        if (outputImg) {
+            outputImg.src = url;
+            outputImg.style.display = 'block';
+        }
+        if (dlLink) {
+            dlLink.href = url;
+            dlLink.download = 'decoded-image.' + mime.split('/')[1];
+            dlLink.style.display = 'inline-block';
+        }
+        statusEl.textContent = 'Decoded successfully.';
+    } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'Decoding failed: ' + err.message;
+    }
+}
+
+function copyBase64Output() {
+    const outputField = document.getElementById('base64-encode-output');
+    if (!outputField?.value) return;
+    navigator.clipboard.writeText(outputField.value).then(() => {
+        const btn = document.getElementById('copyBase64Btn');
+        if (!btn) return;
+        const orig = btn.textContent;
+        btn.textContent = '✔ Copied!';
+        setTimeout(() => { btn.textContent = orig; }, 1500);
+    });
+}
+
+function swapBase64Fields() {
+    const output = document.getElementById('base64-encode-output')?.value;
+    const input  = document.getElementById('base64-decode-input');
+    if (output && input) input.value = output;
+}
+
+function clearBase64Fields() {
+    const els = ['base64-encode-input', 'base64-encode-output', 'base64-decode-input'];
+    els.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+
+    const eo = document.getElementById('base64-encode-output');
+    if (eo) delete eo.dataset.originalName;
+
+    const outputImg = document.getElementById('base64-decoded-output');
+    const dlLink    = document.getElementById('base64-decoded-download');
+    if (outputImg) {
+        outputImg.style.display = 'none';
+        outputImg.src = '';
+    }
+    if (dlLink) dlLink.style.display = 'none';
+
+    const s1 = document.getElementById('base64-encode-status');
+    const s2 = document.getElementById('base64-decode-status');
+    if (s1) s1.textContent = '';
+    if (s2) s2.textContent = '';
+}
+
 // ── Event listeners ───────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', () => {
     const b = (id, fn) => { const el = document.getElementById(id); if (el) el.addEventListener('click', fn); };
+    
+    // AES encryption
     b('encryptImageBtn', encryptAESImage);
     b('decryptImageBtn', decryptAESImage);
     b('copyImageBtn',    copyImageOutput);
     b('swapImageBtn',    swapImageFields);
     b('clearImageBtn',   clearImageFields);
+    
+    // Base64 encoding
+    b('encodeBase64Btn', encodeImageToBase64);
+    b('decodeBase64Btn', decodeBase64ToImage);
+    b('copyBase64Btn',   copyBase64Output);
+    b('swapBase64Btn',   swapBase64Fields);
+    b('clearBase64Btn',  clearBase64Fields);
 });
