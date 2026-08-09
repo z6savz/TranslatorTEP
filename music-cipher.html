@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://storage.ko-fi.com; connect-src 'self' https://cdn.jsdelivr.net; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';">
+    <!-- Clickjacking Defense (Frame-Busting) -->
+    <style id="antiClickjack">body{display:none !important;}</style>
+    <script src="js/anti-clickjack.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Sheet Cipher — Cryptic Fox</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="js/components.js"></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/music-cipher.js" defer></script>
+
+    <!-- Favicon Links -->
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+
+    <meta name="description"
+        content="Decode musical notation ciphers where notes on a staff represent letters. Translate treble and bass clef sheet music into text messages.">
+    <link rel="canonical" href="https://cryptic-fox.com/music-cipher.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cryptic-fox.com/music-cipher.html">
+    <meta property="og:title" content="Music Sheet Cipher — Cryptic Fox">
+    <meta property="og:description"
+        content="Decode musical notation ciphers. Transform sheet music into hidden messages.">
+    <meta property="og:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Music Sheet Cipher — Cryptic Fox">
+    <meta name="twitter:description"
+        content="Decode musical notation ciphers. Transform sheet music into hidden messages.">
+    <meta name="twitter:image" content="https://cryptic-fox.com/images/Fox-Thumbnail.png">
+
+    <style>
+        .music-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .intro-box {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .intro-box h2 {
+            color: var(--color-accent);
+            margin-top: 0;
+        }
+
+        .cipher-method {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .cipher-method h3 {
+            color: var(--color-accent);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--color-text-muted);
+            font-weight: 500;
+        }
+
+        .note-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            background: var(--color-surface-deep);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            color: var(--color-text);
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+
+        .settings-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .setting-group label {
+            margin-bottom: 5px;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+        }
+
+        .setting-group select {
+            padding: 8px;
+            background: var(--color-surface-deep);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            color: var(--color-text);
+            font-family: inherit;
+        }
+
+        .output-box {
+            background: var(--color-surface-deep);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            margin-top: 15px;
+            min-height: 60px;
+            color: var(--color-accent);
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            word-wrap: break-word;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: var(--color-accent);
+            border: none;
+            border-radius: var(--radius-pill);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-base);
+        }
+
+        .btn:hover {
+            background: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--color-surface);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-surface-deep);
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+            margin-top: 8px;
+        }
+
+        .mapping-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--color-surface-deep);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+
+        .mapping-item {
+            text-align: center;
+            padding: 5px;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+        }
+
+        .note-name {
+            font-weight: bold;
+            color: var(--color-accent);
+        }
+    </style>
+</head>
+
+<body class="music-cipher-page">
+    <div class="dropdown" role="navigation" aria-label="Site navigation"></div>
+    
+    <div class="music-container">
+        <h1>🎵 Music Sheet Cipher</h1>
+        
+        <div class="intro-box">
+            <h2>About Musical Notation Ciphers</h2>
+            <p>Musical notation ciphers use notes on a staff to encode letters and messages. Composers and cryptographers have used music to hide secret communications for centuries, from Renaissance composers to modern puzzle makers.</p>
+            <p><strong>How it works:</strong> Each note on the musical staff is assigned a letter. By reading the notes in sequence, a hidden message can be revealed. Different mapping schemes exist, from simple alphabetical progressions to more complex key-based systems.</p>
+        </div>
+
+        <!-- Decoder Section -->
+        <div class="cipher-method">
+            <h3>
+                <span>Decode Musical Notes</span>
+                <span class="info-icon">i
+                    <div class="tooltip-content">
+                        <h4>Music Cipher Decoder</h4>
+                        <div><b>Description:</b> Converts musical notes into letters based on various cipher schemes.</div>
+                        <div><b>History:</b> Used by composers like Bach and in wartime communications.</div>
+                        <div><b>How-to:</b> Enter notes (e.g., "C D E F G" or "C4 D4 E4"), select a cipher method, and decode.</div>
+                    </div>
+                </span>
+            </h3>
+
+            <div class="input-group">
+                <label for="noteInput">Enter Musical Notes:</label>
+                <textarea 
+                    id="noteInput" 
+                    class="note-input" 
+                    placeholder="Enter notes separated by spaces, e.g., C D E F G A B C
+Or with octaves: C4 D4 E4 F4 G4 A4 B4 C5
+Sharps/flats: C# D Eb F G#"></textarea>
+                <div class="help-text">
+                    Format: Note names (C, D, E, F, G, A, B) optionally with octaves (C4, D5) or accidentals (C#, Db, F#, Gb)
+                </div>
+            </div>
+
+            <div class="settings-row">
+                <div class="setting-group">
+                    <label for="cipherType">Cipher Method:</label>
+                    <select id="cipherType">
+                        <option value="sequential">Sequential (C=A, D=B, E=C...)</option>
+                        <option value="direct">Direct Note Names (C=C, D=D...)</option>
+                        <option value="scale-position">Scale Position (1st=A, 2nd=B...)</option>
+                        <option value="custom">Custom Mapping</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label for="startingNote">Starting Note:</label>
+                    <select id="startingNote">
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                    </select>
+                </div>
+
+                <div class="setting-group">
+                    <label for="startingLetter">Maps to Letter:</label>
+                    <select id="startingLetter">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn" onclick="decodeMusic()"> Decode</button>
+                <button class="btn btn-secondary" onclick="showMapping()"> Show Mapping</button>
+                <button class="btn btn-secondary" onclick="clearFields()"> Clear</button>
+            </div>
+
+            <div id="outputBox" class="output-box"></div>
+            <div id="mappingDisplay" class="mapping-display" style="display: none;"></div>
+        </div>
+
+        <!-- Encoder Section -->
+        <div class="cipher-method">
+            <h3>
+                <span>Encode Text to Music</span>
+            </h3>
+
+            <div class="input-group">
+                <label for="textInput">Enter Text to Encode:</label>
+                <textarea 
+                    id="textInput" 
+                    class="note-input" 
+                    placeholder="Enter your message here..."></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn" onclick="encodeMusic()"> Encode</button>
+                <button class="btn btn-secondary" onclick="clearEncodeFields()"> Clear</button>
+            </div>
+
+            <div id="encodeOutputBox" class="output-box"></div>
+        </div>
+    </div>
+</body>
+
+</html>
