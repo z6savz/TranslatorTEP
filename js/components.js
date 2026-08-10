@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <a href="${prefix}lovelace-music.html">Lovelace Music</a>
                 <a href="${prefix}cryptography.html">Resources</a>
                 <a href="${prefix}blog.html">Blog</a>
-                <a href="${prefix}tepcipher.html">⌖Ξ⎔ ⚲∷⎔⍥Ξ⎐</a>
+                <a href="${prefix}tepcipher.html">🜎🜢🜁⊖🜨♄🜁🜎🜛🜢</a>
             </div>
         `;
         navPlaceholder.innerHTML = navHtml;
