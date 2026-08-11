@@ -23,8 +23,10 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 function normalizeNote(note) {
     note = note.trim().toUpperCase();
     
-    // Remove octave numbers (C4 -> C)
-    note = note.replace(/[0-9]/g, '');
+    // Extract octave number if present
+    const octaveMatch = note.match(/([0-9]+)$/);
+    const octave = octaveMatch ? octaveMatch[1] : '';
+    const noteWithoutOctave = note.replace(/[0-9]+$/, '');
     
     // Convert flats to sharps
     const flatToSharp = {
@@ -35,12 +37,14 @@ function normalizeNote(note) {
         'BB': 'A#'
     };
     
-    if (note.includes('B') && note.length > 1) {
-        const converted = flatToSharp[note];
-        if (converted) return converted;
+    let normalizedNote = noteWithoutOctave;
+    if (normalizedNote.includes('B') && normalizedNote.length > 1) {
+        const converted = flatToSharp[normalizedNote];
+        if (converted) normalizedNote = converted;
     }
     
-    return note;
+    // Reattach octave if present
+    return octave ? normalizedNote + octave : normalizedNote;
 }
 
 /**
@@ -57,8 +61,11 @@ function parseNotes(input) {
         // Handle various formats: C, C4, C#, C#4, Db, Db4
         const normalized = normalizeNote(token);
         
-        // Validate note
-        if (CHROMATIC_NOTES.includes(normalized) || NATURAL_NOTES.includes(normalized)) {
+        // Extract base note for validation (without octave)
+        const baseNote = normalized.replace(/[0-9]+$/, '');
+        
+        // Validate base note
+        if (CHROMATIC_NOTES.includes(baseNote) || NATURAL_NOTES.includes(baseNote)) {
             notes.push(normalized);
         }
     }
@@ -140,11 +147,15 @@ function generateMapping(cipherType, startingNote, startingLetter) {
 function reverseMapping(mapping) {
     const reversed = {};
     for (const [note, letter] of Object.entries(mapping)) {
-        // Only map letters without octave numbers for encoding
-        if (!note.match(/[0-9]/)) {
-            if (!reversed[letter]) {
-                reversed[letter] = note;
-            }
+        // Map each letter to its note, preferring notes without octave numbers
+        if (!reversed[letter]) {
+            reversed[letter] = note;
+        } else if (!reversed[letter].match(/[0-9]/) && note.match(/[0-9]/)) {
+            // Keep the note without octave number if we already have it
+            continue;
+        } else if (reversed[letter].match(/[0-9]/) && !note.match(/[0-9]/)) {
+            // Replace octave-numbered note with plain note if found
+            reversed[letter] = note;
         }
     }
     return reversed;
@@ -307,6 +318,13 @@ function clearEncodeFields() {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function() {
+    // Add button event listeners
+    document.getElementById('decodeBtn').addEventListener('click', decodeMusic);
+    document.getElementById('showMappingBtn').addEventListener('click', showMapping);
+    document.getElementById('clearBtn').addEventListener('click', clearFields);
+    document.getElementById('encodeBtn').addEventListener('click', encodeMusic);
+    document.getElementById('clearEncodeBtn').addEventListener('click', clearEncodeFields);
+    
     // Add keyboard shortcuts
     document.getElementById('noteInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && e.ctrlKey) {

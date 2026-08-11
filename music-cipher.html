@@ -98,6 +98,7 @@
             font-family: 'Courier New', monospace;
             font-size: 0.95rem;
             resize: vertical;
+            box-sizing: border-box;
         }
 
         .settings-row {
@@ -209,7 +210,7 @@
     <div class="dropdown" role="navigation" aria-label="Site navigation"></div>
     
     <div class="music-container">
-        <h1>🎵 Music Sheet Cipher</h1>
+        <h1>♫ Musical Notation Cipher ♫</h1>
         
         <div class="intro-box">
             <h2>About Musical Notation Ciphers</h2>
@@ -283,9 +284,9 @@ Sharps/flats: C# D Eb F G#"></textarea>
             </div>
 
             <div class="button-group">
-                <button class="btn" onclick="decodeMusic()"> Decode</button>
-                <button class="btn btn-secondary" onclick="showMapping()"> Show Mapping</button>
-                <button class="btn btn-secondary" onclick="clearFields()"> Clear</button>
+                <button id="decodeBtn" class="btn"> Decode</button>
+                <button id="showMappingBtn" class="btn btn-secondary"> Show Mapping</button>
+                <button id="clearBtn" class="btn btn-secondary"> Clear</button>
             </div>
 
             <div id="outputBox" class="output-box"></div>
@@ -307,8 +308,8 @@ Sharps/flats: C# D Eb F G#"></textarea>
             </div>
 
             <div class="button-group">
-                <button class="btn" onclick="encodeMusic()"> Encode</button>
-                <button class="btn btn-secondary" onclick="clearEncodeFields()"> Clear</button>
+                <button id="encodeBtn" class="btn"> Encode</button>
+                <button id="clearEncodeBtn" class="btn btn-secondary"> Clear</button>
             </div>
 
             <div id="encodeOutputBox" class="output-box"></div>
