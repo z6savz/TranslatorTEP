@@ -40,7 +40,7 @@
         <p class="blog-date">May 11, 2026</p>
 
         <section class="intro">
-            <p>Artificial intelligence systems are becoming more capable every year, but they continue to struggle with one of humanity’s oldest tools: figurative language. While AI companies invest heavily in defending large language models (LLMs) against malicious code, prompt injection, and other technical exploits, researchers are finding that creative phrasing—especially poetry—can still cause models to misinterpret user intent.</p>
+            <p>Artificial intelligence systems are becoming more capable every year, but they continue to struggle with one of humanity’s oldest tools: figurative language. While AI companies invest heavily in defending large language models (LLMs) against malicious code, prompt injection, and other technical exploits, researchers are finding that creative phrasing, such as poetry, can still cause models to misinterpret user intent.</p>
             <p>This isn’t because poetry is a “universal jailbreak,” as some online commentary suggests. Instead, it highlights a well‑documented challenge in AI safety: models trained primarily on literal, direct language often fail to generalize their safety rules to metaphor, rhyme, or stylistic obfuscation.</p>
         </section>
 
@@ -49,16 +49,14 @@
         <h2>1. Why Style Can Break Safety Filters</h2>
         <p>Modern LLMs rely on pattern recognition. Safety systems such as Reinforcement Learning from Human Feedback (RLHF) and Constitutional AI are trained on large datasets of refusals, warnings, and policy‑aligned responses. However, these datasets overwhelmingly consist of plain, prosaic language.</p>
         <p>When a user embeds harmful intent inside rhyme, metaphor, archaic phrasing, unusual syntax, or dense figurative structures, the model may prioritize satisfying the stylistic constraints rather than identifying the underlying risk.</p>
-        <p>This phenomenon is known in AI‑safety literature as <strong>adversarial prompting</strong>—a broad category that includes poetic prompts but is not limited to them.</p>
+        <p>This phenomenon is known in AI‑safety literature as <strong>adversarial prompting</strong>: a broad category that includes poetic prompts but is not limited to them.</p>
 
         <hr style="border: 0; height: 1px; background: var(--color-border); margin: 40px 0;">
 
         <h2>2. Bigger Models Aren’t Always Better at This</h2>
         <p>There are theories about a “Scale Paradox,” suggesting larger models are more vulnerable to poetic prompts. While specific claims of systematic vulnerability are not supported by public research, the underlying idea has some grounding:</p>
-        <ul>
-            <li>Larger models are better at understanding figurative language, which means they may follow creative constraints more faithfully.</li>
-            <li>Smaller models often fail to interpret metaphor at all, which can incidentally make them less responsive to obfuscated harmful requests.</li>
-        </ul>
+            <p>Larger models are better at understanding figurative language, which means they may follow creative constraints more faithfully.</p>
+            <p>Smaller models often fail to interpret metaphor at all, which can incidentally make them less responsive to obfuscated harmful requests.</p>
         <p>However, there is no verified evidence that larger models are systematically more vulnerable, nor that any model has a 100% failure rate when confronted with poetic prompts.</p>
 
         <hr style="border: 0; height: 1px; background: var(--color-border); margin: 40px 0;">
@@ -66,22 +64,22 @@
         <h2>3. What Research Actually Shows</h2>
         <p>Academic and industry studies have demonstrated that:</p>
         <ul style="line-height: 1.8;">
-            <li><strong>Obfuscated harmful prompts</strong>—including those written in rhyme or metaphor—can sometimes bypass safety filters.</li>
-            <li><strong>No single technique</strong> (including poetry) reliably jailbreaks all models.</li>
-            <li><strong>No public dataset</strong> confirms the extreme attack‑success rates sometimes claimed in viral reports.</li>
-            <li><strong>No published paper</strong> titled “Adversarial Poetry as a Universal Single‑Turn Jailbreak Mechanism” exists.</li>
+            <p><strong>Obfuscated harmful prompts</strong> including those written in rhyme or metaphor—can sometimes bypass safety filters.</p>
+            <p><strong>No single technique</strong> (including poetry) reliably jailbreaks all models.</p>
+            <p><strong>No public dataset</strong> confirms the extreme attack‑success rates sometimes claimed in viral reports.</p>
+            <p><strong>No published paper</strong> titled “Adversarial Poetry as a Universal Single‑Turn Jailbreak Mechanism” exists.</p>
         </ul>
         <p>The real issue is more subtle: LLMs still struggle to detect harmful intent when it is embedded in figurative or stylistically unusual language. This is a known limitation in natural‑language understanding, not a catastrophic failure of alignment.</p>
 
         <hr style="border: 0; height: 1px; background: var(--color-border); margin: 40px 0;">
 
         <h2>4. Why This Matters</h2>
-        <p>As LLMs are deployed into more sensitive environments—customer support, coding assistants, enterprise workflows—understanding how they interpret creative language becomes increasingly important. Safety researchers are now exploring:</p>
+        <p>As LLMs are deployed into more sensitive environments such as customer support, coding assistants, enterprise workflows, understanding how they interpret creative language becomes increasingly important. Safety researchers are now exploring:</p>
         <ul>
-            <li>training models on more diverse linguistic styles</li>
-            <li>improving intent‑recognition systems</li>
-            <li>developing adversarial‑robustness benchmarks that include figurative language</li>
-            <li>stress‑testing models with creative obfuscation techniques</li>
+            <p>training models on more diverse linguistic styles</p>
+            <p>improving intent‑recognition systems</p>
+            <p>developing adversarial‑robustness benchmarks that include figurative language</p>
+            <p>stress‑testing models with creative obfuscation techniques</p>
         </ul>
         <p>The goal is not to eliminate creativity from AI interactions, but to ensure that models can recognize harmful intent even when it is wrapped in stylistic complexity.</p>
 

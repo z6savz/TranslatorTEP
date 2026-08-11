@@ -63,33 +63,30 @@
         <p>The CIA Triad is the foundational framework used to guide security policies and select the appropriate
             technologies to protect an organization's assets. Before applying technical controls, we must define our
             three core goals:</p>
-        <ul style="list-style: none; padding-left: 0;">
-            <li style="margin-bottom: 20px;">
-                <strong style="color: var(--color-primary); display: block; font-size: 1.1rem;">•
-                    Confidentiality</strong>
-                The objective of ensuring that sensitive data is accessible only to authorized individuals and remains
-                hidden from others.
-                <br><small style="color: var(--color-accent);">Primary Benefit: Prevents sensitive information leaks and
-                    protects user privacy.</small>
-            </li>
-            <li style="margin-bottom: 20px;">
-                <strong style="color: var(--color-primary); display: block; font-size: 1.1rem;">• Integrity</strong>
-                The objective of guaranteeing that information remains accurate, consistent, and unaltered during
-                storage
-                or transmission.
-                <br><small style="color: var(--color-accent);">Primary Benefit: Ensures that data can be trusted and has
-                    not
-                    been tampered with by malicious actors or system errors.</small>
-            </li>
-            <li style="margin-bottom: 20px;">
-                <strong style="color: var(--color-primary); display: block; font-size: 1.1rem;">• Availability</strong>
-                The objective of ensuring that systems and data are consistently and reliably accessible to authorized
-                users when needed.
-                <br><small style="color: var(--color-accent);">Primary Benefit: Maintains business continuity and
-                    prevents
-                    disruptions to essential services.</small>
-            </li>
-        </ul>
+        <p style="margin-bottom: 20px;">
+            <strong style="color: var(--color-primary); display: block; font-size: 1.1rem;">Confidentiality</strong>
+            The objective of ensuring that sensitive data is accessible only to authorized individuals and remains
+            hidden from others.
+            <br><small style="color: var(--color-accent);">Primary Benefit: Prevents sensitive information leaks and
+                protects user privacy.</small>
+        </p>
+        <p style="margin-bottom: 20px;">
+            <strong style="color: var(--color-primary); display: block; font-size: 1.1rem;">Integrity</strong>
+            The objective of guaranteeing that information remains accurate, consistent, and unaltered during
+            storage
+            or transmission.
+            <br><small style="color: var(--color-accent);">Primary Benefit: Ensures that data can be trusted and has
+                not
+                been tampered with by malicious actors or system errors.</small>
+        </p>
+        <p style="margin-bottom: 20px;">
+            <strong style="color: var(--color-primary); display: block; font-size: 1.1rem;">Availability</strong>
+            The objective of ensuring that systems and data are consistently and reliably accessible to authorized
+            users when needed.
+            <br><small style="color: var(--color-accent);">Primary Benefit: Maintains business continuity and
+                prevents
+                disruptions to essential services.</small>
+        </p>
 
         <h3 style="text-align: center; margin-top: 30px;">Fundamental Security Framework</h3>
         <div style="overflow-x: auto;">
@@ -127,14 +124,12 @@
         <p>The clothing retailer Pacsun provides a clear example of the CIA Triad in action. Faced with frequent
             cyberattacks during high-traffic sales events, they implemented a Cloudflare security suite that bolstered
             all three pillars, resulting in a 27% boost in system performance:</p>
-        <ul style="color: var(--color-text-muted); line-height: 1.8;">
-            <li><strong>Confidentiality:</strong> By utilizing secure DNS, Pacsun prevents the interception of sensitive
-                customer information during the checkout process.</li>
-            <li><strong>Integrity:</strong> They employ a Web Application Firewall (WAF) to block harmful traffic,
-                ensuring their web applications and customer records are not tampered with.</li>
-            <li><strong>Availability:</strong> To ensure the website remains online during massive sales, they use DDoS
-                protection to absorb and mitigate traffic-flooding attacks.</li>
-        </ul>
+        <p style="color: var(--color-text-muted); line-height: 1.8; margin-bottom: 10px;"><strong>Confidentiality:</strong> By utilizing secure DNS, Pacsun prevents the interception of sensitive
+            customer information during the checkout process.</p>
+        <p style="color: var(--color-text-muted); line-height: 1.8; margin-bottom: 10px;"><strong>Integrity:</strong> They employ a Web Application Firewall (WAF) to block harmful traffic,
+            ensuring their web applications and customer records are not tampered with.</p>
+        <p style="color: var(--color-text-muted); line-height: 1.8; margin-bottom: 10px;"><strong>Availability:</strong> To ensure the website remains online during massive sales, they use DDoS
+            protection to absorb and mitigate traffic-flooding attacks.</p>
         <p>While the CIA triad provides the strategic goals, encryption is the primary technical tool used to achieve
             them.</p>
 
@@ -144,12 +139,9 @@
         <h2>3. Cryptology: The Art and Science of Secret Writing</h2>
         <p>The term <strong>Cryptology</strong> encompasses the entire study of secure communication. It is divided into
             two distinct, competing branches:</p>
-        <ol>
-            <li><strong>Cryptography:</strong> The art and science of designing systems to provide information security.
-            </li>
-            <li><strong>Cryptanalysis:</strong> The art and science of breaking or decoding ciphers to test and expose
-                security weaknesses.</li>
-        </ol>
+        <p><strong>Cryptography:</strong> The art and science of designing systems to provide information security.</p>
+        <p><strong>Cryptanalysis:</strong> The art and science of breaking or decoding ciphers to test and expose
+            security weaknesses.</p>
 
         <h3>The Evolution of Secret Communication</h3>
         <p>The methodology of secret writing has evolved significantly from ancient techniques to modern digital bits:
@@ -158,17 +150,13 @@
             style="background: rgba(255,255,255,0.03); padding: 25px; border-radius: var(--radius-md); margin: 20px 0;">
             <h4 style="margin-top: 0; color: var(--color-primary);">1. Classic Cryptography (Security through Obscurity)
             </h4>
-            <ul style="margin-bottom: 25px;">
-                <li><strong>Hieroglyphs:</strong> Used 4,000 years ago by Egyptian scribes to communicate royal secrets.
-                </li>
-                <li><strong>Caesar Shift Cipher (500–600 BC):</strong> A Roman method involving shifting letters by a
-                    fixed number (e.g., a shift of 3 turns "A" into "D").</li>
-                <li><strong>Vigenère Cipher (15th Century):</strong> An advancement that uses variable shift amounts,
-                    making it much harder to crack than the fixed Caesar shift.</li>
-                <li><strong>Core Philosophy:</strong> These methods relied on keeping the process of encryption a
-                    secret.
-                </li>
-            </ul>
+            <p style="margin-bottom: 10px;"><strong>Hieroglyphs:</strong> Used 4,000 years ago by Egyptian scribes to communicate royal secrets.</p>
+            <p style="margin-bottom: 10px;"><strong>Caesar Shift Cipher (500–600 BC):</strong> A Roman method involving shifting letters by a
+                fixed number (e.g., a shift of 3 turns "A" into "D").</p>
+            <p style="margin-bottom: 10px;"><strong>Vigenère Cipher (15th Century):</strong> An advancement that uses variable shift amounts,
+                making it much harder to crack than the fixed Caesar shift.</p>
+            <p style="margin-bottom: 25px;"><strong>Core Philosophy:</strong> These methods relied on keeping the process of encryption a
+                secret.</p>
 
             <h4 style="margin-top: 0; color: var(--color-primary);">2. Modern Cryptography (Public Algorithms, Secret
                 Keys)
@@ -231,20 +219,18 @@
         <!-- Section 5: Threat Landscape -->
         <h2>5. The Threat Landscape: Hacker Personas and Motivations</h2>
         <p>Understanding the motivations of different actors allows us to anticipate and mitigate specific threats.</p>
-        <ul style="list-style: none; padding-left: 0;">
-            <li style="margin-bottom: 15px;"><strong>🟢 White Hat:</strong> Ethical hackers who identify vulnerabilities
-                to help organizations fix them.</li>
-            <li style="margin-bottom: 15px;"><strong>🔴 Black Hat:</strong> Malicious actors driven by profit, often
-                stealing personal information for financial gain.</li>
-            <li style="margin-bottom: 15px;"><strong>🛡️ Red Hat:</strong> "Vigilante" hackers who actively disrupt and
-                thwart the operations of black hat hackers.</li>
-            <li style="margin-bottom: 15px;"><strong>🔵 Blue Hat:</strong> Security professionals hired to test software
-                for bugs before a product is officially released.</li>
-            <li style="margin-bottom: 15px;"><strong>₿ Cryptojackers:</strong> Hackers who illicitly use a victim's
-                hardware to mine cryptocurrency or steal digital wallet credentials.</li>
-            <li style="margin-bottom: 15px;"><strong>⚠️ Cyber Terrorists:</strong> Actors who carry out hostile attacks
-                to advance political agendas or cause widespread disruption.</li>
-        </ul>
+        <p style="margin-bottom: 15px;"><strong>🟢 White Hat:</strong> Ethical hackers who identify vulnerabilities
+            to help organizations fix them.</p>
+        <p style="margin-bottom: 15px;"><strong>🔴 Black Hat:</strong> Malicious actors driven by profit, often
+            stealing personal information for financial gain.</p>
+        <p style="margin-bottom: 15px;"><strong>🛡️ Red Hat:</strong> "Vigilante" hackers who actively disrupt and
+            thwart the operations of black hat hackers.</p>
+        <p style="margin-bottom: 15px;"><strong>🔵 Blue Hat:</strong> Security professionals hired to test software
+            for bugs before a product is officially released.</p>
+        <p style="margin-bottom: 15px;"><strong>₿ Cryptojackers:</strong> Hackers who illicitly use a victim's
+            hardware to mine cryptocurrency or steal digital wallet credentials.</p>
+        <p style="margin-bottom: 15px;"><strong>⚠️ Cyber Terrorists:</strong> Actors who carry out hostile attacks
+            to advance political agendas or cause widespread disruption.</p>
         <div
             style="background: rgba(var(--color-accent-rgb), 0.1); border-left: 4px solid var(--color-accent); padding: 20px; margin: 30px 0;">
             <p style="margin-top: 0;"><strong>The Evolving Threat:</strong> The landscape is becoming more dangerous as
@@ -264,15 +250,13 @@
         <h3>Blockchain (Integrity and Availability)</h3>
         <p>Blockchain provides a decentralized, immutable ledger where transactions are cryptographically linked,
             creating an <strong>Immutable Audit Trail</strong>.</p>
-        <ul style="color: var(--color-text-muted); line-height: 1.8;">
-            <li><strong>Case Study (Supply Chain):</strong> Walmart and IBM used blockchain to track food origins. They
-                successfully reduced the time required to trace a product’s source from seven days to just 2.2 seconds,
-                ensuring the integrity of the food supply.</li>
-            <li><strong>Case Study (Digital Identity):</strong> Estonia has pioneered a blockchain-based digital
-                identity
-                system, allowing citizens to safely access government services and sign documents, which drastically
-                increases the availability and security of public records.</li>
-        </ul>
+        <p style="color: var(--color-text-muted); line-height: 1.8; margin-bottom: 10px;"><strong>Case Study (Supply Chain):</strong> Walmart and IBM used blockchain to track food origins. They
+            successfully reduced the time required to trace a product's source from seven days to just 2.2 seconds,
+            ensuring the integrity of the food supply.</p>
+        <p style="color: var(--color-text-muted); line-height: 1.8;"><strong>Case Study (Digital Identity):</strong> Estonia has pioneered a blockchain-based digital
+            identity
+            system, allowing citizens to safely access government services and sign documents, which drastically
+            increases the availability and security of public records.</p>
 
         <h3>Quantum Cryptography (Confidentiality)</h3>
         <p>While traditional encryption is based on math, quantum cryptography is based on the laws of physics.</p>
@@ -290,27 +274,25 @@
 
         <div
             style="background: var(--color-surface-deep); border: 1px solid var(--color-primary); padding: 25px; border-radius: var(--radius-md); margin: 30px 0;">
-            <ul style="list-style: none; padding-left: 0; margin-bottom: 0;">
-                <li style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Unique Password
-                        Management:</strong> Use different, complex passwords for every account to prevent a single
-                    breach from leading to total identity theft.</li>
-                <li style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Multifactor
-                        Authentication (2FA/MFA):</strong> Always require a second layer of verification, such as a code
-                    sent to your phone.</li>
-                <li style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Biometric
-                        Authentication:</strong> Utilize fingerprint or facial recognition for an added layer of secure,
-                    hardware-bound identity verification.</li>
-                <li style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Software
-                        Discipline:</strong> Update your operating system and applications immediately to patch known
-                    security "holes."</li>
-                <li style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Link and Email
-                        Caution:</strong> Treat all unsolicited attachments and links as high-risk, regardless of who
-                    the
-                    sender appears to be.</li>
-                <li style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Physical Device
-                        Awareness:</strong> Never leave devices unattended in public, and maintain awareness of your
-                    physical surroundings.</li>
-            </ul>
+            <p style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Unique Password
+                    Management:</strong> Use different, complex passwords for every account to prevent a single
+                breach from leading to total identity theft.</p>
+            <p style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Multifactor
+                    Authentication (2FA/MFA):</strong> Always require a second layer of verification, such as a code
+                sent to your phone.</p>
+            <p style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Biometric
+                    Authentication:</strong> Utilize fingerprint or facial recognition for an added layer of secure,
+                hardware-bound identity verification.</p>
+            <p style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Software
+                    Discipline:</strong> Update your operating system and applications immediately to patch known
+                security "holes."</p>
+            <p style="margin-bottom: 12px;"><input type="checkbox" checked disabled> <strong>Link and Email
+                    Caution:</strong> Treat all unsolicited attachments and links as high-risk, regardless of who
+                the
+                sender appears to be.</p>
+            <p style="margin-bottom: 0;"><input type="checkbox" checked disabled> <strong>Physical Device
+                    Awareness:</strong> Never leave devices unattended in public, and maintain awareness of your
+                physical surroundings.</p>
         </div>
 
         <p>The CIA Triad and encryption are the bedrock of cybersecurity. By mastering these fundamentals, you move from
